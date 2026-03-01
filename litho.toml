@@ -14,7 +14,7 @@ output_path = "./deepwiki"
 internal_path = "./.litho"
 
 # Target language (zh, en, ja, ko, de, fr, ru)
-target_language = "zh"
+target_language = "en"
 
 # Whether to analyze dependencies
 analyze_dependencies = true

@@ -1,31 +1,31 @@
 # Project Analysis Summary Report (Full Version)
 
-Generation Time: 2026-02-28 15:45:26 UTC
+Generation Time: 2026-03-01 03:54:58 UTC
 
 ## Execution Timing Statistics
 
-- **Total Execution Time**: 1445.38 seconds
-- **Preprocessing Phase**: 7.87 seconds (0.5%)
-- **Research Phase**: 0.05 seconds (0.0%)
-- **Document Generation Phase**: 1437.47 seconds (99.5%)
+- **Total Execution Time**: 2720.80 seconds
+- **Preprocessing Phase**: 7.97 seconds (0.3%)
+- **Research Phase**: 1434.18 seconds (52.7%)
+- **Document Generation Phase**: 1278.65 seconds (47.0%)
 - **Output Phase**: 0.00 seconds (0.0%)
-- **Summary Generation Time**: 0.004 seconds
+- **Summary Generation Time**: 0.007 seconds
 
 ## Cache Performance Statistics and Savings
 
 ### Performance Metrics
-- **Cache Hit Rate**: 97.6%
-- **Total Operations**: 456
-- **Cache Hits**: 445 times
-- **Cache Misses**: 11 times
-- **Cache Writes**: 12 times
+- **Cache Hit Rate**: 95.0%
+- **Total Operations**: 457
+- **Cache Hits**: 434 times
+- **Cache Misses**: 23 times
+- **Cache Writes**: 24 times
 
 ### Savings
-- **Inference Time Saved**: 2979.7 seconds
-- **Tokens Saved**: 851763 input + 456625 output = 1308388 total
-- **Estimated Cost Savings**: $0.8980
-- **Performance Improvement**: 97.6%
-- **Efficiency Improvement Ratio**: 2.1x (saved time / actual execution time)
+- **Inference Time Saved**: 2872.2 seconds
+- **Tokens Saved**: 700276 input + 431832 output = 1132108 total
+- **Estimated Cost Savings**: $0.8140
+- **Performance Improvement**: 95.0%
+- **Efficiency Improvement Ratio**: 1.1x (saved time / actual execution time)
 
 ## Core Research Data Summary
 
@@ -36,98 +36,107 @@ Provides core objectives, user roles, and system boundary information for the pr
 
 ```json
 {
-  "business_value": "为开发者提供可扩展的 AI 代理命令行与本地 Web 工作台。它把 LLM 对话、工具调用（文件/命令行/网络/MCP）、会话与历史、配置与鉴权整合到一个可在本机运行的产品中。业务收益是提升研发与知识工作效率，降低使用多家模型与工具链的集成成本，并支持团队在本地或局域网内以更安全的方式运行。",
-  "confidence_score": 0.78,
+  "business_value": "Kimi CLI accelerates developer productivity by providing an AI assistant that understands natural language commands and executes complex development tasks. Key benefits include: (1) Reduced context switching - developers can accomplish file operations, code searches, and command execution through a single conversational interface; (2) Persistent sessions - conversation history and context are preserved across sessions; (3) Multi-provider flexibility - supports multiple LLM backends allowing users to choose their preferred AI provider; (4) Web UI option - provides visual interface for users who prefer graphical interaction over CLI; (5) Extensibility - MCP integration and custom tools allow integration with existing development workflows and tools.",
+  "confidence_score": 0.92,
   "external_systems": [
     {
-      "description": "LLM 提供方与兼容 OpenAI 协议的服务端。用于生成回复、工具调用、标题生成、思考模式等能力。",
-      "interaction_type": "HTTPS API 调用（流式/非流式），基于 API Key 或令牌",
-      "name": "Kimi API / OpenAI API / Anthropic API / Google GenAI API（及 openai_common 兼容端点）"
+      "description": "External AI/ML services that provide language model capabilities for understanding and generating text, code, and structured outputs",
+      "interaction_type": "API calls via HTTP with streaming support",
+      "name": "LLM Providers (Kimi/OpenAI/Anthropic/Google)"
     },
     {
-      "description": "OAuth 登录平台。用于 CLI/Web 侧获取访问令牌或完成登录流程（代码中存在 oauth.py 与 platforms.py）。",
-      "interaction_type": "OAuth 授权码/回调，本机浏览器或本地回调服务交互",
-      "name": "第三方 OAuth 平台（具体平台未在材料中点名）"
+      "description": "External tool servers following the MCP standard that provide additional capabilities like file system access, database queries, or custom integrations",
+      "interaction_type": "JSON-RPC protocol over stdio or network transports",
+      "name": "Model Context Protocol (MCP) Servers"
     },
     {
-      "description": "本机文件系统与工作目录。用于读取/写入项目文件、上传附件、会话目录持久化（wire.jsonl/context.jsonl/metadata.json）。",
-      "interaction_type": "本地 I/O 读写与路径访问控制",
-      "name": "本地文件系统（含会话目录与 workdir）"
+      "description": "Identity providers for user authentication, enabling secure login and API key management for LLM services",
+      "interaction_type": "OAuth 2.0 flow with token exchange",
+      "name": "OAuth Authentication Providers"
     },
     {
-      "description": "Git 仓库。用于统计 diff、展示变更文件与增删行信息。",
-      "interaction_type": "调用 git 命令或读取仓库状态（实现细节未完全给出）",
-      "name": "Git（命令行/仓库元数据）"
+      "description": "Local and remote Git repositories for version control operations, diff viewing, and change tracking",
+      "interaction_type": "Local git commands and file system access",
+      "name": "Git Version Control"
     },
     {
-      "description": "操作系统 Shell 与子进程。用于执行 bash/powershell 命令、启动 worker/runner 子进程。",
-      "interaction_type": "子进程创建与 stdout/stderr 采集",
-      "name": "OS Shell（bash / PowerShell）"
+      "description": "Host operating system shell for executing arbitrary commands with user approval workflows",
+      "interaction_type": "Subprocess spawning with async I/O",
+      "name": "Shell/Command Execution Environment"
     },
     {
-      "description": "外部桌面应用。用于“Open in”能力，打开 Finder、VS Code、Cursor、终端等。",
-      "interaction_type": "本机应用启动/协议调用",
-      "name": "Finder / VS Code / Cursor / Terminal / iTerm 等（平台相关）"
-    },
-    {
-      "description": "MCP（Model Context Protocol）服务器或工具提供方。用于扩展工具与资源访问（代码中存在 mcp 模块与文档目录）。",
-      "interaction_type": "JSON-RPC/协议适配（具体传输方式未完全给出）",
-      "name": "MCP Servers（外部工具/资源提供者）"
+      "description": "Local file system for reading, writing, searching, and managing project files and configuration",
+      "interaction_type": "Direct file I/O operations with path validation",
+      "name": "File System"
     }
   ],
-  "project_description": "kimi-cli 是一个以本地开发工作流为中心的 AI 代理产品。它提供：1) 终端 CLI 交互与配置向导；2) 可选的本地 Web 工作台（React）用于会话管理与可视化聊天；3) Web 后端（FastAPI）用于会话 CRUD、文件上传与安全访问、WebSocket 实时流式消息、配置管理与会话重启协调；4) 代理/工具执行体系（含审批与提问交互）以及多模型 Provider 适配（kosong），并提供 SDK（kimi-sdk）方便二次集成。系统定位为“本机/局域网可部署的 AI Agent 工具链中枢”，把 LLM、工具、项目文件与会话历史连接起来。",
+  "project_description": "Kimi CLI is an AI-powered command-line interface and web application that provides intelligent code assistance through natural language interaction. It enables developers to execute shell commands, read/write files, search codebases, and perform various development tasks through conversational AI. The system supports multiple LLM providers (Kimi, OpenAI, Anthropic, Google GenAI), provides a rich web interface for visual interaction, manages persistent conversation sessions, and integrates with external tools via the Model Context Protocol (MCP). The project includes a Python SDK for programmatic access and supports customizable agents with tool extensions.",
   "project_name": "kimi-cli",
   "project_type": "FullStackApp",
   "system_boundary": {
     "excluded_components": [
-      "LLM 云端服务的实现与运维（仅作为外部依赖调用）",
-      "第三方 OAuth 平台的用户体系与授权服务（仅接入）",
-      "Git 的实现与仓库托管平台（仅读取本地仓库状态）",
-      "外部桌面应用本身（Finder/IDE/Terminal 等，仅触发打开）",
-      "MCP 服务器的实现与部署（仅作为外部工具端）",
-      "用户项目代码与数据本身（仅在受控范围内读写）"
+      "LLM model training and fine-tuning infrastructure",
+      "Cloud hosting and deployment infrastructure",
+      "IDE extensions (though integrations possible via MCP)",
+      "Remote server management (SSH support is client-side only)",
+      "Database systems (uses file-based storage)",
+      "Authentication provider backend (relies on external OAuth)"
     ],
     "included_components": [
-      "CLI 应用（kimi_cli）与交互式 setup 向导",
-      "配置管理：TOML/JSON 迁移、模型/Provider/能力校验、环境变量覆盖",
-      "代理运行时：soul/agent、工具集 toolset、审批 approval、提问 question（从 UI 侧体现）",
-      "内置工具：文件读写/搜索替换、shell 执行、web fetch/search、todo、多代理任务等",
-      "会话与历史：session_state、wire 协议与 wire.jsonl/context.jsonl 持久化、fork 会话",
-      "本地 Web 后端：FastAPI 路由（sessions/config/open_in 等）、WebSocket 流、缓存与安全控制",
-      "本地 Web 前端：React 工作台（会话列表、聊天、队列、git diff、token 使用、文件 mention、slash commands）",
-      "Runner/Worker 子进程编排与消息转发（web/runner 目录）",
-      "LLM Provider 适配层（packages/kosong）与对外 SDK（sdks/kimi-sdk）"
+      "CLI application with interactive terminal UI (src/kimi_cli/)",
+      "Web application with React frontend (web/)",
+      "Session management and persistence (wire protocol, session state)",
+      "LLM provider abstraction layer (packages/kosong/)",
+      "System utilities and async helpers (packages/kaos/)",
+      "Public SDK for programmatic access (sdks/kimi-sdk/)",
+      "Tool implementations (file operations, shell commands, web search, etc.)",
+      "Agent system with customizable behaviors",
+      "MCP client integration for external tools",
+      "OAuth authentication flow",
+      "Configuration management (TOML/JSON)",
+      "Multi-agent orchestration support"
     ],
-    "scope": "系统边界是“本机运行的 kimi-cli 产品及其随附组件”。它负责用户交互（CLI/Web）、会话与文件的安全管理、调用外部 LLM、编排工具与子进程、并向前端提供 API 与流式通道。它不托管模型、不提供远程多租户 SaaS。"
+    "scope": "Kimi CLI encompasses the complete AI-powered code assistant platform including the command-line interface, web application, session management, LLM integration layer, and public SDK."
   },
   "target_users": [
     {
-      "description": "在本地仓库中工作，希望把 AI 对话、代码阅读与工具执行整合到终端或 Web 面板。",
-      "name": "个人开发者/工程师",
+      "description": "Professional developers who need AI assistance for coding, debugging, file manipulation, and development workflow automation",
+      "name": "Software Developer",
       "needs": [
-        "快速配置多家模型与密钥",
-        "在工作目录内安全读写文件并执行命令",
-        "对话可持久化、可回放、可搜索、可 fork",
-        "查看 Git 变更与上下文 token 占用",
-        "对工具调用进行审批，避免误操作"
+        "Execute shell commands safely with approval workflows",
+        "Read, write, and search files in codebase",
+        "Manage multiple conversation sessions with context preservation",
+        "Integrate with IDEs and existing development tools"
       ]
     },
     {
-      "description": "需要通过脚本或二次开发把 kimi 的 agent 能力嵌入到自己的工具/服务中。",
-      "name": "工具开发者/集成开发者",
+      "description": "Engineers who manage infrastructure and need AI assistance for scripting, configuration, and system operations",
+      "name": "DevOps Engineer",
       "needs": [
-        "稳定的 SDK 接口（kimi-sdk）与 provider 抽象（kosong）",
-        "可扩展的 tool / MCP 接入方式",
-        "可复用的消息模型与 step-based agent loop"
+        "Execute system commands and scripts",
+        "Work with remote servers via SSH integration",
+        "Manage configuration files",
+        "Monitor and analyze system outputs"
       ]
     },
     {
-      "description": "在局域网内运行本地 Web 工作台，集中管理多个会话与工作目录。",
-      "name": "小团队技术负责人/高级工程师",
+      "description": "Senior engineers who review code, manage projects, and need AI assistance for documentation and analysis",
+      "name": "Technical Lead",
       "needs": [
-        "局域网访问与 token/origin 安全控制",
-        "会话列表缓存与自动归档",
-        "配置变更时可控地重启会话并跳过 busy 会话"
+        "Generate code documentation",
+        "Analyze codebase structure",
+        "Create and review pull requests",
+        "Team workflow integration"
+      ]
+    },
+    {
+      "description": "Developers building applications on top of Kimi CLI platform",
+      "name": "SDK Developer",
+      "needs": [
+        "Programmatic access to Kimi CLI capabilities",
+        "Custom agent creation",
+        "Tool extension development",
+        "Integration with existing applications"
       ]
     }
   ]
@@ -139,882 +148,915 @@ Provides high-level domain division, module relationships, and core business pro
 
 ```json
 {
-  "architecture_summary": "整体架构为“本机优先的全栈 AI 代理工作台”，由 React Web 前端、FastAPI Web 后端、CLI/Runner 子进程编排、LLM Provider 抽象层（packages/kosong）与对外 SDK（sdks/kimi-sdk）组成。系统以“会话（Session）+ 工作目录（workdir）+ 线性事件流（wire.jsonl）”为核心业务模型：前端通过 REST 获取会话/配置快照，通过 WebSocket 订阅/回放流式事件；后端负责会话 CRUD、文件上传与受控文件访问、Git 状态查询、安全校验（token/origin/LAN-only/路径防护）、以及与 runner/worker 的进程生命周期与消息转发。LLM 调用与工具调用被抽象在 kosonɡ 中，支持多家模型协议（Kimi/OpenAI/Anthropic/Google 及 openai_common 兼容端点）并提供工具集 Toolset；SDK 以 facade 形式复用 kosong 能力，便于外部集成。代码结构上呈现出多个边界清晰的上下文：web（UI+TS API client）、src/kimi_cli/web（服务端 API）、src/kimi_cli/ui/cli（终端体验）、packages/kosong（LLM/工具抽象）、packages/kaos（异步文件/SSH 辅助）与 sdks/kimi-sdk（对外包装）。潜在不对齐点：前端“队列/工具文件写入跟踪”等状态逻辑位于 features 下的 store（Zustand），与后端会话状态与 wire 协议的领域边界未显式建模为共享契约模块；同时 backend 的 sessions.py 承载了大量职责（会话、文件、安全、websocket、git、fork、缓存），存在“过宽聚合”风险，后续可按领域拆分 Router/Service。",
+  "architecture_summary": "Kimi CLI is a full-stack AI-powered development assistant platform with a layered architecture comprising three primary interface layers (Web UI, CLI, and SDK) built on top of core business domains. The architecture follows a clean separation of concerns with distinct domain boundaries:\n\n**Interface Layers:**\n- Web Interface (React/TypeScript): Rich graphical interface for visual interaction\n- CLI Interface (Python/Terminal): Command-line experience for terminal users\n- SDK (Python Package): Programmatic access for developers\n\n**Core Business Domains:**\n- Conversation Management: Session lifecycle, history, and real-time streaming\n- LLM Provider Integration: Multi-provider abstraction with tool support\n- Agent System: Customizable AI behaviors with prompt management\n- Tool Execution: Extensible tool framework for file, shell, and web operations\n- Configuration Management: Centralized settings with provider credentials\n\n**Infrastructure Layer:**\n- Authentication: OAuth and API key management\n- Wire Protocol: JSON-RPC event persistence\n- MCP Client: External tool integration\n\nThe architecture demonstrates strong modularity with clear domain boundaries, enabling independent development and testing of each layer. The LLM Provider Integration domain acts as a strategic abstraction, allowing the system to remain provider-agnostic while supporting multiple AI backends. The Conversation Management domain serves as the central orchestration point, coordinating between user interfaces, AI providers, and persistent storage.",
   "business_flows": [
     {
-      "description": "React Web 工作台启动并加载主界面（App/Chat Workspace），建立会话与配置状态，准备后续的会话选择与聊天流。",
-      "entry_point": "web/src/main.tsx",
-      "importance": 8.0,
-      "involved_domains_count": 2,
-      "name": "Web 工作台启动与初始化流程",
-      "steps": [
-        {
-          "code_entry_point": "web/src/main.tsx",
-          "domain_module": "Web 前端工作台域",
-          "operation": "初始化入口：开发模式可选启用 react-scan，随后加载 bootstrap",
-          "step": 1,
-          "sub_module": "应用启动与容错引导"
-        },
-        {
-          "code_entry_point": "web/src/bootstrap.tsx",
-          "domain_module": "Web 前端工作台域",
-          "operation": "创建 React Root，挂载 StrictMode 与 ErrorBoundary；对动态 import chunk 失败执行一次性自动刷新恢复",
-          "step": 2,
-          "sub_module": "应用启动与容错引导"
-        },
-        {
-          "code_entry_point": "web/src/App.tsx",
-          "domain_module": "Web 前端工作台域",
-          "operation": "构建整体布局（侧边栏+工作区），处理 URL 会话选择与 token 状态，渲染 ChatWorkspaceContainer",
-          "step": 3,
-          "sub_module": "会话导航与工作区编排"
-        },
-        {
-          "code_entry_point": "web/src/features/chat/chat-workspace-container.tsx",
-          "domain_module": "Web 前端工作台域",
-          "operation": "读取会话列表/全局配置（hooks），为聊天区准备流式连接、上传与队列状态",
-          "step": 4,
-          "sub_module": "聊天工作区编排"
-        }
-      ]
-    },
-    {
-      "description": "用户在 Web 工作台创建/选择会话后，前端通过 REST 获取会话元信息并通过 WebSocket 建立流式通道；后端回放历史 wire 事件并转发 runner 输出，实现实时对话与工具调用展示。",
-      "entry_point": "web/src/App.tsx（会话选择/创建触发）",
+      "description": "Core user interaction flow where a user sends a message through the web interface or CLI, the system processes it through the LLM provider, executes any requested tools, and returns the AI response with real-time streaming. This flow handles the complete conversation lifecycle including message composition, AI reasoning, tool execution, and response visualization.",
+      "entry_point": "User initiates message via ChatPromptComposer (web) or CLI input, triggering message submission to active session",
       "importance": 10.0,
-      "involved_domains_count": 4,
-      "name": "会话实时聊天与事件流同步流程",
-      "steps": [
-        {
-          "code_entry_point": "web/src/App.tsx",
-          "domain_module": "Web 前端工作台域",
-          "operation": "发起会话创建/选择/删除/归档等操作，驱动当前会话上下文变化",
-          "step": 1,
-          "sub_module": "会话导航与工作区编排"
-        },
-        {
-          "code_entry_point": "web/src/features/chat/chat-workspace-container.tsx",
-          "domain_module": "Web 前端工作台域",
-          "operation": "在会话切换时建立/重置流式连接；管理待发送队列、上传状态与重放/忙碌状态，避免父组件不必要重渲染",
-          "step": 2,
-          "sub_module": "聊天工作区编排"
-        },
-        {
-          "code_entry_point": "web/src/hooks/useSessions.ts",
-          "domain_module": "Web 前端 API 接入域",
-          "operation": "通过 apiClient 调用 SessionsApi 获取会话列表/详情并维护前端缓存/状态",
-          "step": 3,
-          "sub_module": "会话 API Hook"
-        },
-        {
-          "code_entry_point": "web/src/lib/apiClient.ts",
-          "domain_module": "Web 前端 API 接入域",
-          "operation": "组合 ConfigApi/SessionsApi 等 OpenAPI 生成客户端，统一承载请求与鉴权（推断）",
-          "step": 4,
-          "sub_module": "OpenAPI 客户端封装"
-        },
-        {
-          "code_entry_point": "src/kimi_cli/web/api/sessions.py",
-          "domain_module": "Web 后端会话与文件域",
-          "operation": "处理会话 CRUD、文件上传/受控访问、git diff、fork、标题生成等；WebSocket：回放 wire.jsonl、管理 runner 子进程、双向转发消息、busy-state 拒绝",
-          "step": 5,
-          "sub_module": "Sessions API（REST + WebSocket）"
-        },
-        {
-          "code_entry_point": "src/kimi_cli/web/runner/process（引用）",
-          "domain_module": "Runner/Worker 编排与流式通讯域",
-          "operation": "启动/管理 worker/runner 子进程，跟踪 busy 状态，承接消息路由与转发",
-          "step": 6,
-          "sub_module": "Runner 进程管理"
-        },
-        {
-          "code_entry_point": "src/kimi_cli/wire/jsonrpc（引用）",
-          "domain_module": "协议与事件持久化域",
-          "operation": "基于 JSON-RPC 事件模型记录与回放 wire 事件，驱动前端对话、工具结果与状态渲染",
-          "step": 7,
-          "sub_module": "Wire JSON-RPC 协议"
-        },
-        {
-          "code_entry_point": "packages/kosong（引用）",
-          "domain_module": "LLM Provider 与工具抽象域（kosong）",
-          "operation": "将对话 step 与工具调用抽象化，适配不同 LLM Provider；为 runner 提供模型调用与工具执行能力（推断自依赖关系）",
-          "step": 8,
-          "sub_module": "Chat Provider + Toolset"
-        }
-      ]
-    },
-    {
-      "description": "用户在输入框编辑提示词，使用 slash commands 与 @file mentions，附加文件并可能进入消息队列；发送后 UI 依据流式状态展示活动指示、上下文 token 使用、git diff、队列等信息。",
-      "entry_point": "web/src/features/chat/components/chat-prompt-composer.tsx",
-      "importance": 9.0,
-      "involved_domains_count": 2,
-      "name": "提示词编辑、附件与队列管理流程",
+      "involved_domains_count": 5,
+      "name": "Interactive Chat Conversation Flow",
       "steps": [
         {
           "code_entry_point": "web/src/features/chat/components/chat-prompt-composer.tsx",
-          "domain_module": "Web 前端工作台域",
-          "operation": "组合输入文本、多模态附件、slash commands 与 file mentions；根据聊天状态控制可编辑性/发送行为",
+          "domain_module": "Web Interface Domain",
+          "operation": "User composes message with optional file attachments and slash commands; message is submitted through prompt composer with queue management for sequential processing",
           "step": 1,
-          "sub_module": "提示词编辑与交互增强"
+          "sub_module": "Chat Workspace"
         },
         {
-          "code_entry_point": "web/src/features/chat/useSlashCommands.ts",
-          "domain_module": "Web 前端工作台域",
-          "operation": "检测“/”触发命令菜单，过滤/导航/插入命令文本，处理 IME 与光标竞态",
+          "code_entry_point": "web/src/hooks/useSessionStream.ts",
+          "domain_module": "Conversation Management Domain",
+          "operation": "Message is transmitted via WebSocket to backend session; session validates busy state, replays history if reconnecting, and forwards to agent runner",
           "step": 2,
-          "sub_module": "命令系统"
+          "sub_module": "Session Streaming"
         },
         {
-          "code_entry_point": "web/src/features/chat/useFileMentions.ts",
-          "domain_module": "Web 前端工作台域",
-          "operation": "检测“@”触发文件提及，汇总上传附件与工作目录文件建议，执行替换与光标定位",
+          "code_entry_point": "src/kimi_cli/agents/default/",
+          "domain_module": "Agent System Domain",
+          "operation": "Agent assembles conversation context including system prompt, message history, and available tools; prepares request for LLM provider",
           "step": 3,
-          "sub_module": "文件提及与工作区文件浏览"
+          "sub_module": "Prompt Management"
         },
         {
-          "code_entry_point": "web/src/features/chat/queue-store.ts",
-          "domain_module": "Web 前端工作台域",
-          "operation": "将待发送项入队/编辑/重排/出队/清空，实现 AI 处理期间的消息排队",
+          "code_entry_point": "packages/kosong/src/kosong/chat_provider/",
+          "domain_module": "LLM Provider Integration Domain",
+          "operation": "Provider formats request according to provider-specific API (Kimi/OpenAI/Anthropic/Google), authenticates, and initiates streaming request",
           "step": 4,
-          "sub_module": "前端队列状态（Zustand）"
+          "sub_module": "Provider Abstraction"
         },
         {
-          "code_entry_point": "web/src/features/chat/components/prompt-toolbar/index.tsx",
-          "domain_module": "Web 前端工作台域",
-          "operation": "在工具栏聚合展示：队列面板、git diff 统计、活动状态、上下文 token；根据数据自动开关面板",
+          "code_entry_point": "packages/kosong/src/kosong/tooling/__init__.py",
+          "domain_module": "LLM Provider Integration Domain",
+          "operation": "If AI requests tool execution, tools are invoked with user approval workflow; results are formatted and returned to conversation",
           "step": 5,
-          "sub_module": "状态工具栏"
+          "sub_module": "Tool Integration"
+        },
+        {
+          "code_entry_point": "web/src/features/chat/components/virtualized-message-list.tsx",
+          "domain_module": "Web Interface Domain",
+          "operation": "Streaming response is rendered in real-time with virtualized message list; thinking blocks, tool calls, and code snippets are displayed appropriately",
+          "step": 6,
+          "sub_module": "Chat Workspace"
+        },
+        {
+          "code_entry_point": "src/kimi_cli/web/api/sessions.py",
+          "domain_module": "Conversation Management Domain",
+          "operation": "Complete conversation turn including user message, AI response, and tool results is persisted to JSONL files for history and replay",
+          "step": 7,
+          "sub_module": "History Management"
         }
       ]
     },
     {
-      "description": "用户在 Web 前端修改全局模型或 thinking 开关；前端调用 Config API 更新全局配置；后端验证并按需重启会话，忙碌会话可跳过并支持强制重启。",
-      "entry_point": "web/src/features/chat/global-config-controls.tsx",
-      "importance": 8.0,
+      "description": "Flow for creating, managing, and maintaining conversation sessions. Includes session creation with work directory selection, session forking to branch conversations, auto-archival of inactive sessions, and session deletion with proper cleanup.",
+      "entry_point": "User creates new session via create-session-dialog or initiates session operation from sidebar",
+      "importance": 9.0,
       "involved_domains_count": 3,
-      "name": "全局配置更新与会话重启协调流程",
+      "name": "Session Lifecycle Management Flow",
+      "steps": [
+        {
+          "code_entry_point": "web/src/features/sessions/create-session-dialog.tsx",
+          "domain_module": "Web Interface Domain",
+          "operation": "User initiates session creation through dialog with directory selection, path completion, and optional custom path input",
+          "step": 1,
+          "sub_module": "Session Sidebar"
+        },
+        {
+          "code_entry_point": "src/kimi_cli/web/api/sessions.py",
+          "domain_module": "Conversation Management Domain",
+          "operation": "Backend creates session with unique ID, sets up work directory, initializes metadata, and prepares wire.jsonl for event logging",
+          "step": 2,
+          "sub_module": "Session Lifecycle"
+        },
+        {
+          "code_entry_point": "src/kimi_cli/web/api/sessions.py",
+          "domain_module": "Conversation Management Domain",
+          "operation": "Session history is initialized with context.jsonl for conversation messages; directory structure is created for uploads and session files",
+          "step": 3,
+          "sub_module": "History Management"
+        },
+        {
+          "code_entry_point": "web/src/App.tsx",
+          "domain_module": "Web Interface Domain",
+          "operation": "New session appears in sidebar with auto-generated or user-specified title; URL is updated to reflect active session",
+          "step": 4,
+          "sub_module": "Session Sidebar"
+        },
+        {
+          "code_entry_point": "src/kimi_cli/web/store/sessions.py",
+          "domain_module": "Conversation Management Domain",
+          "operation": "Background process monitors session activity and auto-archives inactive sessions based on configurable thresholds",
+          "step": 5,
+          "sub_module": "Session Lifecycle"
+        }
+      ]
+    },
+    {
+      "description": "Flow for updating global application configuration and propagating changes to active sessions. Handles model selection changes, thinking mode toggles, and manages session restarts when configuration changes require it.",
+      "entry_point": "User modifies global configuration through config controls in web interface",
+      "importance": 8.0,
+      "involved_domains_count": 4,
+      "name": "Configuration Change Propagation Flow",
       "steps": [
         {
           "code_entry_point": "web/src/features/chat/global-config-controls.tsx",
-          "domain_module": "Web 前端工作台域",
-          "operation": "通过 useGlobalConfig 读取配置与状态；用户选择 defaultModel/默认 thinking；处理 skippedBusySessionIds 并提供 force restart 操作",
+          "domain_module": "Web Interface Domain",
+          "operation": "User selects new default model or toggles thinking mode through global-config-controls; UI shows loading state during update",
           "step": 1,
-          "sub_module": "全局配置控制面板"
-        },
-        {
-          "code_entry_point": "web/src/hooks/useGlobalConfig.ts",
-          "domain_module": "Web 前端 API 接入域",
-          "operation": "拉取/更新全局配置，维护 loading/updating/error 状态并提供 refresh/update 动作",
-          "step": 2,
-          "sub_module": "配置 API Hook"
-        },
-        {
-          "code_entry_point": "web/src/lib/api/apis/ConfigApi.ts",
-          "domain_module": "Web 前端 API 接入域",
-          "operation": "通过 OpenAPI 生成客户端调用后端配置 REST：获取 global config / 读写 TOML 配置",
-          "step": 3,
-          "sub_module": "Config API Client"
+          "sub_module": null
         },
         {
           "code_entry_point": "src/kimi_cli/web/api/config.py",
-          "domain_module": "Web 后端配置与重启协调域",
-          "operation": "接收全局配置与 TOML 配置更新请求；执行敏感性校验与配置验证；协调 runner 重启会话并返回重启/跳过列表",
-          "step": 4,
-          "sub_module": "Config API（REST）"
+          "domain_module": "Configuration Management Domain",
+          "operation": "Configuration update request is validated for provider references and model capabilities; TOML/JSON config file is updated",
+          "step": 2,
+          "sub_module": "Configuration API"
         },
         {
-          "code_entry_point": "src/kimi_cli/config.py",
-          "domain_module": "配置管理域（CLI/服务端共享）",
-          "operation": "加载/校验/保存 TOML/JSON 配置，处理迁移与敏感字段（API keys）管理",
-          "step": 5,
-          "sub_module": "配置模型与持久化"
-        }
-      ]
-    },
-    {
-      "description": "用户在后端 API 发起 fork：从已有会话的指定 turn 处派生新会话，截断并复制必要历史与资源（wire/context/video），生成新 metadata。",
-      "entry_point": "src/kimi_cli/web/api/sessions.py（fork endpoint）",
-      "importance": 7.0,
-      "involved_domains_count": 2,
-      "name": "会话 Fork 与历史裁剪流程",
-      "steps": [
+          "code_entry_point": "src/kimi_cli/web/runner/",
+          "domain_module": "Conversation Management Domain",
+          "operation": "Runner process is notified of configuration change; active sessions are evaluated for restart requirement based on model change",
+          "step": 3,
+          "sub_module": "Session Lifecycle"
+        },
         {
           "code_entry_point": "src/kimi_cli/web/api/sessions.py",
-          "domain_module": "Web 后端会话与文件域",
-          "operation": "根据源会话与 turn index 创建新会话目录；截断 wire.jsonl 与 context.jsonl；复制被引用的视频等资源；写入新会话 metadata.json",
-          "step": 1,
-          "sub_module": "Session Fork 服务"
-        },
-        {
-          "code_entry_point": "src/kimi_cli/wire/jsonrpc（引用）",
-          "domain_module": "协议与事件持久化域",
-          "operation": "以 wire 事件序列为依据执行回放/裁剪边界，确保新会话事件序列一致性",
-          "step": 2,
-          "sub_module": "Wire 事件序列管理"
-        }
-      ]
-    },
-    {
-      "description": "通过 python -m kosong 启动一个 REPL 式 agent loop：选择 provider、装配 Toolset、执行 step、收集工具结果并追加到 history，直至无工具调用。",
-      "entry_point": "packages/kosong/src/kosong/__main__.py",
-      "importance": 6.0,
-      "involved_domains_count": 2,
-      "name": "Kosong 交互式 Agent Loop 执行流程",
-      "steps": [
-        {
-          "code_entry_point": "packages/kosong/src/kosong/__main__.py",
-          "domain_module": "LLM Provider 与工具抽象域（kosong）",
-          "operation": "从环境变量加载配置（dotenv），选择 provider（Kimi/OpenAI/Anthropic/Google）并创建实例",
-          "step": 1,
-          "sub_module": "Provider 装配"
-        },
-        {
-          "code_entry_point": "packages/kosong/src/kosong/__main__.py",
-          "domain_module": "LLM Provider 与工具抽象域（kosong）",
-          "operation": "构建 Toolset（可选 BashTool），初始化 history 与 system prompt",
-          "step": 2,
-          "sub_module": "Toolset 与消息编排"
-        },
-        {
-          "code_entry_point": "packages/kosong/src/kosong/__main__.py",
-          "domain_module": "LLM Provider 与工具抽象域（kosong）",
-          "operation": "循环调用 kosong.step(...)；等待 tool_results；将 assistant/tool 消息追加 history；打印输出；直到无 tool calls",
-          "step": 3,
-          "sub_module": "Step-based Agent Loop"
-        },
-        {
-          "code_entry_point": "packages/kosong/src/kosong/utils/jsonschema.py",
-          "domain_module": "工具与 Schema 支撑域",
-          "operation": "为工具参数与 schema 处理提供 JSON Schema $ref 展开能力（间接支撑工具定义/校验）",
+          "domain_module": "Conversation Management Domain",
+          "operation": "Busy sessions are skipped with notification; idle sessions are restarted with new configuration",
           "step": 4,
-          "sub_module": "JSON Schema 工具"
-        }
-      ]
-    },
-    {
-      "description": "终端交互式 setup 向导引导用户完成平台选择、鉴权（API key/OAuth）、模型发现、thinking 能力确认与配置落盘，并支持 reload。",
-      "entry_point": "src/kimi_cli/ui/shell/setup.py",
-      "importance": 7.0,
-      "involved_domains_count": 2,
-      "name": "CLI 配置向导流程",
-      "steps": [
-        {
-          "code_entry_point": "src/kimi_cli/ui/shell/setup.py",
-          "domain_module": "CLI 交互与向导域",
-          "operation": "按步骤收集平台与认证信息，发现模型列表并提示选择；处理错误并给出反馈",
-          "step": 1,
-          "sub_module": "交互式 Setup Wizard"
+          "sub_module": "Session Streaming"
         },
         {
-          "code_entry_point": "src/kimi_cli/config.py",
-          "domain_module": "配置管理域（CLI/服务端共享）",
-          "operation": "校验并保存配置（TOML/JSON 迁移），提供 reload/读取能力供 CLI 与 Web 侧共享",
-          "step": 2,
-          "sub_module": "配置模型与持久化"
+          "code_entry_point": "web/src/features/chat/global-config-controls.tsx",
+          "domain_module": "Web Interface Domain",
+          "operation": "User is notified of update result with list of restarted and skipped sessions; option to force restart busy sessions is provided",
+          "step": 5,
+          "sub_module": null
         }
       ]
     },
     {
-      "description": "前端在渲染工具结果时识别 WriteFile 等工具输出，提取写入的文件路径并记录到 store，用于 UI 展示“本轮生成/写入文件”等信息。",
-      "entry_point": "web/src/features/tool/store.ts",
-      "importance": 6.0,
-      "involved_domains_count": 2,
-      "name": "工具结果解析与文件写入跟踪流程",
+      "description": "Flow for executing AI-requested tools with user approval. Includes tool call detection, approval dialog display, execution with proper error handling, and result visualization. Handles various tool types including file operations, shell commands, and web searches.",
+      "entry_point": "LLM returns tool call request during conversation streaming",
+      "importance": 9.0,
+      "involved_domains_count": 4,
+      "name": "Tool Execution and Approval Flow",
       "steps": [
         {
-          "code_entry_point": "web/src/features/tool/store.ts",
-          "domain_module": "Web 前端工作台域",
-          "operation": "监听/处理工具结果事件；解析工具参数以识别写文件/输出路径字段；更新“本轮写入文件列表”状态",
+          "code_entry_point": "packages/kosong/src/kosong/tooling/__init__.py",
+          "domain_module": "LLM Provider Integration Domain",
+          "operation": "Provider detects tool call in streaming response; tool name, arguments, and call ID are extracted from response",
           "step": 1,
-          "sub_module": "工具结果状态（Zustand）"
+          "sub_module": "Tool Integration"
+        },
+        {
+          "code_entry_point": "web/src/features/chat/components/approval-dialog.tsx",
+          "domain_module": "Web Interface Domain",
+          "operation": "Tool call is rendered with approval dialog showing tool name, arguments, and approval options (Approve, Approve for session, Decline)",
+          "step": 2,
+          "sub_module": "Chat Workspace"
+        },
+        {
+          "code_entry_point": "src/kimi_cli/tools/",
+          "domain_module": "Tool Execution Domain",
+          "operation": "Upon approval, tool is executed with provided arguments; execution is logged and results are captured",
+          "step": 3,
+          "sub_module": null
         },
         {
           "code_entry_point": "web/src/features/tool/components/display-content.tsx",
-          "domain_module": "Web 前端工作台域",
-          "operation": "根据工具输出类型分发到不同渲染组件（diff、shell、todo、MCP 等），展示结构化结果",
+          "domain_module": "Web Interface Domain",
+          "operation": "Tool results are rendered based on type: code diffs with syntax highlighting, file listings, shell outputs, or search results",
+          "step": 4,
+          "sub_module": "Tool Visualization"
+        },
+        {
+          "code_entry_point": "packages/kosong/src/kosong/tooling/__init__.py",
+          "domain_module": "LLM Provider Integration Domain",
+          "operation": "Tool results are formatted as tool messages and appended to conversation history for LLM to process in next turn",
+          "step": 5,
+          "sub_module": "Tool Integration"
+        }
+      ]
+    },
+    {
+      "description": "Flow for running Kimi CLI in standalone terminal mode without web interface. User interacts through command line REPL with direct LLM communication, tool execution, and console output.",
+      "entry_point": "User runs 'python -m kosong' or 'kimi-cli' command in terminal",
+      "importance": 7.0,
+      "involved_domains_count": 4,
+      "name": "CLI Interactive Session Flow",
+      "steps": [
+        {
+          "code_entry_point": "src/kimi_cli/ui/shell/setup.py",
+          "domain_module": "CLI Interface Domain",
+          "operation": "On first run, interactive wizard guides user through platform selection, API key input, and model discovery",
+          "step": 1,
+          "sub_module": "Setup Wizard"
+        },
+        {
+          "code_entry_point": "packages/kosong/src/kosong/__main__.py",
+          "domain_module": "CLI Interface Domain",
+          "operation": "REPL loop starts with conversation history; user input is read and processed",
           "step": 2,
-          "sub_module": "工具结果展示"
+          "sub_module": "Interactive Terminal"
+        },
+        {
+          "code_entry_point": "packages/kosong/src/kosong/chat_provider/",
+          "domain_module": "LLM Provider Integration Domain",
+          "operation": "Selected provider is initialized with configuration; message history is assembled for request",
+          "step": 3,
+          "sub_module": "Provider Abstraction"
+        },
+        {
+          "code_entry_point": "packages/kosong/src/kosong/__init__.py",
+          "domain_module": "Agent System Domain",
+          "operation": "Agent loop executes step function with system prompt and available tools; tool results are processed and fed back",
+          "step": 4,
+          "sub_module": null
+        },
+        {
+          "code_entry_point": "packages/kosong/src/kosong/__main__.py",
+          "domain_module": "CLI Interface Domain",
+          "operation": "AI responses and tool results are printed to console with formatting; loop continues until no more tool calls",
+          "step": 5,
+          "sub_module": "Interactive Terminal"
         }
       ]
     }
   ],
-  "confidence_score": 8.0,
+  "confidence_score": 9.2,
   "domain_modules": [
     {
       "code_paths": [
-        "web/src/main.tsx",
-        "web/src/bootstrap.tsx",
-        "web/src/App.tsx",
-        "web/src/features/chat/**",
-        "web/src/features/sessions/**",
-        "web/src/features/tool/**",
-        "web/src/components/ui/**"
+        "src/kimi_cli/web/api/sessions.py",
+        "src/kimi_cli/web/store/sessions.py",
+        "src/kimi_cli/web/runner/",
+        "src/kimi_cli/wire/",
+        "web/src/hooks/useSessions.ts",
+        "web/src/hooks/useSessionStream.ts",
+        "web/src/lib/api/apis/SessionsApi.ts"
       ],
-      "complexity": 7.0,
-      "description": "面向用户的本地 Web 工作台（React/TS），提供会话侧边栏、聊天工作区、提示词编辑、状态工具栏、消息搜索、审批/提问对话框、工具结果展示等核心交互。该域的价值是把“会话+工具+项目文件+模型能力”以可视化方式呈现并支持高频操作。",
-      "domain_type": "核心业务域",
+      "complexity": 8.0,
+      "description": "Core business domain responsible for managing the lifecycle of AI conversation sessions, including creation, persistence, history replay, forking, and archival of conversational contexts. This domain ensures users can maintain multiple independent sessions with preserved context and history.",
+      "domain_type": "Core Business Domain",
       "importance": 10.0,
-      "name": "Web 前端工作台域",
+      "name": "Conversation Management Domain",
       "sub_modules": [
         {
           "code_paths": [
-            "web/src/main.tsx",
-            "web/src/bootstrap.tsx"
+            "src/kimi_cli/web/api/sessions.py",
+            "src/kimi_cli/web/store/sessions.py",
+            "web/src/hooks/useSessions.ts",
+            "web/src/lib/api/apis/SessionsApi.ts",
+            "web/src/lib/api/models/Session.ts"
           ],
-          "description": "应用启动入口与初始化，包含动态 import 失败恢复与错误边界处理。",
-          "importance": 7.0,
-          "key_functions": [
-            "React 应用挂载与渲染",
-            "Chunk 加载失败自动恢复",
-            "初始化监控/调试工具（开发态）"
-          ],
-          "name": "应用启动与容错引导"
-        },
-        {
-          "code_paths": [
-            "web/src/App.tsx",
-            "web/src/features/sessions/create-session-dialog.tsx"
-          ],
-          "description": "会话导航与生命周期操作入口：创建/删除/选择/归档，会话与 URL 状态同步、响应式布局。",
-          "importance": 9.0,
-          "key_functions": [
-            "会话选择与持久化（URL）",
-            "创建会话对话框与路径补全",
-            "归档/删除会话触发"
-          ],
-          "name": "会话导航与工作区编排"
-        },
-        {
-          "code_paths": [
-            "web/src/features/chat/chat-workspace-container.tsx",
-            "web/src/features/chat/chat.tsx",
-            "web/src/features/chat/components/**"
-          ],
-          "description": "聊天工作区编排：流式消息展示、输入与发送、工具审批/提问交互、会话标题编辑、消息虚拟化与搜索。",
+          "description": "Manages the complete lifecycle of conversation sessions from creation through deletion, including session metadata, work directories, and state transitions",
           "importance": 10.0,
           "key_functions": [
-            "建立/维护会话流式连接",
-            "消息虚拟化渲染与滚动控制",
-            "审批与提问 UI 工作流",
-            "会话标题显示与重命名"
+            "Create session with work directory",
+            "List sessions with pagination/search",
+            "Update session metadata (title, archived status)",
+            "Delete session with cleanup",
+            "Auto-archive inactive sessions"
           ],
-          "name": "聊天工作区与对话体验"
+          "name": "Session Lifecycle"
         },
         {
           "code_paths": [
-            "web/src/features/chat/components/chat-prompt-composer.tsx",
-            "web/src/features/chat/useSlashCommands.ts",
-            "web/src/features/chat/slash-command-menu.tsx",
-            "web/src/features/chat/useFileMentions.ts",
-            "web/src/features/chat/file-mention-menu.tsx"
+            "src/kimi_cli/web/api/sessions.py",
+            "src/kimi_cli/wire/"
           ],
-          "description": "提示词编辑增强能力：slash commands、@文件提及、附件管理与智能替换。",
+          "description": "Handles conversation history persistence, replay, and forking capabilities allowing users to branch conversations at specific points",
+          "importance": 9.0,
+          "key_functions": [
+            "Persist conversation history to JSONL files",
+            "Replay conversation history for reconnection",
+            "Fork sessions at specific turn indices",
+            "Truncate wire and context files during fork"
+          ],
+          "name": "History Management"
+        },
+        {
+          "code_paths": [
+            "src/kimi_cli/web/api/sessions.py",
+            "web/src/hooks/useSessionStream.ts",
+            "src/kimi_cli/web/runner/"
+          ],
+          "description": "Implements real-time bidirectional communication between frontend and backend for live conversation updates",
+          "importance": 9.0,
+          "key_functions": [
+            "WebSocket connection management",
+            "JSONRPC event streaming",
+            "History replay on reconnect",
+            "Busy-state rejection handling"
+          ],
+          "name": "Session Streaming"
+        }
+      ]
+    },
+    {
+      "code_paths": [
+        "packages/kosong/src/kosong/chat_provider/",
+        "packages/kosong/src/kosong/message.py",
+        "packages/kosong/src/kosong/tooling/",
+        "packages/kosong/src/kosong/__init__.py",
+        "packages/kosong/src/kosong/utils/jsonschema.py",
+        "sdks/kimi-sdk/src/kimi_sdk/__init__.py"
+      ],
+      "complexity": 9.0,
+      "description": "Abstraction layer providing unified interface for multiple Large Language Model providers (Kimi, OpenAI, Anthropic, Google GenAI). Handles provider-specific authentication, message formatting, streaming responses, and tool integration for seamless multi-provider support.",
+      "domain_type": "Core Business Domain",
+      "importance": 10.0,
+      "name": "LLM Provider Integration Domain",
+      "sub_modules": [
+        {
+          "code_paths": [
+            "packages/kosong/src/kosong/chat_provider/",
+            "packages/kosong/src/kosong/chat_provider/kimi.py",
+            "packages/kosong/src/kosong/chat_provider/anthropic.py",
+            "packages/kosong/src/kosong/contrib/chat_provider/"
+          ],
+          "description": "Defines common interfaces and implementations for different LLM providers, enabling provider-agnostic AI capabilities",
+          "importance": 10.0,
+          "key_functions": [
+            "Provider selection and initialization",
+            "API authentication handling",
+            "Provider-specific URL/model configuration",
+            "OAuth credential integration"
+          ],
+          "name": "Provider Abstraction"
+        },
+        {
+          "code_paths": [
+            "packages/kosong/src/kosong/message.py",
+            "packages/kosong/src/kosong/__init__.py"
+          ],
+          "description": "Manages message formatting, serialization, and transformation between provider-specific formats and internal representation",
+          "importance": 9.0,
+          "key_functions": [
+            "Message structure definition",
+            "Content part management",
+            "Tool message formatting",
+            "Provider format conversion"
+          ],
+          "name": "Message Handling"
+        },
+        {
+          "code_paths": [
+            "packages/kosong/src/kosong/tooling/",
+            "packages/kosong/src/kosong/tooling/__init__.py",
+            "packages/kosong/src/kosong/utils/jsonschema.py"
+          ],
+          "description": "Provides framework for defining and executing tools that LLMs can invoke during conversation",
+          "importance": 9.0,
+          "key_functions": [
+            "Tool definition with JSON Schema",
+            "Tool execution with async support",
+            "Tool result aggregation",
+            "JSON Schema dereferencing"
+          ],
+          "name": "Tool Integration"
+        }
+      ]
+    },
+    {
+      "code_paths": [
+        "web/src/features/chat/",
+        "web/src/features/sessions/",
+        "web/src/features/tool/",
+        "web/src/components/",
+        "web/src/App.tsx",
+        "web/src/main.tsx",
+        "web/src/bootstrap.tsx"
+      ],
+      "complexity": 8.0,
+      "description": "Rich web-based user interface providing visual interaction with the AI assistant. Implements real-time chat workspace, session management UI, tool visualization, configuration controls, and responsive design for both desktop and mobile experiences.",
+      "domain_type": "Core Business Domain",
+      "importance": 9.0,
+      "name": "Web Interface Domain",
+      "sub_modules": [
+        {
+          "code_paths": [
+            "web/src/features/chat/chat.tsx",
+            "web/src/features/chat/chat-workspace-container.tsx",
+            "web/src/features/chat/components/chat-conversation.tsx",
+            "web/src/features/chat/components/chat-prompt-composer.tsx",
+            "web/src/features/chat/components/virtualized-message-list.tsx",
+            "web/src/features/chat/components/assistant-message.tsx"
+          ],
+          "description": "Primary conversation interface with message display, input composition, real-time streaming, and tool approval workflows",
+          "importance": 10.0,
+          "key_functions": [
+            "Virtualized message rendering",
+            "Multi-modal input (text + files)",
+            "Slash commands and file mentions",
+            "Real-time streaming display",
+            "Thinking/reasoning visualization"
+          ],
+          "name": "Chat Workspace"
+        },
+        {
+          "code_paths": [
+            "web/src/features/sessions/create-session-dialog.tsx",
+            "web/src/App.tsx"
+          ],
+          "description": "Navigation and management interface for multiple conversation sessions with search, filtering, and organization capabilities",
           "importance": 8.0,
           "key_functions": [
-            "slash 命令检测/过滤/插入",
-            "文件提及建议与选择",
-            "附件对话框触发与管理"
+            "Session list display",
+            "Create/delete/archive sessions",
+            "Session search and filtering",
+            "URL-based session persistence"
           ],
-          "name": "提示词编辑与交互增强"
-        },
-        {
-          "code_paths": [
-            "web/src/features/chat/components/prompt-toolbar/**",
-            "web/src/features/chat/queue-store.ts",
-            "web/src/features/chat/components/activity-status-indicator.tsx"
-          ],
-          "description": "聊天状态可观测性：队列、Git diff、活动状态、上下文 token 使用等信息的聚合与面板管理。",
-          "importance": 7.0,
-          "key_functions": [
-            "队列入队/编辑/重排/出队",
-            "自动开关工具栏面板",
-            "活动状态映射与展示",
-            "上下文 token 使用率展示"
-          ],
-          "name": "状态工具栏与队列管理"
+          "name": "Session Sidebar"
         },
         {
           "code_paths": [
             "web/src/features/tool/components/display-content.tsx",
             "web/src/features/tool/store.ts",
+            "web/src/components/ai-elements/tool.tsx",
             "web/src/components/ui/diff/index.tsx"
           ],
-          "description": "工具结果可视化与本轮产物跟踪：对 diff、shell、MCP、todo 等多类型工具输出进行渲染，并记录写文件路径。",
-          "importance": 7.0,
-          "key_functions": [
-            "工具输出类型识别与分发渲染",
-            "diff 语法高亮展示",
-            "写文件路径提取与状态更新"
-          ],
-          "name": "工具结果展示与产物追踪"
-        }
-      ]
-    },
-    {
-      "code_paths": [
-        "web/src/hooks/useSessions.ts",
-        "web/src/hooks/useGlobalConfig.ts",
-        "web/src/lib/apiClient.ts",
-        "web/src/lib/api/apis/**",
-        "web/src/lib/api/models/**"
-      ],
-      "complexity": 6.0,
-      "description": "前端 API 接入与契约域：基于 OpenAPI 生成的 TS 客户端与自定义 hooks，提供会话与配置等资源的获取/更新能力，并以模型 DTO 保证类型安全。",
-      "domain_type": "支撑域",
-      "importance": 8.0,
-      "name": "Web 前端 API 接入域",
-      "sub_modules": [
-        {
-          "code_paths": [
-            "web/src/lib/apiClient.ts",
-            "web/src/lib/api/apis/ConfigApi.ts",
-            "web/src/lib/api/apis/SessionsApi.ts",
-            "web/src/lib/api/runtime.ts"
-          ],
-          "description": "OpenAPI 客户端封装与运行时：组合各 API 类、统一请求入口（鉴权/基础 URL 等推断）。",
+          "description": "Displays tool execution results including code diffs, file operations, web search results, and shell outputs",
           "importance": 8.0,
           "key_functions": [
-            "Config API 调用",
-            "Sessions API 调用",
-            "请求运行时与错误处理（生成器模式）"
+            "Diff visualization with syntax highlighting",
+            "Search result rendering",
+            "MCP content display",
+            "Tool output categorization"
           ],
-          "name": "OpenAPI 客户端封装"
+          "name": "Tool Visualization"
         },
         {
           "code_paths": [
-            "web/src/hooks/useSessions.ts"
+            "web/src/features/chat/components/prompt-toolbar/index.tsx",
+            "web/src/features/chat/components/prompt-toolbar/toolbar-changes.tsx",
+            "web/src/features/chat/components/prompt-toolbar/toolbar-context.tsx",
+            "web/src/features/chat/components/prompt-toolbar/toolbar-queue.tsx",
+            "web/src/features/chat/components/activity-status-indicator.tsx"
           ],
-          "description": "会话相关 hooks：拉取会话列表/详情并为 UI 提供可复用状态。",
+          "description": "Status and information toolbar showing queue management, git changes, activity status, and context token usage",
           "importance": 7.0,
           "key_functions": [
-            "获取会话列表",
-            "会话状态刷新",
-            "向 UI 暴露 loading/error"
+            "Queue item management",
+            "Git diff statistics display",
+            "Real-time activity indicators",
+            "Token usage monitoring"
           ],
-          "name": "会话 API Hook"
-        },
-        {
-          "code_paths": [
-            "web/src/hooks/useGlobalConfig.ts",
-            "web/src/lib/api/models/GlobalConfig.ts",
-            "web/src/lib/api/models/UpdateGlobalConfigRequest.ts",
-            "web/src/lib/api/models/UpdateGlobalConfigResponse.ts"
-          ],
-          "description": "全局配置 hooks 与 DTO：读取/更新默认模型与 thinking 设置，处理后端返回的会话重启/跳过信息。",
-          "importance": 7.0,
-          "key_functions": [
-            "获取 global config",
-            "更新 global config",
-            "维护 updating/error 状态",
-            "反序列化/序列化 DTO"
-          ],
-          "name": "全局配置 API Hook 与 DTO"
+          "name": "Prompt Toolbar"
         }
       ]
     },
     {
       "code_paths": [
-        "src/kimi_cli/web/api/sessions.py",
-        "src/kimi_cli/session/**（材料中引用）",
-        "src/kimi_cli/web/runner/**",
-        "src/kimi_cli/wire/**"
-      ],
-      "complexity": 9.0,
-      "description": "Web 后端会话与文件管理域（FastAPI）：提供会话 CRUD、会话目录/工作目录文件访问（含上传）、会话 fork、Git diff、标题生成，以及 WebSocket 流式事件通道与历史回放。该域是产品数据与实时交互的核心枢纽，并承担严格的本地/局域网安全控制。",
-      "domain_type": "核心业务域",
-      "importance": 10.0,
-      "name": "Web 后端会话与文件域",
-      "sub_modules": [
-        {
-          "code_paths": [
-            "src/kimi_cli/web/api/sessions.py"
-          ],
-          "description": "会话 REST API：创建/列出/更新/归档/删除；TTL 缓存与元数据（metadata.json）原子更新；自动归档等后台任务。",
-          "importance": 10.0,
-          "key_functions": [
-            "会话 CRUD",
-            "列表缓存与失效",
-            "会话元数据维护",
-            "自动归档策略"
-          ],
-          "name": "会话生命周期管理 API"
-        },
-        {
-          "code_paths": [
-            "src/kimi_cli/web/api/sessions.py"
-          ],
-          "description": "文件与目录访问：上传附件到会话 uploads；受控读取 workdir 文件，包含路径穿越/符号链接/敏感路径/公开深度限制等安全策略。",
-          "importance": 9.0,
-          "key_functions": [
-            "文件上传与大小限制",
-            "workdir 文件读取与目录遍历（受控）",
-            "安全过滤（敏感路径、symlink、traversal）"
-          ],
-          "name": "文件管理与安全访问"
-        },
-        {
-          "code_paths": [
-            "src/kimi_cli/web/api/sessions.py"
-          ],
-          "description": "WebSocket 流：回放 wire.jsonl 历史事件，管理 runner 子进程与 busy-state，双向转发消息并进行鉴权与 origin/LAN 校验。",
-          "importance": 10.0,
-          "key_functions": [
-            "历史回放与同步",
-            "runner 进程绑定与转发",
-            "忙碌拒绝与并发控制",
-            "鉴权与来源校验"
-          ],
-          "name": "实时流式通讯（WebSocket）"
-        },
-        {
-          "code_paths": [
-            "src/kimi_cli/web/api/sessions.py"
-          ],
-          "description": "会话 fork：从指定 turn 派生新会话，裁剪 wire/context 并复制必要资源。",
-          "importance": 7.0,
-          "key_functions": [
-            "wire/context 裁剪",
-            "资源选择性复制",
-            "新会话目录初始化"
-          ],
-          "name": "会话 Fork 服务"
-        },
-        {
-          "code_paths": [
-            "src/kimi_cli/web/api/sessions.py"
-          ],
-          "description": "Git 集成：对 workdir 输出 diff 统计（增删行/变更文件/未跟踪文件），用于前端工具栏展示。",
-          "importance": 6.0,
-          "key_functions": [
-            "仓库检测（初始化/未初始化）",
-            "diff 统计计算",
-            "变更文件列表输出"
-          ],
-          "name": "Git 变更统计服务"
-        }
-      ]
-    },
-    {
-      "code_paths": [
-        "src/kimi_cli/web/api/config.py",
         "src/kimi_cli/config.py",
+        "src/kimi_cli/web/api/config.py",
+        "src/kimi_cli/ui/shell/setup.py",
+        "web/src/hooks/useGlobalConfig.ts",
         "web/src/lib/api/apis/ConfigApi.ts",
-        "web/src/lib/api/models/ConfigToml.ts"
+        "web/src/lib/api/models/GlobalConfig.ts",
+        "web/src/lib/api/models/ConfigModel.ts"
       ],
       "complexity": 7.0,
-      "description": "配置管理域：统一管理 CLI/Web 共享的配置模型与持久化（TOML/JSON 迁移），并通过 Web API 暴露“global config + 原始 TOML 文件”读写能力。该域还承担配置变更后的会话重启协调与敏感信息保护。",
-      "domain_type": "核心业务域",
+      "description": "Centralized configuration system managing application settings, LLM provider configurations, model selection, and user preferences. Supports TOML and JSON formats with validation, migration support, and secure credential storage.",
+      "domain_type": "Core Business Domain",
       "importance": 9.0,
-      "name": "配置管理域（CLI/Web 共享）",
+      "name": "Configuration Management Domain",
       "sub_modules": [
         {
           "code_paths": [
-            "src/kimi_cli/config.py"
+            "src/kimi_cli/config.py",
+            "src/kimi_cli/web/api/config.py",
+            "web/src/hooks/useGlobalConfig.ts",
+            "web/src/lib/api/apis/ConfigApi.ts",
+            "web/src/lib/api/models/GlobalConfig.ts",
+            "web/src/features/chat/global-config-controls.tsx"
           ],
-          "description": "配置模型与持久化：Pydantic 校验、TOML/JSON 加载与保存、历史格式迁移、敏感字段处理。",
+          "description": "Application-wide settings including default model, thinking mode, and available models list",
           "importance": 9.0,
           "key_functions": [
-            "加载/保存配置文件",
-            "配置校验与默认值",
-            "JSON→TOML 迁移",
-            "敏感数据管理"
+            "Configuration loading with format detection",
+            "Default model/thinking settings",
+            "Provider reference validation",
+            "Configuration persistence"
           ],
-          "name": "配置模型与持久化"
+          "name": "Global Configuration"
         },
         {
           "code_paths": [
-            "src/kimi_cli/web/api/config.py"
+            "src/kimi_cli/config.py",
+            "src/kimi_cli/ui/shell/setup.py"
           ],
-          "description": "配置 Web API：提供 global config 与 TOML 内容的读取/更新；对变更进行验证并协调 runner 重启会话，返回重启与跳过 busy 的结果。",
+          "description": "LLM provider-specific settings including API keys, endpoints, custom headers, and OAuth references",
+          "importance": 9.0,
+          "key_functions": [
+            "Provider credentials management",
+            "SecretStr for API keys",
+            "OAuth credential storage",
+            "Custom header configuration"
+          ],
+          "name": "Provider Configuration"
+        },
+        {
+          "code_paths": [
+            "src/kimi_cli/web/api/config.py",
+            "web/src/lib/api/apis/ConfigApi.ts",
+            "web/src/lib/api/models/UpdateGlobalConfigRequest.ts",
+            "web/src/lib/api/models/UpdateGlobalConfigResponse.ts",
+            "web/src/lib/api/models/ConfigToml.ts",
+            "web/src/lib/api/models/UpdateConfigTomlRequest.ts"
+          ],
+          "description": "RESTful API endpoints for configuration management with validation and sensitive path filtering",
           "importance": 8.0,
           "key_functions": [
-            "global config 获取/更新",
-            "TOML 读取/更新",
-            "敏感性检查",
-            "会话重启协调与结果汇报"
+            "GET/PUT configuration endpoints",
+            "TOML configuration management",
+            "Configuration validation",
+            "Session restart coordination"
           ],
-          "name": "配置 Web API 与重启协调"
+          "name": "Configuration API"
         }
       ]
     },
     {
       "code_paths": [
-        "src/kimi_cli/web/runner/**",
-        "src/kimi_cli/web/runner/process（材料中引用）",
-        "src/kimi_cli/wire/jsonrpc"
+        "src/kimi_cli/tools/",
+        "packages/kosong/src/kosong/tooling/"
       ],
       "complexity": 8.0,
-      "description": "Runner/Worker 编排与流式通讯域：负责启动与管理执行进程（runner/worker），在 WebSocket 会话中路由消息、跟踪忙碌状态并与 wire 协议事件持久化协同。价值是将“AI 代理执行”与“Web 交互通道”解耦并实现可靠转发。",
-      "domain_type": "基础设施域",
+      "description": "Extensible tool system enabling AI agents to interact with external systems. Implements file operations, shell commands, web search, multi-agent orchestration, and custom tool extensions through a standardized interface with approval workflows.",
+      "domain_type": "Core Business Domain",
       "importance": 9.0,
-      "name": "Runner/Worker 编排与流式通讯域",
+      "name": "Tool Execution Domain",
       "sub_modules": [
         {
           "code_paths": [
-            "src/kimi_cli/web/runner/process"
+            "src/kimi_cli/tools/file/"
           ],
-          "description": "子进程生命周期管理与 busy-state：启动/终止 runner，维护会话执行互斥与状态查询。",
+          "description": "Tools for reading, writing, searching, and managing files within the workspace",
           "importance": 9.0,
           "key_functions": [
-            "启动/终止子进程",
-            "busy 状态维护",
-            "消息管道/队列管理（推断）"
+            "Read file content",
+            "Write file with validation",
+            "Search file patterns",
+            "Directory listing"
           ],
-          "name": "Runner 进程管理"
+          "name": "File Operations"
         },
         {
           "code_paths": [
-            "src/kimi_cli/wire/jsonrpc"
-          ],
-          "description": "wire JSON-RPC 事件模型：定义并序列化/反序列化事件，用于持久化 wire.jsonl 与历史回放。",
-          "importance": 8.0,
-          "key_functions": [
-            "事件结构定义",
-            "JSONL 持久化",
-            "历史回放解析"
-          ],
-          "name": "Wire 协议与事件序列化"
-        }
-      ]
-    },
-    {
-      "code_paths": [
-        "packages/kosong/src/kosong/chat_provider/**",
-        "packages/kosong/src/kosong/tooling/**",
-        "packages/kosong/src/kosong/utils/jsonschema.py",
-        "packages/kosong/src/kosong/__main__.py",
-        "packages/kosong/src/kosong/__init__.py"
-      ],
-      "complexity": 8.0,
-      "description": "LLM Provider 与工具抽象域（kosong）：以统一的消息/step/工具调用接口屏蔽不同 LLM 供应商差异，并提供工具系统（Toolset、参数校验、工具结果汇聚）。该域为 CLI/Web runner 与 SDK 提供可复用的“代理执行内核”。",
-      "domain_type": "核心业务域",
-      "importance": 9.0,
-      "name": "LLM Provider 与工具抽象域（kosong）",
-      "sub_modules": [
-        {
-          "code_paths": [
-            "packages/kosong/src/kosong/chat_provider/kimi.py",
-            "packages/kosong/src/kosong/chat_provider/openai_common.py",
-            "packages/kosong/src/kosong/chat_provider/__init__.py"
-          ],
-          "description": "Provider 适配层：对 Kimi/OpenAI 兼容端点等进行协议适配与调用封装。",
-          "importance": 9.0,
-          "key_functions": [
-            "多 Provider 选择与初始化",
-            "请求/响应适配（含流式推断）",
-            "统一错误处理（推断）"
-          ],
-          "name": "Chat Provider 适配"
-        },
-        {
-          "code_paths": [
-            "packages/kosong/src/kosong/tooling/__init__.py"
-          ],
-          "description": "工具系统入口：组织工具集合、工具定义与执行框架，对外暴露统一 Toolset。",
-          "importance": 8.0,
-          "key_functions": [
-            "工具注册与发现",
-            "工具执行与结果聚合",
-            "工具参数 schema 管理（推断）"
-          ],
-          "name": "Tooling 与 Toolset"
-        },
-        {
-          "code_paths": [
-            "packages/kosong/src/kosong/utils/jsonschema.py"
-          ],
-          "description": "JSON Schema 工具：对本地 $ref 进行展开，支撑工具参数 schema 的简化与可用性。",
-          "importance": 6.0,
-          "key_functions": [
-            "JSON Pointer 解析",
-            "schema 深拷贝与递归遍历",
-            "内联 $ref 并清理 defs"
-          ],
-          "name": "JSON Schema 处理工具"
-        },
-        {
-          "code_paths": [
+            "src/kimi_cli/tools/shell/",
             "packages/kosong/src/kosong/__main__.py"
           ],
-          "description": "交互式执行入口：提供 REPL 式 agent loop 示例/工具，便于调试 provider 与工具系统。",
-          "importance": 6.0,
+          "description": "Safe execution of shell commands with user approval and output capture",
+          "importance": 9.0,
           "key_functions": [
-            "Provider 选择 CLI",
-            "Step-based agent loop",
-            "可选 BashTool 执行 shell"
+            "Command execution with approval",
+            "Async subprocess spawning",
+            "Output streaming",
+            "Error handling"
           ],
-          "name": "Kosong 执行入口"
+          "name": "Shell Execution"
+        },
+        {
+          "code_paths": [
+            "src/kimi_cli/tools/web/"
+          ],
+          "description": "Web search, fetch, and browsing capabilities for external information retrieval",
+          "importance": 7.0,
+          "key_functions": [
+            "Web search integration",
+            "Content fetching",
+            "Result processing"
+          ],
+          "name": "Web Tools"
+        },
+        {
+          "code_paths": [
+            "src/kimi_cli/tools/multiagent/"
+          ],
+          "description": "Framework for coordinating multiple AI agents in complex workflows",
+          "importance": 7.0,
+          "key_functions": [
+            "Agent spawning",
+            "Task distribution",
+            "Result aggregation"
+          ],
+          "name": "Multi-Agent Orchestration"
         }
       ]
     },
     {
       "code_paths": [
-        "sdks/kimi-sdk/src/kimi_sdk/__init__.py"
+        "src/kimi_cli/agents/",
+        "src/kimi_cli/prompts/",
+        "src/kimi_cli/skills/",
+        "src/kimi_cli/skill/",
+        "src/kimi_cli/soul/"
       ],
-      "complexity": 4.0,
-      "description": "对外 SDK 域：kimi-sdk 作为 facade 重新导出 kosong 的核心能力（provider、message、tooling 等），提供更稳定的公共 API 与示例，面向外部集成开发者。",
-      "domain_type": "支撑域",
-      "importance": 7.0,
-      "name": "对外 SDK 域（kimi-sdk）",
+      "complexity": 8.0,
+      "description": "Customizable AI agent framework defining behaviors, prompts, skills, and personality. Provides the reasoning engine that orchestrates tool usage, maintains conversation context, and executes user-intended tasks through intelligent decision-making.",
+      "domain_type": "Core Business Domain",
+      "importance": 9.0,
+      "name": "Agent System Domain",
       "sub_modules": [
         {
           "code_paths": [
-            "sdks/kimi-sdk/src/kimi_sdk/__init__.py"
+            "src/kimi_cli/agents/default/",
+            "src/kimi_cli/agents/okabe/",
+            "src/kimi_cli/soul/"
           ],
-          "description": "Facade 与公共 API：整合并导出 kosong 子模块，提供文档化的 agent loop 示例。",
+          "description": "Pre-defined agent configurations with specific behaviors and capabilities",
+          "importance": 8.0,
+          "key_functions": [
+            "Agent personality definition",
+            "Default tool selection",
+            "Behavior configuration"
+          ],
+          "name": "Agent Definitions"
+        },
+        {
+          "code_paths": [
+            "src/kimi_cli/prompts/"
+          ],
+          "description": "System prompts and instructions guiding agent behavior and capabilities",
+          "importance": 9.0,
+          "key_functions": [
+            "System prompt templates",
+            "Capability instructions",
+            "Context injection"
+          ],
+          "name": "Prompt Management"
+        },
+        {
+          "code_paths": [
+            "src/kimi_cli/skills/skill-creator/",
+            "src/kimi_cli/skills/kimi-cli-help/",
+            "src/kimi_cli/skill/flow/"
+          ],
+          "description": "Modular skill packages extending agent capabilities for specific use cases",
           "importance": 7.0,
           "key_functions": [
-            "统一导出消息与工具抽象",
-            "提供示例与用法文档",
-            "屏蔽内部模块组织变化"
+            "Custom skill creation",
+            "Skill invocation",
+            "Result processing"
           ],
-          "name": "SDK Facade 导出"
+          "name": "Skill Extensions"
         }
       ]
     },
     {
       "code_paths": [
-        "src/kimi_cli/ui/shell/__init__.py",
-        "src/kimi_cli/ui/shell/setup.py"
+        "src/kimi_cli/auth/",
+        "src/kimi_cli/wire/",
+        "src/kimi_cli/acp/",
+        "sdks/kimi-sdk/",
+        "packages/kosong/src/kosong/__init__.py"
+      ],
+      "complexity": 7.0,
+      "description": "Cross-cutting infrastructure providing authentication, wire protocol, MCP client integration, and SDK support. Enables secure communication, external tool integration, and programmatic access to the platform.",
+      "domain_type": "Infrastructure Domain",
+      "importance": 8.0,
+      "name": "Infrastructure Domain",
+      "sub_modules": [
+        {
+          "code_paths": [
+            "src/kimi_cli/auth/"
+          ],
+          "description": "OAuth and API key authentication handling for secure LLM provider access",
+          "importance": 9.0,
+          "key_functions": [
+            "OAuth flow implementation",
+            "API key management",
+            "Token refresh",
+            "Credential storage"
+          ],
+          "name": "Authentication"
+        },
+        {
+          "code_paths": [
+            "src/kimi_cli/wire/"
+          ],
+          "description": "JSON-RPC based communication protocol for session event persistence and replay",
+          "importance": 8.0,
+          "key_functions": [
+            "Event serialization",
+            "Protocol versioning",
+            "Replay support",
+            "Bidirectional communication"
+          ],
+          "name": "Wire Protocol"
+        },
+        {
+          "code_paths": [
+            "src/kimi_cli/acp/"
+          ],
+          "description": "Model Context Protocol client for integrating external tools and capabilities",
+          "importance": 8.0,
+          "key_functions": [
+            "MCP server connection",
+            "Tool discovery",
+            "Protocol negotiation",
+            "Resource access"
+          ],
+          "name": "MCP Client"
+        },
+        {
+          "code_paths": [
+            "sdks/kimi-sdk/src/kimi_sdk/__init__.py",
+            "packages/kosong/src/kosong/__init__.py"
+          ],
+          "description": "Public SDK for programmatic access to Kimi CLI capabilities",
+          "importance": 8.0,
+          "key_functions": [
+            "Agent loop abstraction",
+            "Message handling",
+            "Tool integration",
+            "Error handling"
+          ],
+          "name": "SDK Support"
+        }
+      ]
+    },
+    {
+      "code_paths": [
+        "src/kimi_cli/ui/",
+        "src/kimi_cli/cli/",
+        "packages/kosong/src/kosong/__main__.py"
       ],
       "complexity": 6.0,
-      "description": "CLI 交互与向导域：提供终端侧交互体验，尤其是首次配置向导，降低模型平台、密钥与能力配置门槛，并与配置管理域联动。",
-      "domain_type": "核心业务域",
-      "importance": 8.0,
-      "name": "CLI 交互与向导域",
+      "description": "Terminal-based user interface providing interactive command-line experience for users who prefer CLI over web. Includes REPL loop, command processing, and text-based UI components.",
+      "domain_type": "Core Business Domain",
+      "importance": 7.0,
+      "name": "CLI Interface Domain",
       "sub_modules": [
+        {
+          "code_paths": [
+            "src/kimi_cli/ui/shell/",
+            "src/kimi_cli/ui/print/",
+            "packages/kosong/src/kosong/__main__.py"
+          ],
+          "description": "Text-based interface for command input and output display in terminal environment",
+          "importance": 8.0,
+          "key_functions": [
+            "REPL loop execution",
+            "Input/output handling",
+            "Console formatting",
+            "Progress display"
+          ],
+          "name": "Interactive Terminal"
+        },
+        {
+          "code_paths": [
+            "src/kimi_cli/cli/"
+          ],
+          "description": "CLI command parsing, routing, and execution framework",
+          "importance": 7.0,
+          "key_functions": [
+            "Command parsing",
+            "Argument handling",
+            "Command routing",
+            "Help generation"
+          ],
+          "name": "Command Processing"
+        },
         {
           "code_paths": [
             "src/kimi_cli/ui/shell/setup.py"
           ],
-          "description": "交互式 setup wizard：平台选择、认证、模型发现、thinking 能力确认、配置保存与 reload。",
-          "importance": 8.0,
+          "description": "Interactive configuration wizard for initial setup and platform selection",
+          "importance": 7.0,
           "key_functions": [
-            "分步引导与用户输入采集",
-            "模型发现与选择",
-            "配置保存与重载",
-            "错误处理与提示"
+            "Platform selection",
+            "API key input",
+            "Model discovery",
+            "Configuration persistence"
           ],
-          "name": "CLI Setup Wizard"
-        }
-      ]
-    },
-    {
-      "code_paths": [
-        "packages/kaos/src/kaos/**"
-      ],
-      "complexity": 5.0,
-      "description": "异步系统辅助域（kaos）：为文件系统/SSH 等提供异步 helper，作为 runner 与工具系统的基础能力（材料中被 sessions.py 引用）。",
-      "domain_type": "基础设施域",
-      "importance": 5.0,
-      "name": "系统与异步辅助域（kaos）",
-      "sub_modules": [
-        {
-          "code_paths": [
-            "packages/kaos/src/kaos/**"
-          ],
-          "description": "异步文件/SSH 等通用能力集合，降低上层实现复杂度。",
-          "importance": 5.0,
-          "key_functions": [
-            "异步文件系统操作（推断）",
-            "SSH/远程访问辅助（推断）"
-          ],
-          "name": "异步 IO/SSH Helpers"
+          "name": "Setup Wizard"
         }
       ]
     }
   ],
   "domain_relations": [
     {
-      "description": "App 作为页面编排入口，依赖 ChatWorkspaceContainer 提供聊天工作区能力。",
-      "from_domain": "Web 前端工作台域",
-      "relation_type": "模块依赖",
-      "strength": 8.0,
-      "to_domain": "Web 前端工作台域"
-    },
-    {
-      "description": "ChatWorkspaceContainer 通过 hooks 调用前端 API 接入层以获取会话与全局配置。",
-      "from_domain": "Web 前端工作台域",
-      "relation_type": "Service Call",
-      "strength": 8.0,
-      "to_domain": "Web 前端 API 接入域"
-    },
-    {
-      "description": "useSessions/useGlobalConfig 通过 apiClient 组合的 SessionsApi/ConfigApi 与后端交互。",
-      "from_domain": "Web 前端 API 接入域",
+      "description": "Web UI calls session management APIs to create, list, update, and delete conversation sessions; manages session selection and persistence through URL-based routing",
+      "from_domain": "Web Interface Domain",
       "relation_type": "Service Call",
       "strength": 9.0,
-      "to_domain": "Web 后端会话与文件域"
+      "to_domain": "Conversation Management Domain"
     },
     {
-      "description": "前端配置相关调用（ConfigApi）与后端 config router 交互，触发配置验证与会话重启协调。",
-      "from_domain": "Web 前端 API 接入域",
+      "description": "Chat workspace sends user messages to LLM providers and receives streaming responses; handles tool approvals and executes tool calls initiated by AI",
+      "from_domain": "Web Interface Domain",
       "relation_type": "Service Call",
-      "strength": 8.0,
-      "to_domain": "配置管理域（CLI/Web 共享）"
+      "strength": 10.0,
+      "to_domain": "LLM Provider Integration Domain"
     },
     {
-      "description": "后端 sessions API 在 WebSocket/会话执行中依赖 runner/worker 编排以启动进程并转发消息。",
-      "from_domain": "Web 后端会话与文件域",
+      "description": "Web UI displays and modifies global configuration settings including model selection and thinking mode through configuration controls",
+      "from_domain": "Web Interface Domain",
+      "relation_type": "Data Dependency",
+      "strength": 8.0,
+      "to_domain": "Configuration Management Domain"
+    },
+    {
+      "description": "Web UI displays tool execution results and manages tool approval workflows; visualizes file operations, shell outputs, and search results",
+      "from_domain": "Web Interface Domain",
       "relation_type": "Service Call",
-      "strength": 9.0,
-      "to_domain": "Runner/Worker 编排与流式通讯域"
-    },
-    {
-      "description": "后端 sessions API 依赖 wire JSON-RPC 进行事件持久化与回放，实现前端同步。",
-      "from_domain": "Web 后端会话与文件域",
-      "relation_type": "数据依赖",
-      "strength": 9.0,
-      "to_domain": "协议与事件持久化域"
-    },
-    {
-      "description": "后端 sessions API 依赖 kosong 作为 LLM/工具抽象层以执行对话与工具调用（材料中明确引用）。",
-      "from_domain": "Web 后端会话与文件域",
-      "relation_type": "Tool Support",
-      "strength": 8.0,
-      "to_domain": "LLM Provider 与工具抽象域（kosong）"
-    },
-    {
-      "description": "后端 sessions API 依赖 kaos 提供异步文件系统/SSH 等基础能力（材料中明确引用）。",
-      "from_domain": "Web 后端会话与文件域",
-      "relation_type": "Tool Support",
-      "strength": 6.0,
-      "to_domain": "系统与异步辅助域（kaos）"
-    },
-    {
-      "description": "后端 config API 依赖配置管理模块（src/kimi_cli/config.py）进行校验与持久化，并据此协调会话重启。",
-      "from_domain": "配置管理域（CLI/Web 共享）",
-      "relation_type": "配置依赖",
-      "strength": 9.0,
-      "to_domain": "Runner/Worker 编排与流式通讯域"
-    },
-    {
-      "description": "kosong 的 kimi provider 依赖 openai_common 以复用 OpenAI 协议兼容实现。",
-      "from_domain": "LLM Provider 与工具抽象域（kosong）",
-      "relation_type": "模块依赖",
       "strength": 7.0,
-      "to_domain": "LLM Provider 与工具抽象域（kosong）"
+      "to_domain": "Tool Execution Domain"
     },
     {
-      "description": "kosong tooling 依赖 jsonschema 工具以处理工具参数 schema 的引用展开。",
-      "from_domain": "LLM Provider 与工具抽象域（kosong）",
-      "relation_type": "模块依赖",
-      "strength": 6.0,
-      "to_domain": "工具与 Schema 支撑域"
+      "description": "Session management creates and manages LLM provider instances for each conversation; passes messages and receives AI responses",
+      "from_domain": "Conversation Management Domain",
+      "relation_type": "Service Call",
+      "strength": 10.0,
+      "to_domain": "LLM Provider Integration Domain"
     },
     {
-      "description": "CLI shell 初始化依赖 kosong chat_provider（通过 packages/kosong 导入）以在终端侧使用同一套 provider 抽象。",
-      "from_domain": "CLI 交互与向导域",
-      "relation_type": "Tool Support",
-      "strength": 6.0,
-      "to_domain": "LLM Provider 与工具抽象域（kosong）"
+      "description": "Sessions use global configuration for default model and thinking settings; sessions may be restarted when configuration changes",
+      "from_domain": "Conversation Management Domain",
+      "relation_type": "Configuration Dependency",
+      "strength": 9.0,
+      "to_domain": "Configuration Management Domain"
     },
     {
-      "description": "kimi-sdk 以 facade 方式依赖并复用 kosong 的 provider/message/tooling 能力，向外提供稳定接口。",
-      "from_domain": "对外 SDK 域（kimi-sdk）",
-      "relation_type": "模块依赖",
+      "description": "Session management uses wire protocol for event persistence and replay; relies on authentication for secure provider access",
+      "from_domain": "Conversation Management Domain",
+      "relation_type": "Service Call",
+      "strength": 9.0,
+      "to_domain": "Infrastructure Domain"
+    },
+    {
+      "description": "Provider abstraction loads API keys, endpoints, and provider-specific settings from configuration; validates provider references",
+      "from_domain": "LLM Provider Integration Domain",
+      "relation_type": "Configuration Dependency",
+      "strength": 9.0,
+      "to_domain": "Configuration Management Domain"
+    },
+    {
+      "description": "LLM providers invoke tools based on AI requests; tools execute and return results back to the conversation flow",
+      "from_domain": "LLM Provider Integration Domain",
+      "relation_type": "Service Call",
+      "strength": 10.0,
+      "to_domain": "Tool Execution Domain"
+    },
+    {
+      "description": "Provider integration uses authentication module for OAuth flows and API key management; may integrate MCP tools",
+      "from_domain": "LLM Provider Integration Domain",
+      "relation_type": "Service Call",
       "strength": 8.0,
-      "to_domain": "LLM Provider 与工具抽象域（kosong）"
+      "to_domain": "Infrastructure Domain"
+    },
+    {
+      "description": "Agents orchestrate LLM calls through the provider abstraction layer; manage conversation context and tool usage patterns",
+      "from_domain": "Agent System Domain",
+      "relation_type": "Service Call",
+      "strength": 10.0,
+      "to_domain": "LLM Provider Integration Domain"
+    },
+    {
+      "description": "Agents select and invoke appropriate tools based on user intent and conversation context",
+      "from_domain": "Agent System Domain",
+      "relation_type": "Service Call",
+      "strength": 9.0,
+      "to_domain": "Tool Execution Domain"
+    },
+    {
+      "description": "Agents load system prompts and behavior configurations from configuration files",
+      "from_domain": "Agent System Domain",
+      "relation_type": "Configuration Dependency",
+      "strength": 7.0,
+      "to_domain": "Configuration Management Domain"
+    },
+    {
+      "description": "Tools may interact with MCP clients for external tool integration; some tools use authentication for external services",
+      "from_domain": "Tool Execution Domain",
+      "relation_type": "Service Call",
+      "strength": 7.0,
+      "to_domain": "Infrastructure Domain"
+    },
+    {
+      "description": "CLI invokes agent loop for interactive conversation; processes agent responses and displays them in terminal",
+      "from_domain": "CLI Interface Domain",
+      "relation_type": "Service Call",
+      "strength": 9.0,
+      "to_domain": "Agent System Domain"
+    },
+    {
+      "description": "CLI loads and saves configuration settings; setup wizard creates initial configuration",
+      "from_domain": "CLI Interface Domain",
+      "relation_type": "Configuration Dependency",
+      "strength": 8.0,
+      "to_domain": "Configuration Management Domain"
+    },
+    {
+      "description": "CLI directly uses provider abstraction for standalone REPL mode without session management",
+      "from_domain": "CLI Interface Domain",
+      "relation_type": "Service Call",
+      "strength": 10.0,
+      "to_domain": "LLM Provider Integration Domain"
     }
   ]
 }
@@ -1026,35 +1068,30 @@ Contains static analysis results of the codebase and business process analysis.
 ```json
 {
   "main_workflow": {
-    "description": "用户在 Web 工作台创建/选择会话后，前端通过 REST 获取会话元信息并通过 WebSocket 建立流式通道；后端回放历史 wire 事件并转发 runner 输出，实现实时对话与工具调用展示。这是系统的核心业务流程，体现了 AI 代理产品的主要价值——将用户对话、LLM 调用、工具执行与实时反馈完整串联。",
-    "flowchart_mermaid": "flowchart TD\n    A[用户在 Web 工作台选择/创建会话] --> B[前端通过 SessionsApi 获取会话详情]\n    B --> C[前端建立 WebSocket 连接]\n    C --> D[后端回放 wire.jsonl 历史事件]\n    D --> E[后端管理 runner 子进程与 busy-state]\n    E --> F{会话是否忙碌?}\n    F -->|是| G[拒绝新请求，返回 busy 状态]\n    F -->|否| H[用户编辑提示词并发送]\n    H --> I[前端通过 WebSocket 发送消息]\n    I --> J[后端转发消息至 runner 进程]\n    J --> K[runner 调用 kosong 执行 LLM step]\n    K --> L{是否需要工具调用?}\n    L -->|是| M[执行工具并收集结果]\n    M --> N[将工具结果追加到 history]\n    N --> K\n    L -->|否| O[生成 assistant 回复]\n    O --> P[后端通过 WebSocket 流式返回事件]\n    P --> Q[前端实时渲染消息与工具结果]\n    Q --> R[事件持久化到 wire.jsonl 与 context.jsonl]\n    R --> S{对话是否结束?}\n    S -->|否| H\n    S -->|是| T[会话完成，等待下一次交互]",
-    "name": "会话实时聊天与事件流同步流程"
+    "description": "The primary workflow through which users interact with the AI assistant via the web interface. This flow encompasses the complete lifecycle of a conversation turn: from user message composition (with optional file attachments and slash commands), through WebSocket transmission to the backend, AI processing via the LLM provider, tool execution with user approval, to real-time streaming response visualization and persistence. The workflow coordinates multiple domains including Web Interface, Conversation Management, LLM Provider Integration, Agent System, and Tool Execution.",
+    "flowchart_mermaid": "flowchart TD\n    A[User Opens Chat Workspace] --> B[Select or Create Session]\n    B --> C[Compose Message]\n    C --> D{Add Attachments?}\n    D -->|Yes| E[Select Files via File Mention]\n    D -->|No| F{Use Slash Command?}\n    E --> F\n    F -->|Yes| G[Execute Slash Command]\n    F -->|No| H[Submit Message]\n    G --> H\n    \n    H --> I[Queue Message in Prompt Queue]\n    I --> J[Transmit via WebSocket]\n    J --> K{Session Busy?}\n    K -->|Yes| L[Reject - Show Busy Status]\n    K -->|No| M[Replay History if Reconnecting]\n    \n    M --> N[Forward to Agent Runner]\n    N --> O[Agent Assembles Context]\n    O --> P[Add System Prompt]\n    P --> Q[Include Message History]\n    Q --> R[Prepare Available Tools]\n    \n    R --> S[Send to LLM Provider]\n    S --> T[Provider Formats Request]\n    T --> U[Authenticate with API]\n    U --> V[Initiate Streaming]\n    \n    V --> W[Stream Response Chunks]\n    W --> X{Tool Call Detected?}\n    X -->|Yes| Y[Display Approval Dialog]\n    Y --> Z{User Approves?}\n    Z -->|Yes| AA[Execute Tool]\n    Z -->|No| AB[Decline Tool - Notify AI]\n    AA --> AC[Capture Tool Results]\n    AB --> W\n    AC --> AD[Format as Tool Message]\n    AD --> W\n    \n    X -->|No| AE[Render Streaming Content]\n    AE --> AF{Content Type?}\n    AF -->|Text| AG[Display Markdown]\n    AF -->|Thinking| AH[Show Expandable Block]\n    AF -->|Code| AI[Syntax Highlight]\n    \n    AG --> AJ[Virtualized Message List]\n    AH --> AJ\n    AI --> AJ\n    \n    AJ --> AK{Stream Complete?}\n    AK -->|No| W\n    AK -->|Yes| AL[Persist to wire.jsonl]\n    AL --> AM[Save to context.jsonl]\n    AM --> AN[Update Session Activity]\n    AN --> AO[Ready for Next Message]\n    \n    AO --> C\n    \n    subgraph Legend\n        AP[Real-time Status Updates]\n        AQ[Token Usage Display]\n        AR[Activity Indicator]\n        AS[Git Changes Tracking]\n    end\n    \n    style A fill:#e1f5fe\n    style W fill:#fff3e0\n    style Y fill:#fce4ec\n    style AL fill:#e8f5e9",
+    "name": "Interactive Chat Conversation Flow"
   },
   "other_important_workflows": [
     {
-      "description": "用户在输入框编辑提示词，使用 slash commands 与 @file mentions，附加文件并可能进入消息队列；发送后 UI 依据流式状态展示活动指示、上下文 token 使用、git diff、队列等信息。这是提升用户体验和工作效率的关键交互流程。",
-      "flowchart_mermaid": "flowchart TD\n    A[用户在提示词输入框输入文本] --> B{检测输入内容}\n    B -->|以 / 开头| C[触发 slash command 菜单]\n    C --> D[用户选择命令]\n    D --> E[执行文本替换与光标定位]\n    B -->|包含 @ 符号| F[触发文件提及菜单]\n    F --> G[汇总上传附件与工作目录文件建议]\n    G --> H[用户选择文件]\n    H --> I[插入文件引用]\n    B -->|普通文本| J[继续编辑]\n    E --> J\n    I --> J\n    J --> K{AI 是否正在处理?}\n    K -->|是| L[将消息加入队列]\n    L --> M[队列管理：编辑/重排/删除]\n    M --> N[等待当前处理完成]\n    N --> O[自动发送队列中的下一条消息]\n    K -->|否| P[直接发送消息]\n    O --> Q[更新工具栏状态]\n    P --> Q\n    Q --> R[显示活动状态指示器]\n    R --> S[显示上下文 token 使用率]\n    S --> T[显示 Git diff 统计]\n    T --> U[显示队列面板（如有队列项）]",
-      "name": "提示词编辑、附件与队列管理流程"
+      "description": "Workflow for creating, managing, and maintaining conversation sessions. Users can create new sessions with custom work directories, fork existing sessions at specific conversation points to branch conversations, archive inactive sessions, and delete sessions with proper cleanup. The system maintains persistent storage for conversation history and automatically archives sessions based on inactivity thresholds.",
+      "flowchart_mermaid": "flowchart TD\n    A[User Initiates Session Action] --> B{Action Type?}\n    \n    B -->|Create New| C[Open Create Session Dialog]\n    C --> D[Browse Available Directories]\n    D --> E{Select Existing or Custom?}\n    E -->|Existing| F[Select from List]\n    E -->|Custom| G[Enter Custom Path]\n    G --> H{Directory Exists?}\n    H -->|No| I[Confirm Create New Directory]\n    H -->|Yes| J[Validate Path]\n    I --> J\n    F --> J\n    J --> K[Backend: Generate Session ID]\n    K --> L[Create Session Directory Structure]\n    L --> M[Initialize metadata.json]\n    M --> N[Create wire.jsonl for Events]\n    N --> O[Create context.jsonl for Messages]\n    O --> P[Setup uploads/ Directory]\n    P --> Q[Update URL with Session ID]\n    Q --> R[Display in Session Sidebar]\n    \n    B -->|Fork Session| S[Select Turn Index]\n    S --> T[Create New Session]\n    T --> U[Truncate wire.jsonl at Index]\n    U --> V[Truncate context.jsonl at Index]\n    V --> W[Copy Referenced Video Files]\n    W --> X[Link to Original Session]\n    X --> R\n    \n    B -->|Archive Session| Y[Mark as Archived]\n    Y --> Z[Update metadata.json]\n    Z --> AA[Hide from Active List]\n    AA --> AB[Maintain History Access]\n    \n    B -->|Delete Session| AC[Confirm Deletion]\n    AC --> AD[Stop Active Processes]\n    AD --> AE[Cleanup Session Files]\n    AE --> AF[Remove from Session Store]\n    AF --> AG[Update Session List]\n    \n    B -->|Auto-Archive| AH[Background Monitor]\n    AH --> AI{Session Inactive?}\n    AI -->|Yes| Y\n    AI -->|No| AJ[Continue Monitoring]\n    \n    subgraph Persistence\n        AK[Session Metadata]\n        AL[Conversation History]\n        AM[Uploaded Files]\n    end\n    \n    style A fill:#e1f5fe\n    style K fill:#fff3e0\n    style Y fill:#fce4ec\n    style AD fill:#ffebee",
+      "name": "Session Lifecycle Management Flow"
     },
     {
-      "description": "用户在 Web 前端修改全局模型或 thinking 开关；前端调用 Config API 更新全局配置；后端验证并按需重启会话，忙碌会话可跳过并支持强制重启。此流程确保配置变更能够正确应用到所有相关会话，同时避免中断正在进行的对话。",
-      "flowchart_mermaid": "flowchart TD\n    A[用户在全局配置面板选择默认模型或 thinking 开关] --> B[前端通过 useGlobalConfig Hook 获取当前配置]\n    B --> C[用户选择新的配置项]\n    C --> D[前端调用 ConfigApi.update 更新配置]\n    D --> E[后端 Config API 接收更新请求]\n    E --> F[后端验证配置合法性与敏感性]\n    F --> G{配置是否有效?}\n    G -->|否| H[返回错误，前端显示 toast 提示]\n    G -->|是| I[后端保存配置到 TOML 文件]\n    I --> J[后端检查所有活跃会话状态]\n    J --> K{哪些会话需要重启?}\n    K --> L[标记空闲会话为待重启]\n    K --> M[标记忙碌会话为跳过]\n    L --> N[后端协调 runner 重启空闲会话]\n    N --> O[后端返回更新结果：重启列表与跳过列表]\n    O --> P[前端显示 toast 提示重启结果]\n    P --> Q{是否有忙碌会话被跳过?}\n    Q -->|是| R[前端显示强制重启按钮]\n    R --> S[用户点击强制重启]\n    S --> T[前端发送 forceRestartBusySessions: true]\n    T --> U[后端强制重启忙碌会话]\n    U --> V[返回最终重启结果]\n    Q -->|否| W[流程完成]",
-      "name": "全局配置更新与会话重启协调流程"
+      "description": "Workflow for executing AI-requested tools with user oversight. When the LLM requests a tool execution during conversation, the system presents an approval dialog to the user showing the tool name, parameters, and allowing decisions to approve (once or for the entire session) or decline. Approved tools are executed with proper error handling, and results are formatted and returned to the conversation for the AI to process.",
+      "flowchart_mermaid": "flowchart TD\n    A[LLM Streams Response] --> B{Tool Call in Stream?}\n    B -->|No| C[Continue Text Rendering]\n    B -->|Yes| D[Extract Tool Name and Arguments]\n    \n    D --> E[Parse Tool Call ID]\n    E --> F[Format Tool Parameters]\n    F --> G[Display Approval Dialog]\n    \n    G --> H{User Decision}\n    H -->|Approve Once| I[Execute Tool]\n    H -->|Approve for Session| J[Add to Auto-Approve List]\n    J --> I\n    H -->|Decline| K[Return Decline Message]\n    \n    I --> L{Tool Type?}\n    L -->|File Operation| M[Read/Write/Search Files]\n    L -->|Shell Command| N[Spawn Async Subprocess]\n    L -->|Web Search| O[Query External API]\n    L -->|Multi-Agent| P[Spawn Child Agent]\n    L -->|MCP Tool| Q[Call External Server]\n    \n    M --> R[Capture Result]\n    N --> S[Stream Command Output]\n    O --> T[Parse Search Results]\n    P --> U[Collect Agent Response]\n    Q --> V[Process MCP Response]\n    \n    S --> R\n    T --> R\n    U --> R\n    V --> R\n    \n    R --> W{Execution Success?}\n    W -->|Yes| X[Format Tool Result]\n    W -->|No| Y[Format Error Message]\n    \n    X --> Z[Display Result in Chat]\n    Y --> Z\n    \n    Z --> AA[Create Tool Message]\n    AA --> AB[Append to Conversation History]\n    AB --> AC[Return to LLM for Next Turn]\n    \n    K --> AA\n    \n    AC --> A\n    \n    subgraph Tool Categories\n        AD[File Operations: Read, Write, Search, List]\n        AE[Shell Execution: Bash Commands]\n        AF[Web Tools: Search, Fetch]\n        AG[Multi-Agent: Spawn, Coordinate]\n        AH[MCP Integration: External Tools]\n    end\n    \n    style G fill:#fce4ec\n    style I fill:#e8f5e9\n    style Z fill:#fff3e0",
+      "name": "Tool Execution and Approval Flow"
     },
     {
-      "description": "React Web 工作台启动并加载主界面，建立会话与配置状态，准备后续的会话选择与聊天流。这是用户访问系统的入口流程，确保应用正确初始化并处理各种异常情况。",
-      "flowchart_mermaid": "flowchart TD\n    A[用户打开 Web 应用 URL] --> B[main.tsx 入口执行]\n    B --> C{是否开发模式?}\n    C -->|是| D[可选启用 react-scan 性能监控]\n    C -->|否| E[跳过性能监控]\n    D --> E\n    E --> F[加载 bootstrap.tsx]\n    F --> G[创建 React Root 并挂载]\n    G --> H[设置 StrictMode 与 ErrorBoundary]\n    H --> I{动态 import 是否失败?}\n    I -->|是| J[检测 chunk 加载失败]\n    J --> K[执行一次性自动刷新恢复]\n    K --> L[重新加载应用]\n    I -->|否| M[渲染 App.tsx 主组件]\n    L --> B\n    M --> N[构建整体布局：侧边栏+工作区]\n    N --> O[处理 URL 中的会话 ID 参数]\n    O --> P[从 URL 或存储中恢复 token 状态]\n    P --> Q[渲染 ChatWorkspaceContainer]\n    Q --> R[获取会话列表与全局配置]\n    R --> S[建立初始状态，等待用户操作]",
-      "name": "Web 工作台启动与初始化流程"
+      "description": "Workflow for updating global application settings and ensuring changes are properly propagated to active sessions. When users modify settings such as default model selection or thinking mode through the web interface, the system validates the changes, updates configuration files, evaluates which sessions need to be restarted, and handles the restart process with user notification for busy sessions.",
+      "flowchart_mermaid": "flowchart TD\n    A[User Opens Config Controls] --> B[Load Current Configuration]\n    B --> C[Display Available Models]\n    C --> D{User Action?}\n    \n    D -->|Change Model| E[Select from Model List]\n    E --> F[Validate Model Selection]\n    F --> G{Model Supports Thinking?}\n    G -->|Check Capabilities| H[Update Thinking Toggle State]\n    \n    D -->|Toggle Thinking| I{Model Allows Toggle?}\n    I -->|Forced On/Off| J[Disable Toggle - Show Tooltip]\n    I -->|User Controlled| K[Toggle Thinking Mode]\n    \n    H --> L[Prepare Update Request]\n    K --> L\n    \n    L --> M[Send PUT to Config API]\n    M --> N[Backend Validates Request]\n    N --> O{Valid?}\n    O -->|No| P[Return Validation Error]\n    O -->|Yes| Q[Check Sensitive Paths]\n    \n    Q --> R[Update TOML/JSON Config]\n    R --> S[Save Configuration File]\n    S --> T[Identify Affected Sessions]\n    \n    T --> U{Session Active?}\n    U -->|Yes| V{Session Busy?}\n    V -->|No| W[Restart Session Immediately]\n    V -->|Yes| X[Add to Skipped List]\n    \n    W --> Y[Reload Agent with New Config]\n    Y --> Z[Reinitialize LLM Provider]\n    Z --> AA[Preserve Conversation History]\n    AA --> AB[Update Session State]\n    \n    X --> AC[Track Skipped Session IDs]\n    AB --> AD[Return Success Response]\n    AC --> AD\n    \n    AD --> AE[Update Global Config Store]\n    AE --> AF[Show Toast Notification]\n    \n    AF --> AG{Any Skipped Sessions?}\n    AG -->|Yes| AH[Show Force Restart Button]\n    AH --> AI{User Clicks Force?}\n    AI -->|Yes| AJ[Send Force Restart Request]\n    AJ --> AK[Interrupt Busy Sessions]\n    AK --> W\n    \n    AG -->|No| AL[Configuration Complete]\n    AI -->|No| AL\n    \n    P --> AM[Display Error Toast]\n    AM --> A\n    \n    subgraph Configuration Items\n        AN[Default Model Selection]\n        AO[Thinking Mode Toggle]\n        AP[Provider Credentials]\n        AQ[Custom Endpoints]\n    end\n    \n    style A fill:#e1f5fe\n    style R fill:#fff3e0\n    style W fill:#e8f5e9\n    style X fill:#fce4ec",
+      "name": "Configuration Change Propagation Flow"
     },
     {
-      "description": "用户在后端 API 发起 fork：从已有会话的指定 turn 处派生新会话，截断并复制必要历史与资源（wire/context/video），生成新 metadata。此流程允许用户从历史对话的某个节点创建分支，探索不同的对话路径。",
-      "flowchart_mermaid": "flowchart TD\n    A[用户选择要 fork 的源会话] --> B[用户指定 fork 的起始 turn index]\n    B --> C[前端发送 fork 请求至 Sessions API]\n    C --> D[后端验证源会话存在性与权限]\n    D --> E[后端创建新会话目录]\n    E --> F[后端读取源会话的 wire.jsonl]\n    F --> G[后端截断 wire.jsonl 至指定 turn]\n    G --> H[后端读取源会话的 context.jsonl]\n    H --> I[后端截断 context.jsonl 至指定 turn]\n    I --> J[后端识别被引用的视频等资源]\n    J --> K[后端选择性复制资源文件到新会话]\n    K --> L[后端生成新会话的 metadata.json]\n    L --> M[后端返回新会话信息]\n    M --> N[前端刷新会话列表]\n    N --> O[前端可选跳转到新 fork 会话]",
-      "name": "会话 Fork 与历史裁剪流程"
-    },
-    {
-      "description": "终端交互式 setup 向导引导用户完成平台选择、鉴权（API key/OAuth）、模型发现、thinking 能力确认与配置落盘，并支持 reload。这是 CLI 用户首次使用或重新配置系统的核心流程。",
-      "flowchart_mermaid": "flowchart TD\n    A[用户在终端运行 kimi setup 命令] --> B[setup.py 启动交互式向导]\n    B --> C[显示可用平台列表]\n    C --> D[用户选择 LLM 平台]\n    D --> E{平台认证方式?}\n    E -->|API Key| F[提示用户输入 API Key]\n    E -->|OAuth| G[引导用户完成 OAuth 流程]\n    F --> H[验证 API Key 有效性]\n    G --> H\n    H --> I[调用平台 API 获取可用模型列表]\n    I --> J[显示模型列表供用户选择]\n    J --> K[用户选择默认模型]\n    K --> L[查询模型 thinking 能力]\n    L --> M{模型是否支持 thinking?}\n    M -->|是| N[提示用户配置 thinking 开关]\n    M -->|否| O[跳过 thinking 配置]\n    N --> P[用户确认 thinking 配置]\n    O --> Q[组装完整配置对象]\n    P --> Q\n    Q --> R[保存配置到 TOML 文件]\n    R --> S[显示配置摘要]\n    S --> T[询问是否立即 reload]\n    T --> U{用户选择 reload?}\n    U -->|是| V[重新加载配置并验证]\n    V --> W[显示配置生效信息]\n    U -->|否| X[流程完成]",
-      "name": "CLI 配置向导流程"
+      "description": "Workflow for running Kimi CLI in standalone terminal mode without the web interface. Users interact through a command-line REPL (Read-Eval-Print Loop) with direct LLM communication, tool execution, and console output. This flow includes the initial setup wizard for first-time configuration and the ongoing interactive loop for conversation turns.",
+      "flowchart_mermaid": "flowchart TD\n    A[User Runs kimi-cli Command] --> B{Configuration Exists?}\n    \n    B -->|No| C[Launch Setup Wizard]\n    C --> D[Display Platform Options]\n    D --> E[User Selects Platform]\n    E --> F{Platform Requires Auth?}\n    \n    F -->|OAuth| G[Initiate OAuth Flow]\n    G --> H[Open Browser for Auth]\n    H --> I[Receive Auth Token]\n    I --> J[Store Credentials Securely]\n    \n    F -->|API Key| K[Prompt for API Key]\n    K --> L[Validate Key Format]\n    L --> J\n    \n    J --> M[Discover Available Models]\n    M --> N[Display Model List]\n    N --> O[User Selects Default Model]\n    O --> P[Save Configuration to TOML]\n    P --> Q[Configuration Complete]\n    \n    B -->|Yes| Q\n    Q --> R[Load Configuration]\n    R --> S[Initialize LLM Provider]\n    S --> T[Setup Available Tools]\n    T --> U[Start REPL Loop]\n    \n    U --> V[Display Prompt]\n    V --> W[Read User Input]\n    W --> X{Special Command?}\n    \n    X -->|Exit| Y[Save Session State]\n    Y --> Z[Cleanup and Exit]\n    \n    X -->|Clear History| AA[Reset Conversation]\n    AA --> V\n    \n    X -->|Normal Input| AB[Assemble Message History]\n    AB --> AC[Add System Prompt]\n    AC --> AD[Prepare Toolset]\n    AD --> AE[Call Provider API]\n    \n    AE --> AF[Stream AI Response]\n    AF --> AG{Content Type?}\n    AG -->|Text| AH[Print to Console]\n    AG -->|Thinking| AI[Display in Dimmed Style]\n    AG -->|Code| AJ[Syntax Highlight Output]\n    \n    AH --> AK{Tool Call?}\n    AI --> AK\n    AJ --> AK\n    \n    AK -->|Yes| AL[Display Tool Request]\n    AL --> AM[Prompt for Approval]\n    AM --> AN{User Approves?}\n    AN -->|Yes| AO[Execute Tool]\n    AN -->|No| AP[Decline Tool]\n    \n    AO --> AQ[Display Tool Output]\n    AP --> AQ\n    AQ --> AR[Append to History]\n    AR --> AE\n    \n    AK -->|No| AS{More Tool Calls?}\n    AS -->|Yes| AE\n    AS -->|No| AT[Print Final Response]\n    AT --> AR\n    AR --> V\n    \n    subgraph CLI Features\n        AU[Multi-line Input Support]\n        AV[Command History]\n        AW[Auto-completion]\n        AX[Progress Indicators]\n    end\n    \n    style A fill:#e1f5fe\n    style C fill:#fff3e0\n    style U fill:#e8f5e9\n    style AL fill:#fce4ec",
+      "name": "CLI Interactive Session Flow"
     }
   ]
 }
@@ -3713,7 +3750,7 @@ Code analysis results from preprocessing phase, including definitions of functio
   {
     "code_dossier": {
       "code_purpose": "config",
-      "description": "Configuration management system for Kimi CLI application providing structured configuration models and file operations",
+      "description": "Central configuration management component for kimi_cli application, handling configuration models definition, validation, persistence, and migration between JSON and TOML formats",
       "file_path": "src/kimi_cli/config.py",
       "functions": [
         "get_config_file",
@@ -3737,51 +3774,43 @@ Code analysis results from preprocessing phase, including definitions of functio
         "Config"
       ],
       "name": "config.py",
-      "source_summary": "from __future__ import annotations\n\nimport json\nfrom pathlib import Path\nfrom typing import Literal, Self\n\nimport tomlkit\nfrom pydantic import (\n    AliasChoices,\n    BaseModel,\n    Field,\n    SecretStr,\n    ValidationError,\n    field_serializer,\n    model_validator,\n)\nfrom tomlkit.exceptions import TOMLKitError\n\nfrom kimi_cli.exception import ConfigError\nfrom kimi_cli.llm import ModelCapability, ProviderType\nfrom kimi_cli.share import get_share_dir\nfrom kimi_cli.utils.logging import logger\n\n\nclass OAuthRef(BaseModel):\n    \"\"\"Reference to OAuth credentials stored outside the config file.\"\"\"\n\n    storage: Literal[\"keyring\", \"file\"] = \"file\"\n    \"\"\"Credential storage backend.\"\"\"\n    key: str\n    \"\"\"Storage key to locate OAuth credentials.\"\"\"\n\n\nclass LLMProvider(BaseModel):\n    \"\"\"LLM provider configuration.\"\"\"\n\n    type: ProviderType\n    \"\"\"Provider type\"\"\"\n    base_url: str\n    \"\"\"API base URL\"\"\"\n    api_key: SecretStr\n    \"\"\"API key\"\"\"\n    env: dict[str, str] | None = None\n    \"\"\"Environment variables to set before creating the provider instance\"\"\"\n    custom_headers: dict[str, str] | None = None\n    \"\"\"Custom headers to include in API requests\"\"\"\n    oauth: OAuthRef | None = None\n    \"\"\"OAuth credential reference (do not store tokens here).\"\"\"\n\n    @field_serializer(\"api_key\", when_used=\"json\")\n    def dump_secret(self, v: SecretStr):\n        return v.get_secret_value()\n\n\nclass LLMModel(BaseModel):\n    \"\"\"LLM model configuration.\"\"\"\n\n    provider: str\n    \"\"\"Provider name\"\"\"\n    model: str\n    \"\"\"Model name\"\"\"\n    max_context_size: int\n    \"\"\"Maximum context size (unit: tokens)\"\"\"\n    capabilities: set[ModelCapability] | None = None\n    \"\"\"Model capabilities\"\"\"\n\n\nclass LoopControl(BaseModel):\n    \"\"\"Agent loop control configuration.\"\"\"\n\n    max_steps_per_turn: int = Field(\n        default=100,\n        ge=1,\n        validation_alias=AliasChoices(\"max_steps_per_turn\", \"max_steps_per_run\"),\n    )\n    \"\"\"Maximum number of steps in one turn\"\"\"\n    max_retries_per_step: int = Field(default=3, ge=1)\n    \"\"\"Maximum number of retries in one step\"\"\"\n    max_ralph_iterations: int = Field(default=0, ge=-1)\n    \"\"\"Extra iterations after the first turn in Ralph mode. Use -1 for unlimited.\"\"\"\n    reserved_context_size: int = Field(default=50_000, ge=1000)\n    \"\"\"Reserved token count for LLM response generation. Auto-compaction triggers when\n    context_tokens + reserved_context_size >= max_context_size. Default is 50000.\"\"\"\n\n\nclass MoonshotSearchConfig(BaseModel):\n    \"\"\"Moonshot Search configuration.\"\"\"\n\n    base_url: str\n    \"\"\"Base URL for Moonshot Search service.\"\"\"\n    api_key: SecretStr\n    \"\"\"API key for Moonshot Search service.\"\"\"\n    custom_headers: dict[str, str] | None = None\n    \"\"\"Custom headers to include in API requests.\"\"\"\n    oauth: OAuthRef | None = None\n    \"\"\"OAuth credential reference (do not store tokens here).\"\"\"\n\n    @field_serializer(\"api_key\", when_used=\"json\")\n    def dump_secret(self, v: SecretStr):\n        return v.get_secret_value()\n\n\nclass MoonshotFetchConfig(BaseModel):\n    \"\"\"Moonshot Fetch configuration.\"\"\"\n\n    base_url: str\n    \"\"\"Base URL for Moonshot Fetch service.\"\"\"\n    api_key: SecretStr\n    \"\"\"API key for Moonshot Fetch service.\"\"\"\n    custom_headers: dict[str, str] | None = None\n    \"\"\"Custom headers to include in API requests.\"\"\"\n    oauth: OAuthRef | None = None\n    \"\"\"OAuth credential reference (do not store tokens here).\"\"\"\n\n    @field_serializer(\"api_key\", when_used=\"json\")\n    def dump_secret(self, v: SecretStr):\n        return v.get_secret_value()\n\n\nclass Services(BaseModel):\n    \"\"\"Services configuration.\"\"\"\n\n    moonshot_search: MoonshotSearchConfig | None = None\n    \"\"\"Moonshot Search configuration.\"\"\"\n    moonshot_fetch: MoonshotFetchConfig | None = None\n    \"\"\"Moonshot Fetch configuration.\"\"\"\n\n\nclass MCPClientConfig(BaseModel):\n    \"\"\"MCP client configuration.\"\"\"\n\n    tool_call_timeout_ms: int = 60000\n    \"\"\"Timeout for tool calls in milliseconds.\"\"\"\n\n\nclass MCPConfig(BaseModel):\n    \"\"\"MCP configuration.\"\"\"\n\n    client: MCPClientConfig = Field(\n        default_factory=MCPClientConfig, description=\"MCP client configuration\"\n    )\n\n\nclass Config(BaseModel):\n    \"\"\"Main configuration structure.\"\"\"\n\n    is_from_default_location: bool = Field(\n        default=False,\n        description=\"Whether the config was loaded from the default location\",\n        exclude=True,\n    )\n    default_model: str = Field(default=\"\", description=\"Default model to use\")\n    default_thinking: bool = Field(default=False, description=\"Default thinking mode\")\n    default_yolo: bool = Field(default=False, description=\"Default yolo (auto-approve) mode\")\n    models: dict[str, LLMModel] = Field(default_factory=dict, description=\"List of LLM models\")\n    providers: dict[str, LLMProvider] = Field(\n        default_factory=dict, description=\"List of LLM providers\"\n    )\n    loop_control: LoopControl = Field(default_factory=LoopControl, description=\"Agent loop control\")\n    services: Services = Field(default_factory=Services, description=\"Services configuration\")\n    mcp: MCPConfig = Field(default_factory=MCPConfig, description=\"MCP configuration\")\n\n    @model_validator(mode=\"after\")\n    def validate_model(self) -> Self:\n        if self.default_model and self.default_model not in self.models:\n            raise ValueError(f\"Default model {self.default_model} not found in models\")\n        for model in self.models.values():\n            if model.provider not in self.providers:\n                raise ValueError(f\"Provider {model.provider} not found in providers\")\n        return self\n\n\ndef get_config_file() -> Path:\n    \"\"\"Get the configuration file path.\"\"\"\n    return get_share_dir() / \"config.toml\"\n\n\ndef get_default_config() -> Config:\n    \"\"\"Get the default configuration.\"\"\"\n    return Config(\n        default_model=\"\",\n        models={},\n        providers={},\n        services=Services(),\n    )\n\n\ndef load_config(config_file: Path | None = None) -> Config:\n    \"\"\"\n    Load configuration from config file.\n    If the config file does not exist, create it with default configuration.\n\n    Args:\n        config_file (Path | None): Path to the configuration file. If None, use default path.\n\n    Returns:\n        Validated Config object.\n\n    Raises:\n        ConfigError: If the configuration file is invalid.\n    \"\"\"\n    default_config_file = get_config_file()\n    if config_file is None:\n        config_file = default_config_file\n    is_default_config_file = config_file.expanduser().resolve(\n        strict=False\n    ) == default_config_file.expanduser().resolve(strict=False)\n    logger.debug(\"Loading config from file: {file}\", file=config_file)\n\n    # If the user hasn't provided an explicit config path, migrate legacy JSON config once.\n    if is_default_config_file and not config_file.exists():\n        _migrate_json_config_to_toml()\n\n    if not config_file.exists():\n        config = get_default_config()\n        logger.debug(\"No config file found, creating default config: {config}\", config=config)\n        save_config(config, config_file)\n        config.is_from_default_location = is_default_config_file\n        return config\n\n    try:\n        config_text = config_file.read_text(encoding=\"utf-8\")\n        if config_file.suffix.lower() == \".json\":\n            data = json.loads(config_text)\n        else:\n            data = tomlkit.loads(config_text)\n        config = Config.model_validate(data)\n    except json.JSONDecodeError as e:\n        raise ConfigError(f\"Invalid JSON in configuration file {config_file}: {e}\") from e\n    except TOMLKitError as e:\n        raise ConfigError(f\"Invalid TOML in configuration file {config_file}: {e}\") from e\n    except ValidationError as e:\n        raise ConfigError(f\"Invalid configuration file {config_file}: {e}\") from e\n    config.is_from_default_location = is_default_config_file\n    return config\n\n\ndef load_config_from_string(config_string: str) -> Config:\n    \"\"\"\n    Load configuration from a TOML or JSON string.\n\n    Args:\n        config_string (str): TOML or JSON configuration text.\n\n    Returns:\n        Validated Config object.\n\n    Raises:\n        ConfigError: If the configuration text is invalid.\n    \"\"\"\n    if not config_string.strip():\n        raise ConfigError(\"Configuration text cannot be empty\")\n\n    json_error: json.JSONDecodeError | None = None\n    try:\n        data = json.loads(config_string)\n    except json.JSONDecodeError as exc:\n        json_error = exc\n        data = None\n\n    if data is None:\n        try:\n            data = tomlkit.loads(config_string)\n        except TOMLKitError as toml_error:\n            raise ConfigError(\n                f\"Invalid configuration text: {json_error}; {toml_error}\"\n            ) from toml_error\n\n    try:\n        config = Config.model_validate(data)\n    except ValidationError as e:\n        raise ConfigError(f\"Invalid configuration text: {e}\") from e\n    config.is_from_default_location = False\n    return config\n\n\ndef save_config(config: Config, config_file: Path | None = None):\n    \"\"\"\n    Save configuration to config file.\n\n    Args:\n        config (Config): Config object to save.\n        config_file (Path | None): Path to the configuration file. If None, use default path.\n    \"\"\"\n    config_file = config_file or get_config_file()\n    logger.debug(\"Saving config to file: {file}\", file=config_file)\n    config_file.parent.mkdir(parents=True, exist_ok=True)\n    config_data = config.model_dump(mode=\"json\", exclude_none=True)\n    with open(config_file, \"w\", encoding=\"utf-8\") as f:\n        if config_file.suffix.lower() == \".json\":\n            f.write(json.dumps(config_data, ensure_ascii=False, indent=2))\n        else:\n            f.write(tomlkit.dumps(config_data))  # type: ignore[reportUnknownMemberType]\n\n\ndef _migrate_json_config_to_toml() -> None:\n    old_json_config_file = get_share_dir() / \"config.json\"\n    new_toml_config_file = get_share_dir() / \"config.toml\"\n\n    if not old_json_config_file.exists():\n        return\n    if new_toml_config_file.exists():\n        return\n\n    logger.info(\n        \"Migrating legacy config file from {old} to {new}\",\n        old=old_json_config_file,\n        new=new_toml_config_file,\n    )\n\n    try:\n        with open(old_json_config_file, encoding=\"utf-8\") as f:\n            data = json.load(f)\n        config = Config.model_validate(data)\n    except json.JSONDecodeError as e:\n        raise ConfigError(f\"Invalid JSON in legacy configuration file: {e}\") from e\n    except ValidationError as e:\n        raise ConfigError(f\"Invalid legacy configuration file: {e}\") from e\n\n    # Write new TOML config, then keep a backup of the original JSON file.\n    save_config(config, new_toml_config_file)\n    backup_path = old_json_config_file.with_name(\"config.json.bak\")\n    old_json_config_file.replace(backup_path)\n    logger.info(\"Legacy config backed up to {file}\", file=backup_path)\n"
+      "source_summary": "from __future__ import annotations\n\nimport json\nfrom pathlib import Path\nfrom typing import Literal, Self\n\nimport tomlkit\nfrom pydantic import (\n    AliasChoices,\n    BaseModel,\n    Field,\n    SecretStr,\n    ValidationError,\n    field_serializer,\n    model_validator,\n)\nfrom tomlkit.exceptions import TOMLKitError\n\nfrom kimi_cli.exception import ConfigError\nfrom kimi_cli.llm import ModelCapability, ProviderType\nfrom kimi_cli.share import get_share_dir\nfrom kimi_cli.utils.logging import logger\n\n\nclass OAuthRef(BaseModel):\n    \"\"\"Reference to OAuth credentials stored outside the config file.\"\"\"\n\n    storage: Literal[\"keyring\", \"file\"] = \"file\"\n    \"\"\"Credential storage backend.\"\"\"\n    key: str\n    \"\"\"Storage key to locate OAuth credentials.\"\"\"\n\n\nclass LLMProvider(BaseModel):\n    \"\"\"LLM provider configuration.\"\"\"\n\n    type: ProviderType\n    \"\"\"Provider type\"\"\"\n    base_url: str\n    \"\"\"API base URL\"\"\"\n    api_key: SecretStr\n    \"\"\"API key\"\"\"\n    env: dict[str, str] | None = None\n    \"\"\"Environment variables to set before creating the provider instance\"\"\"\n    custom_headers: dict[str, str] | None = None\n    \"\"\"Custom headers to include in API requests\"\"\"\n    oauth: OAuthRef | None = None\n    \"\"\"OAuth credential reference (do not store tokens here).\"\"\"\n\n    @field_serializer(\"api_key\", when_used=\"json\")\n    def dump_secret(self, v: SecretStr):\n        return v.get_secret_value()\n\n\nclass LLMModel(BaseModel):\n    \"\"\"LLM model configuration.\"\"\"\n\n    provider: str\n    \"\"\"Provider name\"\"\"\n    model: str\n    \"\"\"Model name\"\"\"\n    max_context_size: int\n    \"\"\"Maximum context size (unit: tokens)\"\"\"\n    capabilities: set[ModelCapability] | None = None\n    \"\"\"Model capabilities\"\"\"\n\n\nclass LoopControl(BaseModel):\n    \"\"\"Agent loop control configuration.\"\"\"\n\n    max_steps_per_turn: int = Field(\n        default=100,\n        ge=1,\n        validation_alias=AliasChoices(\"max_steps_per_turn\", \"max_steps_per_run\"),\n    )\n    \"\"\"Maximum number of steps in one turn\"\"\"\n    max_retries_per_step: int = Field(default=3, ge=1)\n    \"\"\"Maximum number of retries in one step\"\"\"\n    max_ralph_iterations: int = Field(default=0, ge=-1)\n    \"\"\"Extra iterations after the first turn in Ralph mode. Use -1 for unlimited.\"\"\"\n    reserved_context_size: int = Field(default=50_000, ge=1000)\n    \"\"\"Reserved token count for LLM response generation. Auto-compaction triggers when\n    context_tokens + reserved_context_size >= max_context_size. Default is 50000.\"\"\"\n\n\nclass MoonshotSearchConfig(BaseModel):\n    \"\"\"Moonshot Search configuration.\"\"\"\n\n    base_url: str\n    \"\"\"Base URL for Moonshot Search service.\"\"\"\n    api_key: SecretStr\n    \"\"\"API key for Moonshot Search service.\"\"\"\n    custom_headers: dict[str, str] | None = None\n    \"\"\"Custom headers to include in API requests.\"\"\"\n    oauth: OAuthRef | None = None\n    \"\"\"OAuth credential reference (do not store tokens here).\"\"\"\n\n    @field_serializer(\"api_key\", when_used=\"json\")\n    def dump_secret(self, v: SecretStr):\n        return v.get_secret_value()\n\n\nclass MoonshotFetchConfig(BaseModel):\n    \"\"\"Moonshot Fetch configuration.\"\"\"\n\n    base_url: str\n    \"\"\"Base URL for Moonshot Fetch service.\"\"\"\n    api_key: SecretStr\n    \"\"\"API key for Moonshot Fetch service.\"\"\"\n    custom_headers: dict[str, str] | None = None\n    \"\"\"Custom headers to include in API requests.\"\"\"\n    oauth: OAuthRef | None = None\n    \"\"\"OAuth credential reference (do not store tokens here).\"\"\"\n\n    @field_serializer(\"api_key\", when_used=\"json\")\n    def dump_secret(self, v: SecretStr):\n        return v.get_secret_value()\n\n\nclass Services(BaseModel):\n    \"\"\"Services configuration.\"\"\"\n\n    moonshot_search: MoonshotSearchConfig | None = None\n    \"\"\"Moonshot Search configuration.\"\"\"\n    moonshot_fetch: MoonshotFetchConfig | None = None\n    \"\"\"Moonshot Fetch configuration.\"\"\"\n\n\nclass MCPClientConfig(BaseModel):\n    \"\"\"MCP client configuration.\"\"\"\n\n    tool_call_timeout_ms: int = 60000\n    \"\"\"Timeout for tool calls in milliseconds.\"\"\"\n\n\nclass MCPConfig(BaseModel):\n    \"\"\"MCP configuration.\"\"\"\n\n    client: MCPClientConfig = Field(\n        default_factory=MCPClientConfig, description=\"MCP client configuration\"\n    )\n\n\nclass Config(BaseModel):\n    \"\"\"Main configuration structure.\"\"\"\n\n    is_from_default_location: bool = Field(\n        default=False,\n        description=\"Whether the config was loaded from the default location\",\n        exclude=True,\n    )\n    source_file: Path | None = Field(\n        default=None,\n        description=\"Path to the loaded config file. None when loaded from --config text.\",\n        exclude=True,\n    )\n    default_model: str = Field(default=\"\", description=\"Default model to use\")\n    default_thinking: bool = Field(default=False, description=\"Default thinking mode\")\n    default_yolo: bool = Field(default=False, description=\"Default yolo (auto-approve) mode\")\n    default_editor: str = Field(\n        default=\"\",\n        description=\"Default external editor command (e.g. 'vim', 'code --wait')\",\n    )\n    models: dict[str, LLMModel] = Field(default_factory=dict, description=\"List of LLM models\")\n    providers: dict[str, LLMProvider] = Field(\n        default_factory=dict, description=\"List of LLM providers\"\n    )\n    loop_control: LoopControl = Field(default_factory=LoopControl, description=\"Agent loop control\")\n    services: Services = Field(default_factory=Services, description=\"Services configuration\")\n    mcp: MCPConfig = Field(default_factory=MCPConfig, description=\"MCP configuration\")\n\n    @model_validator(mode=\"after\")\n    def validate_model(self) -> Self:\n        if self.default_model and self.default_model not in self.models:\n            raise ValueError(f\"Default model {self.default_model} not found in models\")\n        for model in self.models.values():\n            if model.provider not in self.providers:\n                raise ValueError(f\"Provider {model.provider} not found in providers\")\n        return self\n\n\ndef get_config_file() -> Path:\n    \"\"\"Get the configuration file path.\"\"\"\n    return get_share_dir() / \"config.toml\"\n\n\ndef get_default_config() -> Config:\n    \"\"\"Get the default configuration.\"\"\"\n    return Config(\n        default_model=\"\",\n        models={},\n        providers={},\n        services=Services(),\n    )\n\n\ndef load_config(config_file: Path | None = None) -> Config:\n    \"\"\"\n    Load configuration from config file.\n    If the config file does not exist, create it with default configuration.\n\n    Args:\n        config_file (Path | None): Path to the configuration file. If None, use default path.\n\n    Returns:\n        Validated Config object.\n\n    Raises:\n        ConfigError: If the configuration file is invalid.\n    \"\"\"\n    default_config_file = get_config_file().expanduser().resolve(strict=False)\n    if config_file is None:\n        config_file = default_config_file\n    config_file = config_file.expanduser().resolve(strict=False)\n    is_default_config_file = config_file == default_config_file\n    logger.debug(\"Loading config from file: {file}\", file=config_file)\n\n    # If the user hasn't provided an explicit config path, migrate legacy JSON config once.\n    if is_default_config_file and not config_file.exists():\n        _migrate_json_config_to_toml()\n\n    if not config_file.exists():\n        config = get_default_config()\n        logger.debug(\"No config file found, creating default config: {config}\", config=config)\n        save_config(config, config_file)\n        config.is_from_default_location = is_default_config_file\n        config.source_file = config_file\n        return config\n\n    try:\n        config_text = config_file.read_text(encoding=\"utf-8\")\n        if config_file.suffix.lower() == \".json\":\n            data = json.loads(config_text)\n        else:\n            data = tomlkit.loads(config_text)\n        config = Config.model_validate(data)\n    except json.JSONDecodeError as e:\n        raise ConfigError(f\"Invalid JSON in configuration file {config_file}: {e}\") from e\n    except TOMLKitError as e:\n        raise ConfigError(f\"Invalid TOML in configuration file {config_file}: {e}\") from e\n    except ValidationError as e:\n        raise ConfigError(f\"Invalid configuration file {config_file}: {e}\") from e\n    config.is_from_default_location = is_default_config_file\n    config.source_file = config_file\n    return config\n\n\ndef load_config_from_string(config_string: str) -> Config:\n    \"\"\"\n    Load configuration from a TOML or JSON string.\n\n    Args:\n        config_string (str): TOML or JSON configuration text.\n\n    Returns:\n        Validated Config object.\n\n    Raises:\n        ConfigError: If the configuration text is invalid.\n    \"\"\"\n    if not config_string.strip():\n        raise ConfigError(\"Configuration text cannot be empty\")\n\n    json_error: json.JSONDecodeError | None = None\n    try:\n        data = json.loads(config_string)\n    except json.JSONDecodeError as exc:\n        json_error = exc\n        data = None\n\n    if data is None:\n        try:\n            data = tomlkit.loads(config_string)\n        except TOMLKitError as toml_error:\n            raise ConfigError(\n                f\"Invalid configuration text: {json_error}; {toml_error}\"\n            ) from toml_error\n\n    try:\n        config = Config.model_validate(data)\n    except ValidationError as e:\n        raise ConfigError(f\"Invalid configuration text: {e}\") from e\n    config.is_from_default_location = False\n    config.source_file = None\n    return config\n\n\ndef save_config(config: Config, config_file: Path | None = None):\n    \"\"\"\n    Save configuration to config file.\n\n    Args:\n        config (Config): Config object to save.\n        config_file (Path | None): Path to the configuration file. If None, use default path.\n    \"\"\"\n    config_file = config_file or get_config_file()\n    logger.debug(\"Saving config to file: {file}\", file=config_file)\n    config_file.parent.mkdir(parents=True, exist_ok=True)\n    config_data = config.model_dump(mode=\"json\", exclude_none=True)\n    with open(config_file, \"w\", encoding=\"utf-8\") as f:\n        if config_file.suffix.lower() == \".json\":\n            f.write(json.dumps(config_data, ensure_ascii=False, indent=2))\n        else:\n            f.write(tomlkit.dumps(config_data))  # type: ignore[reportUnknownMemberType]\n\n\ndef _migrate_json_config_to_toml() -> None:\n    old_json_config_file = get_share_dir() / \"config.json\"\n    new_toml_config_file = get_share_dir() / \"config.toml\"\n\n    if not old_json_config_file.exists():\n        return\n    if new_toml_config_file.exists():\n        return\n\n    logger.info(\n        \"Migrating legacy config file from {old} to {new}\",\n        old=old_json_config_file,\n        new=new_toml_config_file,\n    )\n\n    try:\n        with open(old_json_config_file, encoding=\"utf-8\") as f:\n            data = json.load(f)\n        config = Config.model_validate(data)\n    except json.JSONDecodeError as e:\n        raise ConfigError(f\"Invalid JSON in legacy configuration file: {e}\") from e\n    except ValidationError as e:\n        raise ConfigError(f\"Invalid legacy configuration file: {e}\") from e\n\n    # Write new TOML config, then keep a backup of the original JSON file.\n    save_config(config, new_toml_config_file)\n    backup_path = old_json_config_file.with_name(\"config.json.bak\")\n    old_json_config_file.replace(backup_path)\n    logger.info(\"Legacy config backed up to {file}\", file=backup_path)\n"
     },
     "complexity_metrics": {
       "cyclomatic_complexity": 20.0,
-      "lines_of_code": 324,
+      "lines_of_code": 335,
       "number_of_classes": 10,
       "number_of_functions": 6
     },
     "dependencies": [
       {
         "dependency_type": "standard_library",
-        "is_external": false,
-        "line_number": 2,
+        "is_external": true,
+        "line_number": null,
         "name": "json",
         "path": null,
         "version": null
       },
       {
         "dependency_type": "standard_library",
-        "is_external": false,
-        "line_number": 3,
+        "is_external": true,
+        "line_number": null,
         "name": "pathlib.Path",
         "path": null,
         "version": null
       },
       {
         "dependency_type": "standard_library",
-        "is_external": false,
-        "line_number": 4,
-        "name": "typing.Literal",
-        "path": null,
-        "version": null
-      },
-      {
-        "dependency_type": "standard_library",
-        "is_external": false,
-        "line_number": 4,
-        "name": "typing.Self",
+        "is_external": true,
+        "line_number": null,
+        "name": "typing",
         "path": null,
         "version": null
       },
       {
         "dependency_type": "third_party",
         "is_external": true,
-        "line_number": 6,
+        "line_number": null,
         "name": "tomlkit",
         "path": null,
         "version": null
@@ -3789,7 +3818,7 @@ Code analysis results from preprocessing phase, including definitions of functio
       {
         "dependency_type": "third_party",
         "is_external": true,
-        "line_number": 7,
+        "line_number": null,
         "name": "pydantic",
         "path": null,
         "version": null
@@ -3797,48 +3826,40 @@ Code analysis results from preprocessing phase, including definitions of functio
       {
         "dependency_type": "internal",
         "is_external": false,
-        "line_number": 19,
-        "name": "kimi_cli.exception.ConfigError",
-        "path": "kimi_cli/exception",
+        "line_number": null,
+        "name": "kimi_cli.exception",
+        "path": null,
         "version": null
       },
       {
         "dependency_type": "internal",
         "is_external": false,
-        "line_number": 20,
-        "name": "kimi_cli.llm.ModelCapability",
-        "path": "kimi_cli/llm",
+        "line_number": null,
+        "name": "kimi_cli.llm",
+        "path": null,
         "version": null
       },
       {
         "dependency_type": "internal",
         "is_external": false,
-        "line_number": 20,
-        "name": "kimi_cli.llm.ProviderType",
-        "path": "kimi_cli/llm",
+        "line_number": null,
+        "name": "kimi_cli.share",
+        "path": null,
         "version": null
       },
       {
         "dependency_type": "internal",
         "is_external": false,
-        "line_number": 21,
-        "name": "kimi_cli.share.get_share_dir",
-        "path": "kimi_cli/share",
-        "version": null
-      },
-      {
-        "dependency_type": "internal",
-        "is_external": false,
-        "line_number": 22,
-        "name": "kimi_cli.utils.logging.logger",
-        "path": "kimi_cli/utils/logging",
+        "line_number": null,
+        "name": "kimi_cli.utils.logging",
+        "path": null,
         "version": null
       }
     ],
-    "detailed_description": "This configuration module provides a comprehensive configuration management system for the Kimi CLI application. It implements a hierarchical configuration structure using Pydantic models to define and validate various aspects of the application including LLM providers, models, agent control parameters, and external services. The module supports both TOML and JSON configuration formats with automatic migration capabilities from legacy JSON to TOML. It includes validation logic to ensure configuration consistency, handles sensitive data (API keys) securely, and provides utilities for loading, saving, and managing configuration files.",
+    "detailed_description": "This component serves as the central configuration management system for the kimi_cli application. It defines a comprehensive configuration schema using Pydantic models with the following key features:\n\n**Configuration Models:**\n- OAuthRef: Manages OAuth credential storage references (supports keyring and file backends)\n- LLMProvider: Configures LLM provider settings including API base URL, secret keys, environment variables, custom headers, and OAuth references\n- LLMModel: Defines model configurations with provider mapping, context size limits, and capability flags\n- LoopControl: Controls agent execution parameters including max steps, retries, Ralph mode iterations, and context reservation\n- MoonshotSearchConfig/MoonshotFetchConfig: Service-specific configurations for Moonshot APIs\n- Services: Container for optional service configurations\n- MCPClientConfig/MCPConfig: Model Context Protocol client settings with tool call timeouts\n- Config: Main configuration aggregator with default model selection, thinking mode, yolo mode, editor settings, and validation logic\n\n**Core Functionality:**\n1. Configuration Loading: Supports both TOML and JSON formats with automatic format detection, fallback to defaults, and file creation when missing\n2. Validation: Cross-reference validation ensures default models exist and provider references are valid\n3. Secret Management: Secure handling of API keys using SecretStr with custom JSON serialization\n4. Migration Support: One-time migration from legacy JSON to TOML format with backup preservation\n5. Persistence: Configuration saving with format-aware serialization (TOML/JSON)\n\nThe component uses Pydantic's powerful validation features including field validators, model validators, field aliases, and custom serializers to ensure configuration integrity and security.",
     "interfaces": [
       {
-        "description": "Reference to OAuth credentials stored outside the config file",
+        "description": "Pydantic model for OAuth credential storage references supporting keyring and file backends",
         "interface_type": "class",
         "name": "OAuthRef",
         "parameters": [],
@@ -3846,7 +3867,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "LLM provider configuration with API settings and authentication",
+        "description": "Pydantic model for LLM provider configuration with API settings, OAuth, and custom headers",
         "interface_type": "class",
         "name": "LLMProvider",
         "parameters": [],
@@ -3854,7 +3875,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "LLM model configuration including capabilities and context size",
+        "description": "Pydantic model for LLM model configuration with provider mapping, context limits, and capabilities",
         "interface_type": "class",
         "name": "LLMModel",
         "parameters": [],
@@ -3862,7 +3883,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Agent loop control parameters for step management and context handling",
+        "description": "Pydantic model for agent loop control settings with step limits, retries, and context reservation",
         "interface_type": "class",
         "name": "LoopControl",
         "parameters": [],
@@ -3870,7 +3891,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Configuration for Moonshot Search service",
+        "description": "Pydantic model for Moonshot Search service configuration",
         "interface_type": "class",
         "name": "MoonshotSearchConfig",
         "parameters": [],
@@ -3878,7 +3899,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Configuration for Moonshot Fetch service",
+        "description": "Pydantic model for Moonshot Fetch service configuration",
         "interface_type": "class",
         "name": "MoonshotFetchConfig",
         "parameters": [],
@@ -3886,7 +3907,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Container for various external service configurations",
+        "description": "Container for optional service configurations (search and fetch)",
         "interface_type": "class",
         "name": "Services",
         "parameters": [],
@@ -3894,7 +3915,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "MCP client configuration parameters",
+        "description": "MCP client configuration with tool call timeout settings",
         "interface_type": "class",
         "name": "MCPClientConfig",
         "parameters": [],
@@ -3910,7 +3931,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Main configuration structure containing all application settings",
+        "description": "Main configuration model aggregating all settings with validation logic",
         "interface_type": "class",
         "name": "Config",
         "parameters": [],
@@ -3918,7 +3939,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Get the configuration file path",
+        "description": "Returns the default configuration file path",
         "interface_type": "function",
         "name": "get_config_file",
         "parameters": [],
@@ -3926,7 +3947,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Get the default configuration",
+        "description": "Creates and returns default configuration object",
         "interface_type": "function",
         "name": "get_default_config",
         "parameters": [],
@@ -3934,12 +3955,12 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Load configuration from config file",
+        "description": "Loads configuration from file with validation, creates default if missing, handles JSON/TOML formats",
         "interface_type": "function",
         "name": "load_config",
         "parameters": [
           {
-            "description": "Path to the configuration file",
+            "description": "Optional path to configuration file, defaults to standard location",
             "is_optional": true,
             "name": "config_file",
             "param_type": "Path | None"
@@ -3949,7 +3970,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Load configuration from a TOML or JSON string",
+        "description": "Parses and validates configuration from string input",
         "interface_type": "function",
         "name": "load_config_from_string",
         "parameters": [
@@ -3964,41 +3985,42 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Save configuration to config file",
+        "description": "Persists configuration to file with format-aware serialization",
         "interface_type": "function",
         "name": "save_config",
         "parameters": [
           {
-            "description": "Config object to save",
+            "description": "Configuration object to save",
             "is_optional": false,
             "name": "config",
             "param_type": "Config"
           },
           {
-            "description": "Path to the configuration file",
+            "description": "Optional target file path",
             "is_optional": true,
             "name": "config_file",
             "param_type": "Path | None"
           }
         ],
-        "return_type": "void",
+        "return_type": "None",
         "visibility": "public"
       },
       {
-        "description": "Migrate legacy JSON config to TOML format",
+        "description": "One-time migration from legacy JSON config to TOML format with backup",
         "interface_type": "function",
         "name": "_migrate_json_config_to_toml",
         "parameters": [],
-        "return_type": "void",
+        "return_type": "None",
         "visibility": "private"
       }
     ],
     "responsibilities": [
-      "Define and validate configuration schema using Pydantic models",
-      "Manage configuration file operations (load, save, migration)",
-      "Handle sensitive data security for API keys and OAuth credentials",
-      "Ensure configuration consistency through model validation",
-      "Support multiple configuration formats (TOML/JSON) with automatic format detection"
+      "Define structured configuration models using Pydantic for type-safe configuration management",
+      "Load and parse configuration from TOML/JSON files with validation and error handling",
+      "Persist configuration changes to filesystem with proper serialization format handling",
+      "Validate configuration integrity including cross-reference validation between models and providers",
+      "Handle sensitive data (API keys, OAuth tokens) securely with SecretStr and custom serialization",
+      "Support legacy configuration migration from JSON to TOML format with backup preservation"
     ]
   },
   {
@@ -27994,29 +28016,16 @@ Code analysis results from preprocessing phase, including definitions of functio
   },
   {
     "code_dossier": {
-      "code_purpose": "widget",
-      "description": "Slash command system for Kimi CLI shell interface providing user-facing commands",
+      "code_purpose": "command",
+      "description": "Slash command handler module for Kimi CLI shell interface, implementing user-facing interactive commands including help, version, model switching, editor configuration, session management, MCP server display, and various utility functions. Uses registry pattern for command registration.",
       "file_path": "src/kimi_cli/ui/shell/slash.py",
       "functions": [
+        "_ensure_kimi_soul",
         "exit",
         "help",
         "version",
         "model",
-        "changelog",
-        "feedback",
-        "clear",
-        "new",
-        "list_sessions",
-        "web",
-        "mcp",
-        "_ensure_kimi_soul"
-      ],
-      "importance_score": 0.8,
-      "interfaces": [
-        "exit",
-        "help",
-        "version",
-        "model",
+        "editor",
         "changelog",
         "feedback",
         "clear",
@@ -28025,109 +28034,234 @@ Code analysis results from preprocessing phase, including definitions of functio
         "web",
         "mcp"
       ],
+      "importance_score": 0.8,
+      "interfaces": [
+        "ShellSlashCmdFunc",
+        "registry",
+        "shell_mode_registry"
+      ],
       "name": "slash.py",
-      "source_summary": "from __future__ import annotations\n\nfrom collections.abc import Awaitable, Callable\nfrom typing import TYPE_CHECKING, Any\n\nfrom prompt_toolkit.shortcuts.choice_input import ChoiceInput\n\nfrom kimi_cli.auth.platforms import get_platform_name_for_provider, refresh_managed_models\nfrom kimi_cli.cli import Reload, SwitchToWeb\nfrom kimi_cli.config import load_config, save_config\nfrom kimi_cli.exception import ConfigError\nfrom kimi_cli.session import Session\nfrom kimi_cli.soul.kimisoul import KimiSoul\nfrom kimi_cli.ui.shell.console import console\nfrom kimi_cli.utils.changelog import CHANGELOG\nfrom kimi_cli.utils.datetime import format_relative_time\nfrom kimi_cli.utils.slashcmd import SlashCommand, SlashCommandRegistry\n\nif TYPE_CHECKING:\n    from kimi_cli.ui.shell import Shell\n\ntype ShellSlashCmdFunc = Callable[[Shell, str], None | Awaitable[None]]\n\"\"\"\nA function that runs as a Shell-level slash command.\n\nRaises:\n    Reload: When the configuration should be reloaded.\n\"\"\"\n\n\nregistry = SlashCommandRegistry[ShellSlashCmdFunc]()\nshell_mode_registry = SlashCommandRegistry[ShellSlashCmdFunc]()\n\n\ndef _ensure_kimi_soul(app: Shell) -> KimiSoul | None:\n    if not isinstance(app.soul, KimiSoul):\n        console.print(\"[red]KimiSoul required[/red]\")\n        return None\n    return app.soul\n\n\n@registry.command(aliases=[\"quit\"])\n@shell_mode_registry.command(aliases=[\"quit\"])\ndef exit(app: Shell, args: str):\n    \"\"\"Exit the application\"\"\"\n    # should be handled by `Shell`\n    raise NotImplementedError\n\n\nSKILL_COMMAND_PREFIX = \"skill:\"\n\n_KEYBOARD_SHORTCUTS = [\n    (\"Ctrl-X\", \"Toggle agent/shell mode\"),\n    (\"Ctrl-J / Alt-Enter\", \"Insert newline\"),\n    (\"Ctrl-V\", \"Paste (supports images)\"),\n    (\"Ctrl-D\", \"Exit\"),\n    (\"Ctrl-C\", \"Interrupt\"),\n]\n\n\n@registry.command(aliases=[\"h\", \"?\"])\n@shell_mode_registry.command(aliases=[\"h\", \"?\"])\ndef help(app: Shell, args: str):\n    \"\"\"Show help information\"\"\"\n    from rich.console import Group, RenderableType\n    from rich.text import Text\n\n    from kimi_cli.utils.rich.columns import BulletColumns\n\n    def section(title: str, items: list[tuple[str, str]], color: str) -> BulletColumns:\n        lines: list[RenderableType] = [Text.from_markup(f\"[bold]{title}:[/bold]\")]\n        for name, desc in items:\n            lines.append(\n                BulletColumns(\n                    Text.from_markup(f\"[{color}]{name}[/{color}]: [grey50]{desc}[/grey50]\"),\n                    bullet_style=color,\n                )\n            )\n        return BulletColumns(Group(*lines))\n\n    renderables: list[RenderableType] = []\n    renderables.append(\n        BulletColumns(\n            Group(\n                Text.from_markup(\"[grey50]Help! I need somebody. Help! Not just anybody.[/grey50]\"),\n                Text.from_markup(\"[grey50]Help! You know I need someone. Help![/grey50]\"),\n                Text.from_markup(\"[grey50]\\u2015 The Beatles, [italic]Help![/italic][/grey50]\"),\n            ),\n            bullet_style=\"grey50\",\n        )\n    )\n    renderables.append(\n        BulletColumns(\n            Text(\n                \"Sure, Kimi is ready to help! \"\n                \"Just send me messages and I will help you get things done!\"\n            ),\n        )\n    )\n\n    commands: list[SlashCommand[Any]] = []\n    skills: list[SlashCommand[Any]] = []\n    for cmd in app.available_slash_commands.values():\n        if cmd.name.startswith(SKILL_COMMAND_PREFIX):\n            skills.append(cmd)\n        else:\n            commands.append(cmd)\n\n    renderables.append(section(\"Keyboard shortcuts\", _KEYBOARD_SHORTCUTS, \"yellow\"))\n    renderables.append(\n        section(\n            \"Slash commands\",\n            [(c.slash_name(), c.description) for c in sorted(commands, key=lambda c: c.name)],\n            \"blue\",\n        )\n    )\n    if skills:\n        renderables.append(\n            section(\n                \"Skills\",\n                [(c.slash_name(), c.description) for c in sorted(skills, key=lambda c: c.name)],\n                \"cyan\",\n            )\n        )\n\n    with console.pager(styles=True):\n        console.print(Group(*renderables))\n\n\n@registry.command\n@shell_mode_registry.command\ndef version(app: Shell, args: str):\n    \"\"\"Show version information\"\"\"\n    from kimi_cli.constant import VERSION\n\n    console.print(f\"kimi, version {VERSION}\")\n\n\n@registry.command\nasync def model(app: Shell, args: str):\n    \"\"\"Switch LLM model or thinking mode\"\"\"\n    from kimi_cli.llm import derive_model_capabilities\n\n    soul = _ensure_kimi_soul(app)\n    if soul is None:\n        return\n    config = soul.runtime.config\n\n    await refresh_managed_models(config)\n\n    if not config.models:\n        console.print('[yellow]No models configured, send \"/login\" to login.[/yellow]')\n        return\n\n    if not config.is_from_default_location:\n        console.print(\n            \"[yellow]Model switching requires the default config file; \"\n            \"restart without --config/--config-file.[/yellow]\"\n        )\n        return\n\n    # Find current model/thinking from runtime (may be overridden by --model/--thinking)\n    curr_model_cfg = soul.runtime.llm.model_config if soul.runtime.llm else None\n    curr_model_name: str | None = None\n    if curr_model_cfg is not None:\n        for name, model_cfg in config.models.items():\n            if model_cfg == curr_model_cfg:\n                curr_model_name = name\n                break\n    curr_thinking = soul.thinking\n\n    # Step 1: Select model\n    model_choices: list[tuple[str, str]] = []\n    for name in sorted(config.models):\n        model_cfg = config.models[name]\n        provider_label = get_platform_name_for_provider(model_cfg.provider) or model_cfg.provider\n        marker = \" (current)\" if name == curr_model_name else \"\"\n        label = f\"{model_cfg.model} ({provider_label}){marker}\"\n        model_choices.append((name, label))\n\n    try:\n        selected_model_name = await ChoiceInput(\n            message=\"Select a model (↑↓ navigate, Enter select, Ctrl+C cancel):\",\n            options=model_choices,\n            default=curr_model_name or model_choices[0][0],\n        ).prompt_async()\n    except (EOFError, KeyboardInterrupt):\n        return\n\n    if not selected_model_name:\n        return\n\n    selected_model_cfg = config.models[selected_model_name]\n    selected_provider = config.providers.get(selected_model_cfg.provider)\n    if selected_provider is None:\n        console.print(f\"[red]Provider not found: {selected_model_cfg.provider}[/red]\")\n        return\n\n    # Step 2: Determine thinking mode\n    capabilities = derive_model_capabilities(selected_model_cfg)\n    new_thinking: bool\n\n    if \"always_thinking\" in capabilities:\n        new_thinking = True\n    elif \"thinking\" in capabilities:\n        thinking_choices: list[tuple[str, str]] = [\n            (\"off\", \"off\" + (\" (current)\" if not curr_thinking else \"\")),\n            (\"on\", \"on\" + (\" (current)\" if curr_thinking else \"\")),\n        ]\n        try:\n            thinking_selection = await ChoiceInput(\n                message=\"Enable thinking mode? (↑↓ navigate, Enter select, Ctrl+C cancel):\",\n                options=thinking_choices,\n                default=\"on\" if curr_thinking else \"off\",\n            ).prompt_async()\n        except (EOFError, KeyboardInterrupt):\n            return\n\n        if not thinking_selection:\n            return\n\n        new_thinking = thinking_selection == \"on\"\n    else:\n        new_thinking = False\n\n    # Check if anything changed\n    model_changed = curr_model_name != selected_model_name\n    thinking_changed = curr_thinking != new_thinking\n\n    if not model_changed and not thinking_changed:\n        console.print(\n            f\"[yellow]Already using {selected_model_name} \"\n            f\"with thinking {'on' if new_thinking else 'off'}.[/yellow]\"\n        )\n        return\n\n    # Save and reload\n    prev_model = config.default_model\n    prev_thinking = config.default_thinking\n    config.default_model = selected_model_name\n    config.default_thinking = new_thinking\n    try:\n        config_for_save = load_config()\n        config_for_save.default_model = selected_model_name\n        config_for_save.default_thinking = new_thinking\n        save_config(config_for_save)\n    except (ConfigError, OSError) as exc:\n        config.default_model = prev_model\n        config.default_thinking = prev_thinking\n        console.print(f\"[red]Failed to save config: {exc}[/red]\")\n        return\n\n    console.print(\n        f\"[green]Switched to {selected_model_name} \"\n        f\"with thinking {'on' if new_thinking else 'off'}. \"\n        \"Reloading...[/green]\"\n    )\n    raise Reload(session_id=soul.runtime.session.id)\n\n\n@registry.command(aliases=[\"release-notes\"])\n@shell_mode_registry.command(aliases=[\"release-notes\"])\ndef changelog(app: Shell, args: str):\n    \"\"\"Show release notes\"\"\"\n    from rich.console import Group, RenderableType\n    from rich.text import Text\n\n    from kimi_cli.utils.rich.columns import BulletColumns\n\n    renderables: list[RenderableType] = []\n    for ver, entry in CHANGELOG.items():\n        title = f\"[bold]{ver}[/bold]\"\n        if entry.description:\n            title += f\": {entry.description}\"\n\n        lines: list[RenderableType] = [Text.from_markup(title)]\n        for item in entry.entries:\n            if item.lower().startswith(\"lib:\"):\n                continue\n            lines.append(\n                BulletColumns(\n                    Text.from_markup(f\"[grey50]{item}[/grey50]\"),\n                    bullet_style=\"grey50\",\n                ),\n            )\n        renderables.append(BulletColumns(Group(*lines)))\n\n    with console.pager(styles=True):\n        console.print(Group(*renderables))\n\n\n@registry.command\n@shell_mode_registry.command\ndef feedback(app: Shell, args: str):\n    \"\"\"Submit feedback to make Kimi Code CLI better\"\"\"\n    import webbrowser\n\n    ISSUE_URL = \"https://github.com/MoonshotAI/kimi-cli/issues\"\n    if webbrowser.open(ISSUE_URL):\n        return\n    console.print(f\"Please submit feedback at [underline]{ISSUE_URL}[/underline].\")\n\n\n@registry.command(aliases=[\"reset\"])\nasync def clear(app: Shell, args: str):\n    \"\"\"Clear the context\"\"\"\n    if _ensure_kimi_soul(app) is None:\n        return\n    await app.run_soul_command(\"/clear\")\n    raise Reload()\n\n\n@registry.command\nasync def new(app: Shell, args: str):\n    \"\"\"Start a new session\"\"\"\n    soul = _ensure_kimi_soul(app)\n    if soul is None:\n        return\n    current_session = soul.runtime.session\n    work_dir = current_session.work_dir\n    # Clean up the current session if it has no content, so that chaining\n    # /new commands (or switching away before the first message) does not\n    # leave orphan empty session directories on disk.\n    if current_session.is_empty():\n        await current_session.delete()\n    session = await Session.create(work_dir)\n    console.print(\"[green]New session created. Switching...[/green]\")\n    raise Reload(session_id=session.id)\n\n\n@registry.command(name=\"sessions\", aliases=[\"resume\"])\nasync def list_sessions(app: Shell, args: str):\n    \"\"\"List sessions and resume optionally\"\"\"\n    soul = _ensure_kimi_soul(app)\n    if soul is None:\n        return\n\n    work_dir = soul.runtime.session.work_dir\n    current_session = soul.runtime.session\n    current_session_id = current_session.id\n    sessions = [\n        session for session in await Session.list(work_dir) if session.id != current_session_id\n    ]\n\n    await current_session.refresh()\n    sessions.insert(0, current_session)\n\n    choices: list[tuple[str, str]] = []\n    for session in sessions:\n        time_str = format_relative_time(session.updated_at)\n        marker = \" (current)\" if session.id == current_session_id else \"\"\n        label = f\"{session.title}, {time_str}{marker}\"\n        choices.append((session.id, label))\n\n    try:\n        selection = await ChoiceInput(\n            message=\"Select a session to switch to (↑↓ navigate, Enter select, Ctrl+C cancel):\",\n            options=choices,\n            default=choices[0][0],\n        ).prompt_async()\n    except (EOFError, KeyboardInterrupt):\n        return\n\n    if not selection:\n        return\n\n    if selection == current_session_id:\n        console.print(\"[yellow]You are already in this session.[/yellow]\")\n        return\n\n    console.print(f\"[green]Switching to session {selection}...[/green]\")\n    raise Reload(session_id=selection)\n\n\n@registry.command\ndef web(app: Shell, args: str):\n    \"\"\"Open Kimi Code Web UI in browser\"\"\"\n    soul = _ensure_kimi_soul(app)\n    session_id = soul.runtime.session.id if soul else None\n    raise SwitchToWeb(session_id=session_id)\n\n\n@registry.command\nasync def mcp(app: Shell, args: str):\n    \"\"\"Show MCP servers and tools\"\"\"\n    from rich.console import Group, RenderableType\n    from rich.text import Text\n\n    from kimi_cli.soul.toolset import KimiToolset\n    from kimi_cli.utils.rich.columns import BulletColumns\n\n    soul = _ensure_kimi_soul(app)\n    if soul is None:\n        return\n    toolset = soul.agent.toolset\n    if not isinstance(toolset, KimiToolset):\n        console.print(\"[red]KimiToolset required[/red]\")\n        return\n\n    servers = toolset.mcp_servers\n\n    if not servers:\n        console.print(\"[yellow]No MCP servers configured.[/yellow]\")\n        return\n\n    n_conn = sum(1 for s in servers.values() if s.status == \"connected\")\n    n_tools = sum(len(s.tools) for s in servers.values())\n    console.print(\n        BulletColumns(\n            Text.from_markup(\n                f\"[bold]MCP Servers:[/bold] {n_conn}/{len(servers)} connected, {n_tools} tools\"\n            )\n        )\n    )\n\n    status_colors = {\n        \"connected\": \"green\",\n        \"connecting\": \"cyan\",\n        \"pending\": \"yellow\",\n        \"failed\": \"red\",\n        \"unauthorized\": \"red\",\n    }\n    for name, info in servers.items():\n        color = status_colors.get(info.status, \"red\")\n        server_text = f\"[{color}]{name}[/{color}]\"\n        if info.status == \"unauthorized\":\n            server_text += \" [grey50](unauthorized - run: kimi mcp auth {name})[/grey50]\"\n        elif info.status != \"connected\":\n            server_text += f\" [grey50]({info.status})[/grey50]\"\n\n        lines: list[RenderableType] = [Text.from_markup(server_text)]\n        for tool in info.tools:\n            lines.append(\n                BulletColumns(\n                    Text.from_markup(f\"[grey50]{tool.name}[/grey50]\"),\n                    bullet_style=\"grey50\",\n                )\n            )\n        console.print(BulletColumns(Group(*lines), bullet_style=color))\n\n\nfrom . import (  # noqa: E402\n    debug,  # noqa: F401 # type: ignore[reportUnusedImport]\n    oauth,  # noqa: F401 # type: ignore[reportUnusedImport]\n    setup,  # noqa: F401 # type: ignore[reportUnusedImport]\n    update,  # noqa: F401 # type: ignore[reportUnusedImport]\n    usage,  # noqa: F401 # type: ignore[reportUnusedImport]\n)\n"
+      "source_summary": "from __future__ import annotations\n\nfrom collections.abc import Awaitable, Callable\nfrom typing import TYPE_CHECKING, Any, cast\n\nfrom prompt_toolkit.shortcuts.choice_input import ChoiceInput\n\nfrom kimi_cli.auth.platforms import get_platform_name_for_provider, refresh_managed_models\nfrom kimi_cli.cli import Reload, SwitchToWeb\nfrom kimi_cli.config import load_config, save_config\nfrom kimi_cli.exception import ConfigError\nfrom kimi_cli.session import Session\nfrom kimi_cli.soul.kimisoul import KimiSoul\nfrom kimi_cli.ui.shell.console import console\nfrom kimi_cli.utils.changelog import CHANGELOG\nfrom kimi_cli.utils.datetime import format_relative_time\nfrom kimi_cli.utils.slashcmd import SlashCommand, SlashCommandRegistry\n\nif TYPE_CHECKING:\n    from kimi_cli.ui.shell import Shell\n\ntype ShellSlashCmdFunc = Callable[[Shell, str], None | Awaitable[None]]\n\"\"\"\nA function that runs as a Shell-level slash command.\n\nRaises:\n    Reload: When the configuration should be reloaded.\n\"\"\"\n\n\nregistry = SlashCommandRegistry[ShellSlashCmdFunc]()\nshell_mode_registry = SlashCommandRegistry[ShellSlashCmdFunc]()\n\n\ndef _ensure_kimi_soul(app: Shell) -> KimiSoul | None:\n    if not isinstance(app.soul, KimiSoul):\n        console.print(\"[red]KimiSoul required[/red]\")\n        return None\n    return app.soul\n\n\n@registry.command(aliases=[\"quit\"])\n@shell_mode_registry.command(aliases=[\"quit\"])\ndef exit(app: Shell, args: str):\n    \"\"\"Exit the application\"\"\"\n    # should be handled by `Shell`\n    raise NotImplementedError\n\n\nSKILL_COMMAND_PREFIX = \"skill:\"\n\n_KEYBOARD_SHORTCUTS = [\n    (\"Ctrl-X\", \"Toggle agent/shell mode\"),\n    (\"Ctrl-O\", \"Edit in external editor ($VISUAL/$EDITOR)\"),\n    (\"Ctrl-J / Alt-Enter\", \"Insert newline\"),\n    (\"Ctrl-V\", \"Paste (supports images)\"),\n    (\"Ctrl-D\", \"Exit\"),\n    (\"Ctrl-C\", \"Interrupt\"),\n]\n\n\n@registry.command(aliases=[\"h\", \"?\"])\n@shell_mode_registry.command(aliases=[\"h\", \"?\"])\ndef help(app: Shell, args: str):\n    \"\"\"Show help information\"\"\"\n    from rich.console import Group, RenderableType\n    from rich.text import Text\n\n    from kimi_cli.utils.rich.columns import BulletColumns\n\n    def section(title: str, items: list[tuple[str, str]], color: str) -> BulletColumns:\n        lines: list[RenderableType] = [Text.from_markup(f\"[bold]{title}:[/bold]\")]\n        for name, desc in items:\n            lines.append(\n                BulletColumns(\n                    Text.from_markup(f\"[{color}]{name}[/{color}]: [grey50]{desc}[/grey50]\"),\n                    bullet_style=color,\n                )\n            )\n        return BulletColumns(Group(*lines))\n\n    renderables: list[RenderableType] = []\n    renderables.append(\n        BulletColumns(\n            Group(\n                Text.from_markup(\"[grey50]Help! I need somebody. Help! Not just anybody.[/grey50]\"),\n                Text.from_markup(\"[grey50]Help! You know I need someone. Help![/grey50]\"),\n                Text.from_markup(\"[grey50]\\u2015 The Beatles, [italic]Help![/italic][/grey50]\"),\n            ),\n            bullet_style=\"grey50\",\n        )\n    )\n    renderables.append(\n        BulletColumns(\n            Text(\n                \"Sure, Kimi is ready to help! \"\n                \"Just send me messages and I will help you get things done!\"\n            ),\n        )\n    )\n\n    commands: list[SlashCommand[Any]] = []\n    skills: list[SlashCommand[Any]] = []\n    for cmd in app.available_slash_commands.values():\n        if cmd.name.startswith(SKILL_COMMAND_PREFIX):\n            skills.append(cmd)\n        else:\n            commands.append(cmd)\n\n    renderables.append(section(\"Keyboard shortcuts\", _KEYBOARD_SHORTCUTS, \"yellow\"))\n    renderables.append(\n        section(\n            \"Slash commands\",\n            [(c.slash_name(), c.description) for c in sorted(commands, key=lambda c: c.name)],\n            \"blue\",\n        )\n    )\n    if skills:\n        renderables.append(\n            section(\n                \"Skills\",\n                [(c.slash_name(), c.description) for c in sorted(skills, key=lambda c: c.name)],\n                \"cyan\",\n            )\n        )\n\n    with console.pager(styles=True):\n        console.print(Group(*renderables))\n\n\n@registry.command\n@shell_mode_registry.command\ndef version(app: Shell, args: str):\n    \"\"\"Show version information\"\"\"\n    from kimi_cli.constant import VERSION\n\n    console.print(f\"kimi, version {VERSION}\")\n\n\n@registry.command\nasync def model(app: Shell, args: str):\n    \"\"\"Switch LLM model or thinking mode\"\"\"\n    from kimi_cli.llm import derive_model_capabilities\n\n    soul = _ensure_kimi_soul(app)\n    if soul is None:\n        return\n    config = soul.runtime.config\n\n    await refresh_managed_models(config)\n\n    if not config.models:\n        console.print('[yellow]No models configured, send \"/login\" to login.[/yellow]')\n        return\n\n    if not config.is_from_default_location:\n        console.print(\n            \"[yellow]Model switching requires the default config file; \"\n            \"restart without --config/--config-file.[/yellow]\"\n        )\n        return\n\n    # Find current model/thinking from runtime (may be overridden by --model/--thinking)\n    curr_model_cfg = soul.runtime.llm.model_config if soul.runtime.llm else None\n    curr_model_name: str | None = None\n    if curr_model_cfg is not None:\n        for name, model_cfg in config.models.items():\n            if model_cfg == curr_model_cfg:\n                curr_model_name = name\n                break\n    curr_thinking = soul.thinking\n\n    # Step 1: Select model\n    model_choices: list[tuple[str, str]] = []\n    for name in sorted(config.models):\n        model_cfg = config.models[name]\n        provider_label = get_platform_name_for_provider(model_cfg.provider) or model_cfg.provider\n        marker = \" (current)\" if name == curr_model_name else \"\"\n        label = f\"{model_cfg.model} ({provider_label}){marker}\"\n        model_choices.append((name, label))\n\n    try:\n        selected_model_name = await ChoiceInput(\n            message=\"Select a model (↑↓ navigate, Enter select, Ctrl+C cancel):\",\n            options=model_choices,\n            default=curr_model_name or model_choices[0][0],\n        ).prompt_async()\n    except (EOFError, KeyboardInterrupt):\n        return\n\n    if not selected_model_name:\n        return\n\n    selected_model_cfg = config.models[selected_model_name]\n    selected_provider = config.providers.get(selected_model_cfg.provider)\n    if selected_provider is None:\n        console.print(f\"[red]Provider not found: {selected_model_cfg.provider}[/red]\")\n        return\n\n    # Step 2: Determine thinking mode\n    capabilities = derive_model_capabilities(selected_model_cfg)\n    new_thinking: bool\n\n    if \"always_thinking\" in capabilities:\n        new_thinking = True\n    elif \"thinking\" in capabilities:\n        thinking_choices: list[tuple[str, str]] = [\n            (\"off\", \"off\" + (\" (current)\" if not curr_thinking else \"\")),\n            (\"on\", \"on\" + (\" (current)\" if curr_thinking else \"\")),\n        ]\n        try:\n            thinking_selection = await ChoiceInput(\n                message=\"Enable thinking mode? (↑↓ navigate, Enter select, Ctrl+C cancel):\",\n                options=thinking_choices,\n                default=\"on\" if curr_thinking else \"off\",\n            ).prompt_async()\n        except (EOFError, KeyboardInterrupt):\n            return\n\n        if not thinking_selection:\n            return\n\n        new_thinking = thinking_selection == \"on\"\n    else:\n        new_thinking = False\n\n    # Check if anything changed\n    model_changed = curr_model_name != selected_model_name\n    thinking_changed = curr_thinking != new_thinking\n\n    if not model_changed and not thinking_changed:\n        console.print(\n            f\"[yellow]Already using {selected_model_name} \"\n            f\"with thinking {'on' if new_thinking else 'off'}.[/yellow]\"\n        )\n        return\n\n    # Save and reload\n    prev_model = config.default_model\n    prev_thinking = config.default_thinking\n    config.default_model = selected_model_name\n    config.default_thinking = new_thinking\n    try:\n        config_for_save = load_config()\n        config_for_save.default_model = selected_model_name\n        config_for_save.default_thinking = new_thinking\n        save_config(config_for_save)\n    except (ConfigError, OSError) as exc:\n        config.default_model = prev_model\n        config.default_thinking = prev_thinking\n        console.print(f\"[red]Failed to save config: {exc}[/red]\")\n        return\n\n    console.print(\n        f\"[green]Switched to {selected_model_name} \"\n        f\"with thinking {'on' if new_thinking else 'off'}. \"\n        \"Reloading...[/green]\"\n    )\n    raise Reload(session_id=soul.runtime.session.id)\n\n\n@registry.command\n@shell_mode_registry.command\nasync def editor(app: Shell, args: str):\n    \"\"\"Set default external editor for Ctrl-O\"\"\"\n    from kimi_cli.utils.editor import get_editor_command\n\n    soul = _ensure_kimi_soul(app)\n    if soul is None:\n        return\n    config = soul.runtime.config\n    config_file = config.source_file\n    if config_file is None:\n        console.print(\n            \"[yellow]Editor switching is unavailable with inline --config; \"\n            \"use --config-file to persist this setting.[/yellow]\"\n        )\n        return\n\n    current_editor = config.default_editor\n\n    # If args provided directly, use as editor command\n    if args.strip():\n        new_editor = args.strip()\n    else:\n        options: list[tuple[str, str]] = [\n            (\"code --wait\", \"VS Code (code --wait)\"),\n            (\"vim\", \"Vim\"),\n            (\"nano\", \"Nano\"),\n            (\"\", \"Auto-detect (use $VISUAL/$EDITOR)\"),\n        ]\n        # Mark current selection\n        options = [\n            (val, label + (\" ← current\" if val == current_editor else \"\")) for val, label in options\n        ]\n\n        try:\n            choice = cast(\n                str | None,\n                await ChoiceInput(\n                    message=\"Select an editor (↑↓ navigate, Enter select, Ctrl+C cancel):\",\n                    options=options,\n                    default=(\n                        current_editor\n                        if current_editor in {v for v, _ in options}\n                        else \"code --wait\"\n                    ),\n                ).prompt_async(),\n            )\n        except (EOFError, KeyboardInterrupt):\n            return\n\n        if choice is None:\n            return\n        new_editor = choice\n\n    # Validate the editor binary is available\n    if new_editor:\n        import shlex\n        import shutil\n\n        try:\n            parts = shlex.split(new_editor)\n        except ValueError:\n            console.print(f\"[red]Invalid editor command: {new_editor}[/red]\")\n            return\n\n        binary = parts[0]\n        if not shutil.which(binary):\n            console.print(\n                f\"[yellow]Warning: '{binary}' not found in PATH. \"\n                f\"Saving anyway — make sure it's installed before using Ctrl-O.[/yellow]\"\n            )\n\n    if new_editor == current_editor:\n        console.print(f\"[yellow]Editor is already set to: {new_editor or 'auto-detect'}[/yellow]\")\n        return\n\n    # Save to disk\n    try:\n        config_for_save = load_config(config_file)\n        config_for_save.default_editor = new_editor\n        save_config(config_for_save, config_file)\n    except (ConfigError, OSError) as exc:\n        console.print(f\"[red]Failed to save config: {exc}[/red]\")\n        return\n\n    # Sync in-memory config so Ctrl-O picks it up immediately\n    config.default_editor = new_editor\n\n    if new_editor:\n        console.print(f\"[green]Editor set to: {new_editor}[/green]\")\n    else:\n        resolved = get_editor_command()\n        label = \" \".join(resolved) if resolved else \"none\"\n        console.print(f\"[green]Editor set to auto-detect (resolved: {label})[/green]\")\n\n\n@registry.command(aliases=[\"release-notes\"])\n@shell_mode_registry.command(aliases=[\"release-notes\"])\ndef changelog(app: Shell, args: str):\n    \"\"\"Show release notes\"\"\"\n    from rich.console import Group, RenderableType\n    from rich.text import Text\n\n    from kimi_cli.utils.rich.columns import BulletColumns\n\n    renderables: list[RenderableType] = []\n    for ver, entry in CHANGELOG.items():\n        title = f\"[bold]{ver}[/bold]\"\n        if entry.description:\n            title += f\": {entry.description}\"\n\n        lines: list[RenderableType] = [Text.from_markup(title)]\n        for item in entry.entries:\n            if item.lower().startswith(\"lib:\"):\n                continue\n            lines.append(\n                BulletColumns(\n                    Text.from_markup(f\"[grey50]{item}[/grey50]\"),\n                    bullet_style=\"grey50\",\n                ),\n            )\n        renderables.append(BulletColumns(Group(*lines)))\n\n    with console.pager(styles=True):\n        console.print(Group(*renderables))\n\n\n@registry.command\n@shell_mode_registry.command\ndef feedback(app: Shell, args: str):\n    \"\"\"Submit feedback to make Kimi Code CLI better\"\"\"\n    import webbrowser\n\n    ISSUE_URL = \"https://github.com/MoonshotAI/kimi-cli/issues\"\n    if webbrowser.open(ISSUE_URL):\n        return\n    console.print(f\"Please submit feedback at [underline]{ISSUE_URL}[/underline].\")\n\n\n@registry.command(aliases=[\"reset\"])\nasync def clear(app: Shell, args: str):\n    \"\"\"Clear the context\"\"\"\n    if _ensure_kimi_soul(app) is None:\n        return\n    await app.run_soul_command(\"/clear\")\n    raise Reload()\n\n\n@registry.command\nasync def new(app: Shell, args: str):\n    \"\"\"Start a new session\"\"\"\n    soul = _ensure_kimi_soul(app)\n    if soul is None:\n        return\n    current_session = soul.runtime.session\n    work_dir = current_session.work_dir\n    # Clean up the current session if it has no content, so that chaining\n    # /new commands (or switching away before the first message) does not\n    # leave orphan empty session directories on disk.\n    if current_session.is_empty():\n        await current_session.delete()\n    session = await Session.create(work_dir)\n    console.print(\"[green]New session created. Switching...[/green]\")\n    raise Reload(session_id=session.id)\n\n\n@registry.command(name=\"sessions\", aliases=[\"resume\"])\nasync def list_sessions(app: Shell, args: str):\n    \"\"\"List sessions and resume optionally\"\"\"\n    soul = _ensure_kimi_soul(app)\n    if soul is None:\n        return\n\n    work_dir = soul.runtime.session.work_dir\n    current_session = soul.runtime.session\n    current_session_id = current_session.id\n    sessions = [\n        session for session in await Session.list(work_dir) if session.id != current_session_id\n    ]\n\n    await current_session.refresh()\n    sessions.insert(0, current_session)\n\n    choices: list[tuple[str, str]] = []\n    for session in sessions:\n        time_str = format_relative_time(session.updated_at)\n        marker = \" (current)\" if session.id == current_session_id else \"\"\n        label = f\"{session.title}, {time_str}{marker}\"\n        choices.append((session.id, label))\n\n    try:\n        selection = await ChoiceInput(\n            message=\"Select a session to switch to (↑↓ navigate, Enter select, Ctrl+C cancel):\",\n            options=choices,\n            default=choices[0][0],\n        ).prompt_async()\n    except (EOFError, KeyboardInterrupt):\n        return\n\n    if not selection:\n        return\n\n    if selection == current_session_id:\n        console.print(\"[yellow]You are already in this session.[/yellow]\")\n        return\n\n    console.print(f\"[green]Switching to session {selection}...[/green]\")\n    raise Reload(session_id=selection)\n\n\n@registry.command\ndef web(app: Shell, args: str):\n    \"\"\"Open Kimi Code Web UI in browser\"\"\"\n    soul = _ensure_kimi_soul(app)\n    session_id = soul.runtime.session.id if soul else None\n    raise SwitchToWeb(session_id=session_id)\n\n\n@registry.command\nasync def mcp(app: Shell, args: str):\n    \"\"\"Show MCP servers and tools\"\"\"\n    from rich.console import Group, RenderableType\n    from rich.text import Text\n\n    from kimi_cli.soul.toolset import KimiToolset\n    from kimi_cli.utils.rich.columns import BulletColumns\n\n    soul = _ensure_kimi_soul(app)\n    if soul is None:\n        return\n    toolset = soul.agent.toolset\n    if not isinstance(toolset, KimiToolset):\n        console.print(\"[red]KimiToolset required[/red]\")\n        return\n\n    servers = toolset.mcp_servers\n\n    if not servers:\n        console.print(\"[yellow]No MCP servers configured.[/yellow]\")\n        return\n\n    n_conn = sum(1 for s in servers.values() if s.status == \"connected\")\n    n_tools = sum(len(s.tools) for s in servers.values())\n    console.print(\n        BulletColumns(\n            Text.from_markup(\n                f\"[bold]MCP Servers:[/bold] {n_conn}/{len(servers)} connected, {n_tools} tools\"\n            )\n        )\n    )\n\n    status_colors = {\n        \"connected\": \"green\",\n        \"connecting\": \"cyan\",\n        \"pending\": \"yellow\",\n        \"failed\": \"red\",\n        \"unauthorized\": \"red\",\n    }\n    for name, info in servers.items():\n        color = status_colors.get(info.status, \"red\")\n        server_text = f\"[{color}]{name}[/{color}]\"\n        if info.status == \"unauthorized\":\n            server_text += \" [grey50](unauthorized - run: kimi mcp auth {name})[/grey50]\"\n        elif info.status != \"connected\":\n            server_text += f\" [grey50]({info.status})[/grey50]\"\n\n        lines: list[RenderableType] = [Text.from_markup(server_text)]\n        for tool in info.tools:\n            lines.append(\n                BulletColumns(\n                    Text.from_markup(f\"[grey50]{tool.name}[/grey50]\"),\n                    bullet_style=\"grey50\",\n                )\n            )\n        console.print(BulletColumns(Group(*lines), bullet_style=color))\n\n\nfrom . import (  # noqa: E402\n    debug,  # noqa: F401 # type: ignore[reportUnusedImport]\n    oauth,  # noqa: F401 # type: ignore[reportUnusedImport]\n    setup,  # noqa: F401 # type: ignore[reportUnusedImport]\n    update,  # noqa: F401 # type: ignore[reportUnusedImport]\n    usage,  # noqa: F401 # type: ignore[reportUnusedImport]\n)\n"
     },
     "complexity_metrics": {
-      "cyclomatic_complexity": 58.0,
-      "lines_of_code": 448,
+      "cyclomatic_complexity": 72.0,
+      "lines_of_code": 546,
       "number_of_classes": 0,
-      "number_of_functions": 11
+      "number_of_functions": 15
     },
     "dependencies": [
       {
-        "dependency_type": "library",
+        "dependency_type": "import",
         "is_external": true,
-        "line_number": 7,
-        "name": "prompt_toolkit",
-        "path": "prompt_toolkit.shortcuts.choice_input",
+        "line_number": 3,
+        "name": "collections.abc",
+        "path": null,
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "import",
+        "is_external": true,
+        "line_number": 4,
+        "name": "typing",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": true,
+        "line_number": 6,
+        "name": "prompt_toolkit.shortcuts.choice_input",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": true,
+        "line_number": null,
+        "name": "rich.console",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": true,
+        "line_number": null,
+        "name": "rich.text",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": true,
+        "line_number": null,
+        "name": "webbrowser",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": true,
+        "line_number": null,
+        "name": "shlex",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": true,
+        "line_number": null,
+        "name": "shutil",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": false,
+        "line_number": 8,
+        "name": "kimi_cli.auth.platforms",
+        "path": "src/kimi_cli/auth/platforms",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 9,
-        "name": "kimi_cli.auth.platforms",
-        "path": "kimi_cli.auth.platforms",
+        "name": "kimi_cli.cli",
+        "path": "src/kimi_cli/cli",
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 10,
-        "name": "kimi_cli.cli",
-        "path": "kimi_cli.cli",
+        "name": "kimi_cli.config",
+        "path": "src/kimi_cli/config",
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 11,
-        "name": "kimi_cli.config",
-        "path": "kimi_cli.config",
+        "name": "kimi_cli.exception",
+        "path": "src/kimi_cli/exception",
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 12,
-        "name": "kimi_cli.exception",
-        "path": "kimi_cli.exception",
+        "name": "kimi_cli.session",
+        "path": "src/kimi_cli/session",
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 13,
-        "name": "kimi_cli.session",
-        "path": "kimi_cli.session",
+        "name": "kimi_cli.soul.kimisoul",
+        "path": "src/kimi_cli/soul/kimisoul",
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 14,
-        "name": "kimi_cli.soul.kimisoul",
-        "path": "kimi_cli.soul.kimisoul",
+        "name": "kimi_cli.ui.shell.console",
+        "path": "src/kimi_cli/ui/shell/console",
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 15,
-        "name": "kimi_cli.ui.shell.console",
-        "path": "kimi_cli.ui.shell.console",
+        "name": "kimi_cli.utils.changelog",
+        "path": "src/kimi_cli/utils/changelog",
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 16,
-        "name": "kimi_cli.utils.changelog",
-        "path": "kimi_cli.utils.changelog",
+        "name": "kimi_cli.utils.datetime",
+        "path": "src/kimi_cli/utils/datetime",
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 17,
-        "name": "kimi_cli.utils.datetime",
-        "path": "kimi_cli.utils.datetime",
+        "name": "kimi_cli.utils.slashcmd",
+        "path": "src/kimi_cli/utils/slashcmd",
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "import",
         "is_external": false,
-        "line_number": 18,
-        "name": "kimi_cli.utils.slashcmd",
-        "path": "kimi_cli.utils.slashcmd",
+        "line_number": 19,
+        "name": "kimi_cli.ui.shell",
+        "path": "src/kimi_cli/ui/shell",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": false,
+        "line_number": null,
+        "name": "kimi_cli.llm",
+        "path": "src/kimi_cli/llm",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": false,
+        "line_number": null,
+        "name": "kimi_cli.constant",
+        "path": "src/kimi_cli/constant",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": false,
+        "line_number": null,
+        "name": "kimi_cli.utils.editor",
+        "path": "src/kimi_cli/utils/editor",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": false,
+        "line_number": null,
+        "name": "kimi_cli.utils.rich.columns",
+        "path": "src/kimi_cli/utils/rich/columns",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": false,
+        "line_number": null,
+        "name": "kimi_cli.soul.toolset",
+        "path": "src/kimi_cli/soul/toolset",
         "version": null
       }
     ],
-    "detailed_description": "This component implements a comprehensive slash command system for the Kimi CLI shell, supporting both regular shell mode and agent mode. It provides commands for application control (exit, help), configuration management (model switching, thinking mode), session management (new, clear, list sessions), information display (version, changelog, MCP servers), and external integration (web UI, feedback). The system uses decorator-based command registration and provides interactive user prompts for complex operations.",
+    "detailed_description": "This component implements the slash command system for the Kimi CLI application's shell interface. It provides a comprehensive set of interactive commands that users can invoke using the '/command' syntax. The module uses a registry pattern (SlashCommandRegistry) to register and manage commands, supporting both regular and shell-mode command execution contexts.\n\nKey functionalities include:\n- **Help System**: Displays keyboard shortcuts, slash commands, and available skills with rich formatting\n- **Model Management**: Interactive model switching with thinking mode configuration, supporting model capability detection\n- **Editor Configuration**: Allows users to set default external editor for Ctrl-O functionality\n- **Session Management**: List, create, and resume conversation sessions with relative time formatting\n- **MCP Integration**: Displays connected MCP (Model Context Protocol) servers and available tools\n- **Utility Commands**: Version display, changelog viewing, feedback submission, and web UI access\n\nThe module integrates with configuration persistence, session management, and the soul/agent system. Commands use async/await patterns for interactive prompts (ChoiceInput) and proper error handling. The design supports command aliases and provides immediate feedback through the rich console interface.",
     "interfaces": [
       {
-        "description": "Exit the application",
+        "description": "Helper function to validate and retrieve KimiSoul instance from Shell app",
+        "interface_type": "function",
+        "name": "_ensure_kimi_soul",
+        "parameters": [
+          {
+            "description": "Shell application instance",
+            "is_optional": false,
+            "name": "app",
+            "param_type": "Shell"
+          }
+        ],
+        "return_type": "KimiSoul | None",
+        "visibility": "private"
+      },
+      {
+        "description": "Exit command handler - raises NotImplementedError to be handled by Shell",
         "interface_type": "function",
         "name": "exit",
         "parameters": [
@@ -28148,7 +28282,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Show help information",
+        "description": "Displays help information including keyboard shortcuts, slash commands, and skills",
         "interface_type": "function",
         "name": "help",
         "parameters": [
@@ -28169,7 +28303,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Show version information",
+        "description": "Displays current Kimi CLI version information",
         "interface_type": "function",
         "name": "version",
         "parameters": [
@@ -28190,8 +28324,8 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Switch LLM model or thinking mode",
-        "interface_type": "function",
+        "description": "Interactive model switching with thinking mode configuration, saves preferences to config",
+        "interface_type": "async_function",
         "name": "model",
         "parameters": [
           {
@@ -28207,11 +28341,32 @@ Code analysis results from preprocessing phase, including definitions of functio
             "param_type": "str"
           }
         ],
-        "return_type": "Awaitable[None]",
+        "return_type": "None",
         "visibility": "public"
       },
       {
-        "description": "Show release notes",
+        "description": "Sets default external editor for Ctrl-O functionality with interactive selection",
+        "interface_type": "async_function",
+        "name": "editor",
+        "parameters": [
+          {
+            "description": "Shell application instance",
+            "is_optional": false,
+            "name": "app",
+            "param_type": "Shell"
+          },
+          {
+            "description": "Command arguments (optional editor command)",
+            "is_optional": false,
+            "name": "args",
+            "param_type": "str"
+          }
+        ],
+        "return_type": "None",
+        "visibility": "public"
+      },
+      {
+        "description": "Displays release notes from changelog",
         "interface_type": "function",
         "name": "changelog",
         "parameters": [
@@ -28232,7 +28387,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Submit feedback to make Kimi Code CLI better",
+        "description": "Opens browser to submit feedback on GitHub",
         "interface_type": "function",
         "name": "feedback",
         "parameters": [
@@ -28253,8 +28408,8 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Clear the context",
-        "interface_type": "function",
+        "description": "Clears the conversation context and triggers reload",
+        "interface_type": "async_function",
         "name": "clear",
         "parameters": [
           {
@@ -28270,12 +28425,12 @@ Code analysis results from preprocessing phase, including definitions of functio
             "param_type": "str"
           }
         ],
-        "return_type": "Awaitable[None]",
+        "return_type": "None",
         "visibility": "public"
       },
       {
-        "description": "Start a new session",
-        "interface_type": "function",
+        "description": "Creates and switches to a new session",
+        "interface_type": "async_function",
         "name": "new",
         "parameters": [
           {
@@ -28291,12 +28446,12 @@ Code analysis results from preprocessing phase, including definitions of functio
             "param_type": "str"
           }
         ],
-        "return_type": "Awaitable[None]",
+        "return_type": "None",
         "visibility": "public"
       },
       {
-        "description": "List sessions and resume optionally",
-        "interface_type": "function",
+        "description": "Lists available sessions with interactive selection for resume",
+        "interface_type": "async_function",
         "name": "list_sessions",
         "parameters": [
           {
@@ -28312,11 +28467,11 @@ Code analysis results from preprocessing phase, including definitions of functio
             "param_type": "str"
           }
         ],
-        "return_type": "Awaitable[None]",
+        "return_type": "None",
         "visibility": "public"
       },
       {
-        "description": "Open Kimi Code Web UI in browser",
+        "description": "Raises SwitchToWeb to open Kimi Code Web UI in browser",
         "interface_type": "function",
         "name": "web",
         "parameters": [
@@ -28337,8 +28492,8 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Show MCP servers and tools",
-        "interface_type": "function",
+        "description": "Displays MCP servers connection status and available tools",
+        "interface_type": "async_function",
         "name": "mcp",
         "parameters": [
           {
@@ -28354,304 +28509,318 @@ Code analysis results from preprocessing phase, including definitions of functio
             "param_type": "str"
           }
         ],
-        "return_type": "Awaitable[None]",
+        "return_type": "None",
+        "visibility": "public"
+      },
+      {
+        "description": "Type alias for slash command function signature",
+        "interface_type": "type_alias",
+        "name": "ShellSlashCmdFunc",
+        "parameters": [],
+        "return_type": "None | Awaitable[None]",
+        "visibility": "public"
+      },
+      {
+        "description": "Global registry for shell slash commands",
+        "interface_type": "variable",
+        "name": "registry",
+        "parameters": [],
+        "return_type": "SlashCommandRegistry[ShellSlashCmdFunc]",
+        "visibility": "public"
+      },
+      {
+        "description": "Registry for shell-mode specific slash commands",
+        "interface_type": "variable",
+        "name": "shell_mode_registry",
+        "parameters": [],
+        "return_type": "SlashCommandRegistry[ShellSlashCmdFunc]",
         "visibility": "public"
       }
     ],
     "responsibilities": [
-      "Shell Command Interface Management",
-      "User Configuration Management",
-      "Session Lifecycle Management",
-      "System Information Display",
-      "External Integration"
+      "Register and manage slash commands using the registry pattern for CLI shell interface",
+      "Provide interactive command handlers for user operations including model switching, session management, and configuration",
+      "Implement async interactive prompts with proper error handling and user cancellation support",
+      "Integrate with configuration system for persistent settings (model preferences, editor settings)",
+      "Coordinate with soul/agent system and session management for application state changes"
     ]
   },
   {
     "code_dossier": {
       "code_purpose": "widget",
-      "description": "Main shell interface component for Kimi Code CLI providing interactive terminal UI",
+      "description": "Main interactive Shell component for Kimi Code CLI that provides a REPL interface with support for slash commands, shell mode execution, LLM agent integration (Soul), and auto-update functionality",
       "file_path": "src/kimi_cli/ui/shell/__init__.py",
       "functions": [
-        "run",
-        "_run_shell_command",
-        "_run_slash_command",
-        "run_soul_command",
-        "_auto_update",
-        "_start_background_task",
+        "Shell.__init__",
+        "Shell.run",
+        "Shell.available_slash_commands",
+        "Shell.run_soul_command",
+        "Shell._run_shell_command",
+        "Shell._run_slash_command",
+        "Shell._auto_update",
+        "Shell._start_background_task",
+        "WelcomeInfoItem",
         "_print_welcome_info"
       ],
       "importance_score": 0.8,
       "interfaces": [
-        "Shell.__init__",
-        "Shell.available_slash_commands",
-        "Shell.run",
-        "Shell._run_shell_command",
-        "Shell._run_slash_command",
-        "Shell.run_soul_command",
-        "Shell._auto_update",
-        "Shell._start_background_task",
+        "Shell",
+        "WelcomeInfoItem",
         "WelcomeInfoItem.Level",
-        "WelcomeInfoItem.__init__",
-        "_print_welcome_info"
+        "_print_welcome_info",
+        "_KIMI_BLUE",
+        "_LOGO"
       ],
       "name": "__init__.py",
-      "source_summary": "from __future__ import annotations\n\nimport asyncio\nimport shlex\nfrom collections.abc import Awaitable, Coroutine\nfrom dataclasses import dataclass\nfrom enum import Enum\nfrom typing import Any\n\nfrom kosong.chat_provider import APIStatusError, ChatProviderError\nfrom loguru import logger\nfrom rich.console import Group, RenderableType\nfrom rich.panel import Panel\nfrom rich.table import Table\nfrom rich.text import Text\n\nfrom kimi_cli.soul import LLMNotSet, LLMNotSupported, MaxStepsReached, RunCancelled, Soul, run_soul\nfrom kimi_cli.soul.kimisoul import KimiSoul\nfrom kimi_cli.ui.shell.console import console\nfrom kimi_cli.ui.shell.prompt import CustomPromptSession, PromptMode, toast\nfrom kimi_cli.ui.shell.replay import replay_recent_history\nfrom kimi_cli.ui.shell.slash import registry as shell_slash_registry\nfrom kimi_cli.ui.shell.slash import shell_mode_registry\nfrom kimi_cli.ui.shell.update import LATEST_VERSION_FILE, UpdateResult, do_update, semver_tuple\nfrom kimi_cli.ui.shell.visualize import visualize\nfrom kimi_cli.utils.envvar import get_env_bool\nfrom kimi_cli.utils.logging import open_original_stderr\nfrom kimi_cli.utils.signals import install_sigint_handler\nfrom kimi_cli.utils.slashcmd import SlashCommand, SlashCommandCall, parse_slash_command_call\nfrom kimi_cli.utils.subprocess_env import get_clean_env\nfrom kimi_cli.utils.term import ensure_new_line, ensure_tty_sane\nfrom kimi_cli.wire.types import ContentPart, StatusUpdate\n\n\nclass Shell:\n    def __init__(self, soul: Soul, welcome_info: list[WelcomeInfoItem] | None = None):\n        self.soul = soul\n        self._welcome_info = list(welcome_info or [])\n        self._background_tasks: set[asyncio.Task[Any]] = set()\n        self._available_slash_commands: dict[str, SlashCommand[Any]] = {\n            **{cmd.name: cmd for cmd in soul.available_slash_commands},\n            **{cmd.name: cmd for cmd in shell_slash_registry.list_commands()},\n        }\n        \"\"\"Shell-level slash commands + soul-level slash commands. Name to command mapping.\"\"\"\n\n    @property\n    def available_slash_commands(self) -> dict[str, SlashCommand[Any]]:\n        \"\"\"Get all available slash commands, including shell-level and soul-level commands.\"\"\"\n        return self._available_slash_commands\n\n    async def run(self, command: str | None = None) -> bool:\n        if command is not None:\n            # run single command and exit\n            logger.info(\"Running agent with command: {command}\", command=command)\n            return await self.run_soul_command(command)\n\n        # Start auto-update background task if not disabled\n        if get_env_bool(\"KIMI_CLI_NO_AUTO_UPDATE\"):\n            logger.info(\"Auto-update disabled by KIMI_CLI_NO_AUTO_UPDATE environment variable\")\n        else:\n            self._start_background_task(self._auto_update())\n\n        _print_welcome_info(self.soul.name or \"Kimi Code CLI\", self._welcome_info)\n\n        if isinstance(self.soul, KimiSoul):\n            await replay_recent_history(\n                self.soul.context.history,\n                wire_file=self.soul.wire_file,\n            )\n\n        with CustomPromptSession(\n            status_provider=lambda: self.soul.status,\n            model_capabilities=self.soul.model_capabilities or set(),\n            model_name=self.soul.model_name,\n            thinking=self.soul.thinking or False,\n            agent_mode_slash_commands=list(self._available_slash_commands.values()),\n            shell_mode_slash_commands=shell_mode_registry.list_commands(),\n        ) as prompt_session:\n            try:\n                while True:\n                    ensure_tty_sane()\n                    try:\n                        ensure_new_line()\n                        user_input = await prompt_session.prompt()\n                    except KeyboardInterrupt:\n                        logger.debug(\"Exiting by KeyboardInterrupt\")\n                        console.print(\"[grey50]Tip: press Ctrl-D or send 'exit' to quit[/grey50]\")\n                        continue\n                    except EOFError:\n                        logger.debug(\"Exiting by EOF\")\n                        console.print(\"Bye!\")\n                        break\n\n                    if not user_input:\n                        logger.debug(\"Got empty input, skipping\")\n                        continue\n                    logger.debug(\"Got user input: {user_input}\", user_input=user_input)\n\n                    if user_input.command in [\"exit\", \"quit\", \"/exit\", \"/quit\"]:\n                        logger.debug(\"Exiting by slash command\")\n                        console.print(\"Bye!\")\n                        break\n\n                    if user_input.mode == PromptMode.SHELL:\n                        await self._run_shell_command(user_input.command)\n                        continue\n\n                    if slash_cmd_call := parse_slash_command_call(user_input.command):\n                        await self._run_slash_command(slash_cmd_call)\n                        continue\n\n                    await self.run_soul_command(user_input.content)\n                    console.print()\n            finally:\n                ensure_tty_sane()\n\n        return True\n\n    async def _run_shell_command(self, command: str) -> None:\n        \"\"\"Run a shell command in foreground.\"\"\"\n        if not command.strip():\n            return\n\n        # Check if it's an allowed slash command in shell mode\n        if slash_cmd_call := parse_slash_command_call(command):\n            if shell_mode_registry.find_command(slash_cmd_call.name):\n                await self._run_slash_command(slash_cmd_call)\n                return\n            else:\n                console.print(\n                    f'[yellow]\"/{slash_cmd_call.name}\" is not available in shell mode. '\n                    \"Press Ctrl-X to switch to agent mode.[/yellow]\"\n                )\n                return\n\n        # Check if user is trying to use 'cd' command\n        stripped_cmd = command.strip()\n        split_cmd: list[str] | None = None\n        try:\n            split_cmd = shlex.split(stripped_cmd)\n        except ValueError as exc:\n            logger.debug(\"Failed to parse shell command for cd check: {error}\", error=exc)\n        if split_cmd and len(split_cmd) == 2 and split_cmd[0] == \"cd\":\n            console.print(\n                \"[yellow]Warning: Directory changes are not preserved across command executions.\"\n                \"[/yellow]\"\n            )\n            return\n\n        logger.info(\"Running shell command: {cmd}\", cmd=command)\n\n        proc: asyncio.subprocess.Process | None = None\n\n        def _handler():\n            logger.debug(\"SIGINT received.\")\n            if proc:\n                proc.terminate()\n\n        loop = asyncio.get_running_loop()\n        remove_sigint = install_sigint_handler(loop, _handler)\n        try:\n            # TODO: For the sake of simplicity, we now use `create_subprocess_shell`.\n            # Later we should consider making this behave like a real shell.\n            with open_original_stderr() as stderr:\n                kwargs: dict[str, Any] = {}\n                if stderr is not None:\n                    kwargs[\"stderr\"] = stderr\n                proc = await asyncio.create_subprocess_shell(command, env=get_clean_env(), **kwargs)\n                await proc.wait()\n        except Exception as e:\n            logger.exception(\"Failed to run shell command:\")\n            console.print(f\"[red]Failed to run shell command: {e}[/red]\")\n        finally:\n            remove_sigint()\n\n    async def _run_slash_command(self, command_call: SlashCommandCall) -> None:\n        from kimi_cli.cli import Reload, SwitchToWeb\n\n        if command_call.name not in self._available_slash_commands:\n            logger.info(\"Unknown slash command /{command}\", command=command_call.name)\n            console.print(\n                f'[red]Unknown slash command \"/{command_call.name}\", '\n                'type \"/\" for all available commands[/red]'\n            )\n            return\n\n        command = shell_slash_registry.find_command(command_call.name)\n        if command is None:\n            # the input is a soul-level slash command call\n            await self.run_soul_command(command_call.raw_input)\n            return\n\n        logger.debug(\n            \"Running shell-level slash command: /{command} with args: {args}\",\n            command=command_call.name,\n            args=command_call.args,\n        )\n\n        try:\n            ret = command.func(self, command_call.args)\n            if isinstance(ret, Awaitable):\n                await ret\n        except (Reload, SwitchToWeb):\n            # just propagate\n            raise\n        except (asyncio.CancelledError, KeyboardInterrupt):\n            # Handle Ctrl-C during slash command execution, return to shell prompt\n            logger.debug(\"Slash command interrupted by KeyboardInterrupt\")\n            console.print(\"[red]Interrupted by user[/red]\")\n        except Exception as e:\n            logger.exception(\"Unknown error:\")\n            console.print(f\"[red]Unknown error: {e}[/red]\")\n            raise  # re-raise unknown error\n\n    async def run_soul_command(self, user_input: str | list[ContentPart]) -> bool:\n        \"\"\"\n        Run the soul and handle any known exceptions.\n\n        Returns:\n            bool: Whether the run is successful.\n        \"\"\"\n        logger.info(\"Running soul with user input: {user_input}\", user_input=user_input)\n\n        cancel_event = asyncio.Event()\n\n        def _handler():\n            logger.debug(\"SIGINT received.\")\n            cancel_event.set()\n\n        loop = asyncio.get_running_loop()\n        remove_sigint = install_sigint_handler(loop, _handler)\n\n        try:\n            await run_soul(\n                self.soul,\n                user_input,\n                lambda wire: visualize(\n                    wire.ui_side(merge=False),  # shell UI maintain its own merge buffer\n                    initial_status=StatusUpdate(context_usage=self.soul.status.context_usage),\n                    cancel_event=cancel_event,\n                ),\n                cancel_event,\n                self.soul.wire_file if isinstance(self.soul, KimiSoul) else None,\n            )\n            return True\n        except LLMNotSet:\n            logger.exception(\"LLM not set:\")\n            console.print('[red]LLM not set, send \"/login\" to login[/red]')\n        except LLMNotSupported as e:\n            # actually unsupported input/mode should already be blocked by prompt session\n            logger.exception(\"LLM not supported:\")\n            console.print(f\"[red]{e}[/red]\")\n        except ChatProviderError as e:\n            logger.exception(\"LLM provider error:\")\n            if isinstance(e, APIStatusError) and e.status_code == 401:\n                console.print(\"[red]Authorization failed, please check your login status[/red]\")\n            elif isinstance(e, APIStatusError) and e.status_code == 402:\n                console.print(\"[red]Membership expired, please renew your plan[/red]\")\n            elif isinstance(e, APIStatusError) and e.status_code == 403:\n                console.print(\"[red]Quota exceeded, please upgrade your plan or retry later[/red]\")\n            else:\n                console.print(f\"[red]LLM provider error: {e}[/red]\")\n        except MaxStepsReached as e:\n            logger.warning(\"Max steps reached: {n_steps}\", n_steps=e.n_steps)\n            console.print(f\"[yellow]{e}[/yellow]\")\n        except RunCancelled:\n            logger.info(\"Cancelled by user\")\n            console.print(\"[red]Interrupted by user[/red]\")\n        except Exception as e:\n            logger.exception(\"Unexpected error:\")\n            console.print(f\"[red]Unexpected error: {e}[/red]\")\n            raise  # re-raise unknown error\n        finally:\n            remove_sigint()\n        return False\n\n    async def _auto_update(self) -> None:\n        toast(\"checking for updates...\", topic=\"update\", duration=2.0)\n        result = await do_update(print=False, check_only=True)\n        if result == UpdateResult.UPDATE_AVAILABLE:\n            while True:\n                toast(\n                    \"new version found, run `uv tool upgrade kimi-cli` to upgrade\",\n                    topic=\"update\",\n                    duration=30.0,\n                )\n                await asyncio.sleep(60.0)\n        elif result == UpdateResult.UPDATED:\n            toast(\"auto updated, restart to use the new version\", topic=\"update\", duration=5.0)\n\n    def _start_background_task(self, coro: Coroutine[Any, Any, Any]) -> asyncio.Task[Any]:\n        task = asyncio.create_task(coro)\n        self._background_tasks.add(task)\n\n        def _cleanup(t: asyncio.Task[Any]) -> None:\n            self._background_tasks.discard(t)\n            try:\n                t.result()\n            except asyncio.CancelledError:\n                pass\n            except Exception:\n                logger.exception(\"Background task failed:\")\n\n        task.add_done_callback(_cleanup)\n        return task\n\n\n_KIMI_BLUE = \"dodger_blue1\"\n_LOGO = f\"\"\"\\\n[{_KIMI_BLUE}]\\\n▐█▛█▛█▌\n▐█████▌\\\n[{_KIMI_BLUE}]\\\n\"\"\"\n\n\n@dataclass(slots=True)\nclass WelcomeInfoItem:\n    class Level(Enum):\n        INFO = \"grey50\"\n        WARN = \"yellow\"\n        ERROR = \"red\"\n\n    name: str\n    value: str\n    level: Level = Level.INFO\n\n\ndef _print_welcome_info(name: str, info_items: list[WelcomeInfoItem]) -> None:\n    head = Text.from_markup(\"Welcome to Kimi Code CLI!\")\n    help_text = Text.from_markup(\"[grey50]Send /help for help information.[/grey50]\")\n\n    # Use Table for precise width control\n    logo = Text.from_markup(_LOGO)\n    table = Table(show_header=False, show_edge=False, box=None, padding=(0, 1), expand=False)\n    table.add_column(justify=\"left\")\n    table.add_column(justify=\"left\")\n    table.add_row(logo, Group(head, help_text))\n\n    rows: list[RenderableType] = [table]\n\n    if info_items:\n        rows.append(Text(\"\"))  # empty line\n    for item in info_items:\n        rows.append(Text(f\"{item.name}: {item.value}\", style=item.level.value))\n\n    if LATEST_VERSION_FILE.exists():\n        from kimi_cli.constant import VERSION as current_version\n\n        latest_version = LATEST_VERSION_FILE.read_text(encoding=\"utf-8\").strip()\n        if semver_tuple(latest_version) > semver_tuple(current_version):\n            rows.append(\n                Text.from_markup(\n                    f\"\\n[yellow]New version available: {latest_version}. \"\n                    \"Please run `uv tool upgrade kimi-cli` to upgrade.[/yellow]\"\n                )\n            )\n\n    console.print(\n        Panel(\n            Group(*rows),\n            border_style=_KIMI_BLUE,\n            expand=False,\n            padding=(1, 2),\n        )\n    )\n"
+      "source_summary": "from __future__ import annotations\n\nimport asyncio\nimport shlex\nfrom collections.abc import Awaitable, Coroutine\nfrom dataclasses import dataclass\nfrom enum import Enum\nfrom typing import Any\n\nfrom kosong.chat_provider import APIStatusError, ChatProviderError\nfrom loguru import logger\nfrom rich.console import Group, RenderableType\nfrom rich.panel import Panel\nfrom rich.table import Table\nfrom rich.text import Text\n\nfrom kimi_cli.soul import LLMNotSet, LLMNotSupported, MaxStepsReached, RunCancelled, Soul, run_soul\nfrom kimi_cli.soul.kimisoul import KimiSoul\nfrom kimi_cli.ui.shell.console import console\nfrom kimi_cli.ui.shell.prompt import CustomPromptSession, PromptMode, toast\nfrom kimi_cli.ui.shell.replay import replay_recent_history\nfrom kimi_cli.ui.shell.slash import registry as shell_slash_registry\nfrom kimi_cli.ui.shell.slash import shell_mode_registry\nfrom kimi_cli.ui.shell.update import LATEST_VERSION_FILE, UpdateResult, do_update, semver_tuple\nfrom kimi_cli.ui.shell.visualize import visualize\nfrom kimi_cli.utils.envvar import get_env_bool\nfrom kimi_cli.utils.logging import open_original_stderr\nfrom kimi_cli.utils.signals import install_sigint_handler\nfrom kimi_cli.utils.slashcmd import SlashCommand, SlashCommandCall, parse_slash_command_call\nfrom kimi_cli.utils.subprocess_env import get_clean_env\nfrom kimi_cli.utils.term import ensure_new_line, ensure_tty_sane\nfrom kimi_cli.wire.types import ContentPart, StatusUpdate\n\n\nclass Shell:\n    def __init__(self, soul: Soul, welcome_info: list[WelcomeInfoItem] | None = None):\n        self.soul = soul\n        self._welcome_info = list(welcome_info or [])\n        self._background_tasks: set[asyncio.Task[Any]] = set()\n        self._available_slash_commands: dict[str, SlashCommand[Any]] = {\n            **{cmd.name: cmd for cmd in soul.available_slash_commands},\n            **{cmd.name: cmd for cmd in shell_slash_registry.list_commands()},\n        }\n        \"\"\"Shell-level slash commands + soul-level slash commands. Name to command mapping.\"\"\"\n\n    @property\n    def available_slash_commands(self) -> dict[str, SlashCommand[Any]]:\n        \"\"\"Get all available slash commands, including shell-level and soul-level commands.\"\"\"\n        return self._available_slash_commands\n\n    async def run(self, command: str | None = None) -> bool:\n        if command is not None:\n            # run single command and exit\n            logger.info(\"Running agent with command: {command}\", command=command)\n            return await self.run_soul_command(command)\n\n        # Start auto-update background task if not disabled\n        if get_env_bool(\"KIMI_CLI_NO_AUTO_UPDATE\"):\n            logger.info(\"Auto-update disabled by KIMI_CLI_NO_AUTO_UPDATE environment variable\")\n        else:\n            self._start_background_task(self._auto_update())\n\n        _print_welcome_info(self.soul.name or \"Kimi Code CLI\", self._welcome_info)\n\n        if isinstance(self.soul, KimiSoul):\n            await replay_recent_history(\n                self.soul.context.history,\n                wire_file=self.soul.wire_file,\n            )\n\n        with CustomPromptSession(\n            status_provider=lambda: self.soul.status,\n            model_capabilities=self.soul.model_capabilities or set(),\n            model_name=self.soul.model_name,\n            thinking=self.soul.thinking or False,\n            agent_mode_slash_commands=list(self._available_slash_commands.values()),\n            shell_mode_slash_commands=shell_mode_registry.list_commands(),\n            editor_command_provider=lambda: (\n                self.soul.runtime.config.default_editor if isinstance(self.soul, KimiSoul) else \"\"\n            ),\n        ) as prompt_session:\n            try:\n                while True:\n                    ensure_tty_sane()\n                    try:\n                        ensure_new_line()\n                        user_input = await prompt_session.prompt()\n                    except KeyboardInterrupt:\n                        logger.debug(\"Exiting by KeyboardInterrupt\")\n                        console.print(\"[grey50]Tip: press Ctrl-D or send 'exit' to quit[/grey50]\")\n                        continue\n                    except EOFError:\n                        logger.debug(\"Exiting by EOF\")\n                        console.print(\"Bye!\")\n                        break\n\n                    if not user_input:\n                        logger.debug(\"Got empty input, skipping\")\n                        continue\n                    logger.debug(\"Got user input: {user_input}\", user_input=user_input)\n\n                    if user_input.command in [\"exit\", \"quit\", \"/exit\", \"/quit\"]:\n                        logger.debug(\"Exiting by slash command\")\n                        console.print(\"Bye!\")\n                        break\n\n                    if user_input.mode == PromptMode.SHELL:\n                        await self._run_shell_command(user_input.command)\n                        continue\n\n                    if slash_cmd_call := parse_slash_command_call(user_input.command):\n                        await self._run_slash_command(slash_cmd_call)\n                        continue\n\n                    await self.run_soul_command(user_input.content)\n                    console.print()\n            finally:\n                ensure_tty_sane()\n\n        return True\n\n    async def _run_shell_command(self, command: str) -> None:\n        \"\"\"Run a shell command in foreground.\"\"\"\n        if not command.strip():\n            return\n\n        # Check if it's an allowed slash command in shell mode\n        if slash_cmd_call := parse_slash_command_call(command):\n            if shell_mode_registry.find_command(slash_cmd_call.name):\n                await self._run_slash_command(slash_cmd_call)\n                return\n            else:\n                console.print(\n                    f'[yellow]\"/{slash_cmd_call.name}\" is not available in shell mode. '\n                    \"Press Ctrl-X to switch to agent mode.[/yellow]\"\n                )\n                return\n\n        # Check if user is trying to use 'cd' command\n        stripped_cmd = command.strip()\n        split_cmd: list[str] | None = None\n        try:\n            split_cmd = shlex.split(stripped_cmd)\n        except ValueError as exc:\n            logger.debug(\"Failed to parse shell command for cd check: {error}\", error=exc)\n        if split_cmd and len(split_cmd) == 2 and split_cmd[0] == \"cd\":\n            console.print(\n                \"[yellow]Warning: Directory changes are not preserved across command executions.\"\n                \"[/yellow]\"\n            )\n            return\n\n        logger.info(\"Running shell command: {cmd}\", cmd=command)\n\n        proc: asyncio.subprocess.Process | None = None\n\n        def _handler():\n            logger.debug(\"SIGINT received.\")\n            if proc:\n                proc.terminate()\n\n        loop = asyncio.get_running_loop()\n        remove_sigint = install_sigint_handler(loop, _handler)\n        try:\n            # TODO: For the sake of simplicity, we now use `create_subprocess_shell`.\n            # Later we should consider making this behave like a real shell.\n            with open_original_stderr() as stderr:\n                kwargs: dict[str, Any] = {}\n                if stderr is not None:\n                    kwargs[\"stderr\"] = stderr\n                proc = await asyncio.create_subprocess_shell(command, env=get_clean_env(), **kwargs)\n                await proc.wait()\n        except Exception as e:\n            logger.exception(\"Failed to run shell command:\")\n            console.print(f\"[red]Failed to run shell command: {e}[/red]\")\n        finally:\n            remove_sigint()\n\n    async def _run_slash_command(self, command_call: SlashCommandCall) -> None:\n        from kimi_cli.cli import Reload, SwitchToWeb\n\n        if command_call.name not in self._available_slash_commands:\n            logger.info(\"Unknown slash command /{command}\", command=command_call.name)\n            console.print(\n                f'[red]Unknown slash command \"/{command_call.name}\", '\n                'type \"/\" for all available commands[/red]'\n            )\n            return\n\n        command = shell_slash_registry.find_command(command_call.name)\n        if command is None:\n            # the input is a soul-level slash command call\n            await self.run_soul_command(command_call.raw_input)\n            return\n\n        logger.debug(\n            \"Running shell-level slash command: /{command} with args: {args}\",\n            command=command_call.name,\n            args=command_call.args,\n        )\n\n        try:\n            ret = command.func(self, command_call.args)\n            if isinstance(ret, Awaitable):\n                await ret\n        except (Reload, SwitchToWeb):\n            # just propagate\n            raise\n        except (asyncio.CancelledError, KeyboardInterrupt):\n            # Handle Ctrl-C during slash command execution, return to shell prompt\n            logger.debug(\"Slash command interrupted by KeyboardInterrupt\")\n            console.print(\"[red]Interrupted by user[/red]\")\n        except Exception as e:\n            logger.exception(\"Unknown error:\")\n            console.print(f\"[red]Unknown error: {e}[/red]\")\n            raise  # re-raise unknown error\n\n    async def run_soul_command(self, user_input: str | list[ContentPart]) -> bool:\n        \"\"\"\n        Run the soul and handle any known exceptions.\n\n        Returns:\n            bool: Whether the run is successful.\n        \"\"\"\n        logger.info(\"Running soul with user input: {user_input}\", user_input=user_input)\n\n        cancel_event = asyncio.Event()\n\n        def _handler():\n            logger.debug(\"SIGINT received.\")\n            cancel_event.set()\n\n        loop = asyncio.get_running_loop()\n        remove_sigint = install_sigint_handler(loop, _handler)\n\n        try:\n            await run_soul(\n                self.soul,\n                user_input,\n                lambda wire: visualize(\n                    wire.ui_side(merge=False),  # shell UI maintain its own merge buffer\n                    initial_status=StatusUpdate(context_usage=self.soul.status.context_usage),\n                    cancel_event=cancel_event,\n                ),\n                cancel_event,\n                self.soul.wire_file if isinstance(self.soul, KimiSoul) else None,\n            )\n            return True\n        except LLMNotSet:\n            logger.exception(\"LLM not set:\")\n            console.print('[red]LLM not set, send \"/login\" to login[/red]')\n        except LLMNotSupported as e:\n            # actually unsupported input/mode should already be blocked by prompt session\n            logger.exception(\"LLM not supported:\")\n            console.print(f\"[red]{e}[/red]\")\n        except ChatProviderError as e:\n            logger.exception(\"LLM provider error:\")\n            if isinstance(e, APIStatusError) and e.status_code == 401:\n                console.print(\"[red]Authorization failed, please check your login status[/red]\")\n            elif isinstance(e, APIStatusError) and e.status_code == 402:\n                console.print(\"[red]Membership expired, please renew your plan[/red]\")\n            elif isinstance(e, APIStatusError) and e.status_code == 403:\n                console.print(\"[red]Quota exceeded, please upgrade your plan or retry later[/red]\")\n            else:\n                console.print(f\"[red]LLM provider error: {e}[/red]\")\n        except MaxStepsReached as e:\n            logger.warning(\"Max steps reached: {n_steps}\", n_steps=e.n_steps)\n            console.print(f\"[yellow]{e}[/yellow]\")\n        except RunCancelled:\n            logger.info(\"Cancelled by user\")\n            console.print(\"[red]Interrupted by user[/red]\")\n        except Exception as e:\n            logger.exception(\"Unexpected error:\")\n            console.print(f\"[red]Unexpected error: {e}[/red]\")\n            raise  # re-raise unknown error\n        finally:\n            remove_sigint()\n        return False\n\n    async def _auto_update(self) -> None:\n        toast(\"checking for updates...\", topic=\"update\", duration=2.0)\n        result = await do_update(print=False, check_only=True)\n        if result == UpdateResult.UPDATE_AVAILABLE:\n            while True:\n                toast(\n                    \"new version found, run `uv tool upgrade kimi-cli` to upgrade\",\n                    topic=\"update\",\n                    duration=30.0,\n                )\n                await asyncio.sleep(60.0)\n        elif result == UpdateResult.UPDATED:\n            toast(\"auto updated, restart to use the new version\", topic=\"update\", duration=5.0)\n\n    def _start_background_task(self, coro: Coroutine[Any, Any, Any]) -> asyncio.Task[Any]:\n        task = asyncio.create_task(coro)\n        self._background_tasks.add(task)\n\n        def _cleanup(t: asyncio.Task[Any]) -> None:\n            self._background_tasks.discard(t)\n            try:\n                t.result()\n            except asyncio.CancelledError:\n                pass\n            except Exception:\n                logger.exception(\"Background task failed:\")\n\n        task.add_done_callback(_cleanup)\n        return task\n\n\n_KIMI_BLUE = \"dodger_blue1\"\n_LOGO = f\"\"\"\\\n[{_KIMI_BLUE}]\\\n▐█▛█▛█▌\n▐█████▌\\\n[{_KIMI_BLUE}]\\\n\"\"\"\n\n\n@dataclass(slots=True)\nclass WelcomeInfoItem:\n    class Level(Enum):\n        INFO = \"grey50\"\n        WARN = \"yellow\"\n        ERROR = \"red\"\n\n    name: str\n    value: str\n    level: Level = Level.INFO\n\n\ndef _print_welcome_info(name: str, info_items: list[WelcomeInfoItem]) -> None:\n    head = Text.from_markup(\"Welcome to Kimi Code CLI!\")\n    help_text = Text.from_markup(\"[grey50]Send /help for help information.[/grey50]\")\n\n    # Use Table for precise width control\n    logo = Text.from_markup(_LOGO)\n    table = Table(show_header=False, show_edge=False, box=None, padding=(0, 1), expand=False)\n    table.add_column(justify=\"left\")\n    table.add_column(justify=\"left\")\n    table.add_row(logo, Group(head, help_text))\n\n    rows: list[RenderableType] = [table]\n\n    if info_items:\n        rows.append(Text(\"\"))  # empty line\n    for item in info_items:\n        rows.append(Text(f\"{item.name}: {item.value}\", style=item.level.value))\n\n    if LATEST_VERSION_FILE.exists():\n        from kimi_cli.constant import VERSION as current_version\n\n        latest_version = LATEST_VERSION_FILE.read_text(encoding=\"utf-8\").strip()\n        if semver_tuple(latest_version) > semver_tuple(current_version):\n            rows.append(\n                Text.from_markup(\n                    f\"\\n[yellow]New version available: {latest_version}. \"\n                    \"Please run `uv tool upgrade kimi-cli` to upgrade.[/yellow]\"\n                )\n            )\n\n    console.print(\n        Panel(\n            Group(*rows),\n            border_style=_KIMI_BLUE,\n            expand=False,\n            padding=(1, 2),\n        )\n    )\n"
     },
     "complexity_metrics": {
-      "cyclomatic_complexity": 40.0,
-      "lines_of_code": 366,
+      "cyclomatic_complexity": 41.0,
+      "lines_of_code": 369,
       "number_of_classes": 2,
-      "number_of_functions": 7
+      "number_of_functions": 10
     },
     "dependencies": [
       {
-        "dependency_type": "standard_library",
-        "is_external": false,
-        "line_number": 3,
+        "dependency_type": "import",
+        "is_external": true,
+        "line_number": null,
         "name": "asyncio",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "standard_library",
-        "is_external": false,
-        "line_number": 4,
+        "dependency_type": "import",
+        "is_external": true,
+        "line_number": null,
         "name": "shlex",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "standard_library",
-        "is_external": false,
-        "line_number": 5,
+        "dependency_type": "import",
+        "is_external": true,
+        "line_number": null,
         "name": "collections.abc",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "standard_library",
-        "is_external": false,
-        "line_number": 6,
+        "dependency_type": "import",
+        "is_external": true,
+        "line_number": null,
         "name": "dataclasses",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "standard_library",
-        "is_external": false,
-        "line_number": 7,
+        "dependency_type": "import",
+        "is_external": true,
+        "line_number": null,
         "name": "enum",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "standard_library",
-        "is_external": false,
-        "line_number": 8,
+        "dependency_type": "import",
+        "is_external": true,
+        "line_number": null,
         "name": "typing",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "external_library",
+        "dependency_type": "import",
         "is_external": true,
-        "line_number": 10,
+        "line_number": null,
         "name": "kosong.chat_provider",
-        "path": "kosong.chat_provider",
+        "path": null,
         "version": null
       },
       {
-        "dependency_type": "external_library",
+        "dependency_type": "import",
         "is_external": true,
-        "line_number": 11,
+        "line_number": null,
         "name": "loguru",
-        "path": "loguru",
+        "path": null,
         "version": null
       },
       {
-        "dependency_type": "external_library",
+        "dependency_type": "import",
         "is_external": true,
-        "line_number": 12,
+        "line_number": null,
         "name": "rich.console",
-        "path": "rich.console",
+        "path": null,
         "version": null
       },
       {
-        "dependency_type": "external_library",
+        "dependency_type": "import",
         "is_external": true,
-        "line_number": 13,
+        "line_number": null,
         "name": "rich.panel",
-        "path": "rich.panel",
+        "path": null,
         "version": null
       },
       {
-        "dependency_type": "external_library",
+        "dependency_type": "import",
         "is_external": true,
-        "line_number": 14,
+        "line_number": null,
         "name": "rich.table",
-        "path": "rich.table",
+        "path": null,
         "version": null
       },
       {
-        "dependency_type": "external_library",
+        "dependency_type": "import",
         "is_external": true,
-        "line_number": 15,
+        "line_number": null,
         "name": "rich.text",
-        "path": "rich.text",
+        "path": null,
         "version": null
       },
       {
-        "dependency_type": "internal_module",
+        "dependency_type": "import",
+        "is_external": false,
+        "line_number": 16,
+        "name": "kimi_cli.soul",
+        "path": "kimi_cli/soul",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 17,
-        "name": "kimi_cli.soul",
-        "path": "kimi_cli.soul",
+        "name": "kimi_cli.soul.kimisoul",
+        "path": "kimi_cli/soul/kimisoul",
         "version": null
       },
       {
-        "dependency_type": "internal_module",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 18,
-        "name": "kimi_cli.soul.kimisoul",
-        "path": "kimi_cli.soul.kimisoul",
+        "name": "kimi_cli.ui.shell.console",
+        "path": "kimi_cli/ui/shell/console",
         "version": null
       },
       {
-        "dependency_type": "internal_module",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 19,
-        "name": "kimi_cli.ui.shell.console",
-        "path": "kimi_cli.ui.shell.console",
+        "name": "kimi_cli.ui.shell.prompt",
+        "path": "kimi_cli/ui/shell/prompt",
         "version": null
       },
       {
-        "dependency_type": "internal_module",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 20,
-        "name": "kimi_cli.ui.shell.prompt",
-        "path": "kimi_cli.ui.shell.prompt",
+        "name": "kimi_cli.ui.shell.replay",
+        "path": "kimi_cli/ui/shell/replay",
         "version": null
       },
       {
-        "dependency_type": "internal_module",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 21,
-        "name": "kimi_cli.ui.shell.replay",
-        "path": "kimi_cli.ui.shell.replay",
+        "name": "kimi_cli.ui.shell.slash",
+        "path": "kimi_cli/ui/shell/slash",
         "version": null
       },
       {
-        "dependency_type": "internal_module",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 22,
-        "name": "kimi_cli.ui.shell.slash",
-        "path": "kimi_cli.ui.shell.slash",
+        "name": "kimi_cli.ui.shell.update",
+        "path": "kimi_cli/ui/shell/update",
         "version": null
       },
       {
-        "dependency_type": "internal_module",
+        "dependency_type": "import",
+        "is_external": false,
+        "line_number": 23,
+        "name": "kimi_cli.ui.shell.visualize",
+        "path": "kimi_cli/ui/shell/visualize",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 24,
-        "name": "kimi_cli.ui.shell.update",
-        "path": "kimi_cli.ui.shell.update",
+        "name": "kimi_cli.utils.envvar",
+        "path": "kimi_cli/utils/envvar",
         "version": null
       },
       {
-        "dependency_type": "internal_module",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 25,
-        "name": "kimi_cli.ui.shell.visualize",
-        "path": "kimi_cli.ui.shell.visualize",
+        "name": "kimi_cli.utils.logging",
+        "path": "kimi_cli/utils/logging",
         "version": null
       },
       {
-        "dependency_type": "internal_module",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 26,
-        "name": "kimi_cli.utils.envvar",
-        "path": "kimi_cli.utils.envvar",
+        "name": "kimi_cli.utils.signals",
+        "path": "kimi_cli/utils/signals",
         "version": null
       },
       {
-        "dependency_type": "internal_module",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 27,
-        "name": "kimi_cli.utils.logging",
-        "path": "kimi_cli.utils.logging",
+        "name": "kimi_cli.utils.slashcmd",
+        "path": "kimi_cli/utils/slashcmd",
         "version": null
       },
       {
-        "dependency_type": "internal_module",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 28,
-        "name": "kimi_cli.utils.signals",
-        "path": "kimi_cli.utils.signals",
+        "name": "kimi_cli.utils.subprocess_env",
+        "path": "kimi_cli/utils/subprocess_env",
         "version": null
       },
       {
-        "dependency_type": "internal_module",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 29,
-        "name": "kimi_cli.utils.slashcmd",
-        "path": "kimi_cli.utils.slashcmd",
+        "name": "kimi_cli.utils.term",
+        "path": "kimi_cli/utils/term",
         "version": null
       },
       {
-        "dependency_type": "internal_module",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 30,
-        "name": "kimi_cli.utils.subprocess_env",
-        "path": "kimi_cli.utils.subprocess_env",
-        "version": null
-      },
-      {
-        "dependency_type": "internal_module",
-        "is_external": false,
-        "line_number": 31,
-        "name": "kimi_cli.utils.term",
-        "path": "kimi_cli.utils.term",
-        "version": null
-      },
-      {
-        "dependency_type": "internal_module",
-        "is_external": false,
-        "line_number": 32,
         "name": "kimi_cli.wire.types",
-        "path": "kimi_cli.wire.types",
+        "path": "kimi_cli/wire/types",
         "version": null
       },
       {
-        "dependency_type": "internal_module",
+        "dependency_type": "import",
         "is_external": false,
-        "line_number": 105,
+        "line_number": 258,
         "name": "kimi_cli.cli",
-        "path": "kimi_cli.cli",
-        "version": null
-      },
-      {
-        "dependency_type": "internal_module",
-        "is_external": false,
-        "line_number": 196,
-        "name": "kimi_cli.constant",
-        "path": "kimi_cli.constant",
+        "path": "kimi_cli/cli",
         "version": null
       }
     ],
-    "detailed_description": "This component implements the main interactive shell interface for Kimi Code CLI. It serves as the primary user interface that handles command input, executes both shell commands and slash commands, manages the soul (AI agent) interactions, and provides background tasks like auto-update checking. The shell supports multiple modes including agent mode for AI interactions and shell mode for system commands, with seamless switching between them.",
+    "detailed_description": "This file implements the core Shell class which serves as the main interactive command-line interface for the Kimi Code CLI application. The Shell provides a sophisticated REPL (Read-Eval-Print Loop) environment with multiple interaction modes including agent mode for LLM interactions and shell mode for direct command execution. Key features include: (1) Interactive prompt session management using CustomPromptSession with support for different input modes, (2) Slash command processing that integrates both shell-level and soul-level commands, (3) Shell command execution with proper environment isolation and signal handling, (4) Integration with the Soul system for LLM agent interactions, (5) Auto-update background task with toast notifications, (6) Welcome screen display with version checking and status information, (7) Comprehensive error handling for various exception types including LLM errors, network errors, and user interruptions, (8) Proper resource cleanup and TTY state management. The Shell acts as the primary orchestrator between the user, the LLM agent, and system commands.",
     "interfaces": [
       {
-        "description": "Initialize the shell with a soul instance",
-        "interface_type": "constructor",
-        "name": "Shell.__init__",
+        "description": "Main interactive shell class that provides REPL interface with multi-mode support",
+        "interface_type": "class",
+        "name": "Shell",
         "parameters": [
           {
-            "description": "The AI soul/agent instance to interact with",
+            "description": "The Soul instance to integrate with the shell for LLM interactions",
             "is_optional": false,
             "name": "soul",
             "param_type": "Soul"
           },
           {
-            "description": "Optional welcome information items to display",
+            "description": "Optional list of welcome information items to display on startup",
             "is_optional": true,
             "name": "welcome_info",
             "param_type": "list[WelcomeInfoItem] | None"
@@ -28661,20 +28830,12 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Get all available slash commands including shell-level and soul-level commands",
-        "interface_type": "property",
-        "name": "Shell.available_slash_commands",
-        "parameters": [],
-        "return_type": "dict[str, SlashCommand[Any]]",
-        "visibility": "public"
-      },
-      {
-        "description": "Main entry point to run the shell interactively or execute a single command",
+        "description": "Main entry point for running the interactive shell. If command is provided, executes it and exits; otherwise starts interactive REPL loop",
         "interface_type": "method",
         "name": "Shell.run",
         "parameters": [
           {
-            "description": "Single command to run in non-interactive mode",
+            "description": "Optional single command to execute and exit",
             "is_optional": true,
             "name": "command",
             "param_type": "str | None"
@@ -28684,42 +28845,12 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Execute shell commands in foreground with proper signal handling",
-        "interface_type": "method",
-        "name": "Shell._run_shell_command",
-        "parameters": [
-          {
-            "description": "Shell command string to execute",
-            "is_optional": false,
-            "name": "command",
-            "param_type": "str"
-          }
-        ],
-        "return_type": "None",
-        "visibility": "private"
-      },
-      {
-        "description": "Execute slash commands with proper error handling and special case handling",
-        "interface_type": "method",
-        "name": "Shell._run_slash_command",
-        "parameters": [
-          {
-            "description": "Parsed slash command call object",
-            "is_optional": false,
-            "name": "command_call",
-            "param_type": "SlashCommandCall"
-          }
-        ],
-        "return_type": "None",
-        "visibility": "private"
-      },
-      {
-        "description": "Execute soul commands with comprehensive error handling for various LLM-related errors",
+        "description": "Runs the Soul agent with user input and handles various error conditions including LLM errors, authorization issues, and cancellation",
         "interface_type": "method",
         "name": "Shell.run_soul_command",
         "parameters": [
           {
-            "description": "User input for the soul/agent",
+            "description": "User input to process through the Soul agent",
             "is_optional": false,
             "name": "user_input",
             "param_type": "str | list[ContentPart]"
@@ -28729,7 +28860,37 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Background task to check for and notify about updates",
+        "description": "Executes a shell command in foreground with proper environment isolation and SIGINT handling",
+        "interface_type": "method",
+        "name": "Shell._run_shell_command",
+        "parameters": [
+          {
+            "description": "Shell command to execute in foreground",
+            "is_optional": false,
+            "name": "command",
+            "param_type": "str"
+          }
+        ],
+        "return_type": "None",
+        "visibility": "private"
+      },
+      {
+        "description": "Processes and executes slash commands, routing to shell-level or soul-level handlers",
+        "interface_type": "method",
+        "name": "Shell._run_slash_command",
+        "parameters": [
+          {
+            "description": "Parsed slash command call with name and arguments",
+            "is_optional": false,
+            "name": "command_call",
+            "param_type": "SlashCommandCall"
+          }
+        ],
+        "return_type": "None",
+        "visibility": "private"
+      },
+      {
+        "description": "Background task that checks for updates and displays toast notifications",
         "interface_type": "method",
         "name": "Shell._auto_update",
         "parameters": [],
@@ -28737,47 +28898,24 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "private"
       },
       {
-        "description": "Start and manage background tasks with proper cleanup",
-        "interface_type": "method",
-        "name": "Shell._start_background_task",
+        "description": "Dataclass representing a welcome screen information item with name, value, and severity level",
+        "interface_type": "class",
+        "name": "WelcomeInfoItem",
         "parameters": [
           {
-            "description": "Coroutine to run as background task",
-            "is_optional": false,
-            "name": "coro",
-            "param_type": "Coroutine[Any, Any, Any]"
-          }
-        ],
-        "return_type": "asyncio.Task[Any]",
-        "visibility": "private"
-      },
-      {
-        "description": "Enumeration for welcome info item severity levels",
-        "interface_type": "enum",
-        "name": "WelcomeInfoItem.Level",
-        "parameters": [],
-        "return_type": null,
-        "visibility": "public"
-      },
-      {
-        "description": "Initialize welcome information item",
-        "interface_type": "constructor",
-        "name": "WelcomeInfoItem.__init__",
-        "parameters": [
-          {
-            "description": "Info item name",
+            "description": "Name/label for the welcome info item",
             "is_optional": false,
             "name": "name",
             "param_type": "str"
           },
           {
-            "description": "Info item value",
+            "description": "Value to display for this item",
             "is_optional": false,
             "name": "value",
             "param_type": "str"
           },
           {
-            "description": "Severity level for display",
+            "description": "Severity level (INFO/WARN/ERROR) for styling",
             "is_optional": true,
             "name": "level",
             "param_type": "Level"
@@ -28787,18 +28925,18 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Display formatted welcome information with logo and status",
+        "description": "Displays formatted welcome banner with logo, application name, help text, info items, and version update notice",
         "interface_type": "function",
         "name": "_print_welcome_info",
         "parameters": [
           {
-            "description": "CLI name to display",
+            "description": "Application name to display in welcome banner",
             "is_optional": false,
             "name": "name",
             "param_type": "str"
           },
           {
-            "description": "Welcome information items to display",
+            "description": "List of information items to display below the banner",
             "is_optional": false,
             "name": "info_items",
             "param_type": "list[WelcomeInfoItem]"
@@ -28809,11 +28947,12 @@ Code analysis results from preprocessing phase, including definitions of functio
       }
     ],
     "responsibilities": [
-      "Handle user input and command routing between shell commands, slash commands, and soul commands",
-      "Manage interactive prompt session with mode switching capabilities",
-      "Execute and manage background tasks like auto-update checking",
-      "Provide error handling and user feedback for various command execution scenarios",
-      "Display welcome information and maintain terminal state management"
+      "Interactive REPL Management: Maintains the main command loop, processes user input through CustomPromptSession, and orchestrates command routing between agent mode, shell mode, and slash commands",
+      "Slash Command Processing: Manages registration and execution of shell-level and soul-level slash commands, handles command parsing and validation",
+      "Shell Command Execution: Executes foreground shell commands with proper environment isolation, signal handling (SIGINT), and subprocess management",
+      "Soul/Agent Integration: Bridges user input with the Soul LLM agent system, handles visualization, cancellation, and comprehensive error handling for LLM interactions",
+      "Auto-Update Management: Implements background task for automatic update checking and user notification through toast messages",
+      "Resource Lifecycle Management: Manages background tasks, signal handlers, and terminal state cleanup through proper finally blocks and context managers"
     ]
   },
   {
@@ -29795,27 +29934,43 @@ Code analysis results from preprocessing phase, including definitions of functio
   {
     "code_dossier": {
       "code_purpose": "widget",
-      "description": "Interactive shell prompt component for Kimi CLI with dual modes (agent/shell), intelligent completions, attachment handling, and toast notifications",
+      "description": "A sophisticated interactive prompt/REPL interface component for the kimi_cli AI assistant CLI application. Provides multi-mode input (AGENT/SHELL), intelligent autocomplete for slash commands and file mentions, image clipboard paste support, persistent command history, and dynamic status bar rendering with toast notifications.",
       "file_path": "src/kimi_cli/ui/shell/prompt.py",
       "functions": [
+        "SlashCommandCompleter.__init__",
         "SlashCommandCompleter.get_completions",
-        "LocalFileMentionCompleter.get_completions",
+        "LocalFileMentionCompleter.__init__",
+        "LocalFileMentionCompleter._is_ignored",
+        "LocalFileMentionCompleter._get_paths",
         "LocalFileMentionCompleter._get_top_level_paths",
         "LocalFileMentionCompleter._get_deep_paths",
         "LocalFileMentionCompleter._extract_fragment",
         "LocalFileMentionCompleter._is_completed_file",
+        "LocalFileMentionCompleter.get_completions",
         "_load_history_entries",
+        "PromptMode.toggle",
+        "UserInput.__str__",
+        "UserInput.__bool__",
         "toast",
+        "_current_toast",
         "_guess_image_mime",
         "_build_image_part",
+        "AttachmentCache.__init__",
+        "AttachmentCache._dir_for",
+        "AttachmentCache._ensure_dir",
+        "AttachmentCache._reserve_id",
         "AttachmentCache.store_bytes",
         "AttachmentCache.store_image",
         "AttachmentCache.load_bytes",
         "AttachmentCache.load_content_parts",
         "_parse_attachment_kind",
         "_sanitize_surrogates",
+        "CustomPromptSession.__init__",
         "CustomPromptSession._render_message",
+        "CustomPromptSession._open_in_external_editor",
         "CustomPromptSession._apply_mode",
+        "CustomPromptSession.__enter__",
+        "CustomPromptSession.__exit__",
         "CustomPromptSession._try_paste_image",
         "CustomPromptSession.prompt",
         "CustomPromptSession._append_history_entry",
@@ -29828,23 +29983,22 @@ Code analysis results from preprocessing phase, including definitions of functio
         "LocalFileMentionCompleter",
         "PromptMode",
         "UserInput",
-        "_ToastEntry",
-        "CachedAttachment",
         "AttachmentCache",
-        "CustomPromptSession"
+        "CustomPromptSession",
+        "toast"
       ],
       "name": "prompt.py",
-      "source_summary": "from __future__ import annotations\n\nimport asyncio\nimport base64\nimport json\nimport mimetypes\nimport os\nimport re\nimport time\nfrom collections import deque\nfrom collections.abc import Callable, Iterable, Sequence\nfrom dataclasses import dataclass\nfrom datetime import datetime\nfrom enum import Enum\nfrom hashlib import md5, sha256\nfrom io import BytesIO\nfrom pathlib import Path\nfrom typing import Any, Literal, override\n\nfrom kaos.path import KaosPath\nfrom PIL import Image\nfrom prompt_toolkit import PromptSession\nfrom prompt_toolkit.application.current import get_app_or_none\nfrom prompt_toolkit.buffer import Buffer\nfrom prompt_toolkit.clipboard.pyperclip import PyperclipClipboard\nfrom prompt_toolkit.completion import (\n    CompleteEvent,\n    Completer,\n    Completion,\n    FuzzyCompleter,\n    WordCompleter,\n    merge_completers,\n)\nfrom prompt_toolkit.document import Document\nfrom prompt_toolkit.filters import has_completions\nfrom prompt_toolkit.formatted_text import FormattedText\nfrom prompt_toolkit.history import InMemoryHistory\nfrom prompt_toolkit.key_binding import KeyBindings, KeyPressEvent\nfrom prompt_toolkit.patch_stdout import patch_stdout\nfrom prompt_toolkit.styles import Style\nfrom pydantic import BaseModel, ValidationError\n\nfrom kimi_cli.llm import ModelCapability\nfrom kimi_cli.share import get_share_dir\nfrom kimi_cli.soul import StatusSnapshot\nfrom kimi_cli.ui.shell.console import console\nfrom kimi_cli.utils.clipboard import grab_image_from_clipboard, is_clipboard_available\nfrom kimi_cli.utils.logging import logger\nfrom kimi_cli.utils.media_tags import wrap_media_part\nfrom kimi_cli.utils.slashcmd import SlashCommand\nfrom kimi_cli.utils.string import random_string\nfrom kimi_cli.wire.types import ContentPart, ImageURLPart, TextPart\n\nPROMPT_SYMBOL = \"✨\"\nPROMPT_SYMBOL_SHELL = \"$\"\nPROMPT_SYMBOL_THINKING = \"💫\"\n\n\nclass SlashCommandCompleter(Completer):\n    \"\"\"\n    A completer that:\n    - Shows one line per slash command in the form: \"/name (alias1, alias2)\"\n    - Fuzzy-matches by primary name or any alias while inserting the canonical \"/name\"\n    - Only activates when the current token starts with '/'\n    \"\"\"\n\n    def __init__(self, available_commands: Sequence[SlashCommand[Any]]) -> None:\n        super().__init__()\n        self._available_commands = list(available_commands)\n        self._command_lookup: dict[str, list[SlashCommand[Any]]] = {}\n        words: list[str] = []\n\n        for cmd in sorted(self._available_commands, key=lambda c: c.name):\n            if cmd.name not in self._command_lookup:\n                self._command_lookup[cmd.name] = []\n                words.append(cmd.name)\n            self._command_lookup[cmd.name].append(cmd)\n            for alias in cmd.aliases:\n                if alias in self._command_lookup:\n                    self._command_lookup[alias].append(cmd)\n                else:\n                    self._command_lookup[alias] = [cmd]\n                    words.append(alias)\n\n        self._word_pattern = re.compile(r\"[^\\s]+\")\n        self._fuzzy_pattern = r\"^[^\\s]*\"\n        self._word_completer = WordCompleter(words, WORD=False, pattern=self._word_pattern)\n        self._fuzzy = FuzzyCompleter(self._word_completer, WORD=False, pattern=self._fuzzy_pattern)\n\n    @override\n    def get_completions(\n        self, document: Document, complete_event: CompleteEvent\n    ) -> Iterable[Completion]:\n        text = document.text_before_cursor\n\n        # Only autocomplete when the input buffer has no other content.\n        if document.text_after_cursor.strip():\n            return\n\n        # Only consider the last token (allowing future arguments after a space)\n        last_space = text.rfind(\" \")\n        token = text[last_space + 1 :]\n        prefix = text[: last_space + 1] if last_space != -1 else \"\"\n\n        if prefix.strip():\n            return\n        if not token.startswith(\"/\"):\n            return\n\n        typed = token[1:]\n        if typed and typed in self._command_lookup:\n            return\n        mention_doc = Document(text=typed, cursor_position=len(typed))\n        candidates = list(self._fuzzy.get_completions(mention_doc, complete_event))\n\n        seen: set[str] = set()\n\n        for candidate in candidates:\n            commands = self._command_lookup.get(candidate.text)\n            if not commands:\n                continue\n            for cmd in commands:\n                if cmd.name in seen:\n                    continue\n                seen.add(cmd.name)\n                yield Completion(\n                    text=f\"/{cmd.name}\",\n                    start_position=-len(token),\n                    display=cmd.slash_name(),\n                    display_meta=cmd.description,\n                )\n\n\nclass LocalFileMentionCompleter(Completer):\n    \"\"\"Offer fuzzy `@` path completion by indexing workspace files.\"\"\"\n\n    _FRAGMENT_PATTERN = re.compile(r\"[^\\s@]+\")\n    _TRIGGER_GUARDS = frozenset((\".\", \"-\", \"_\", \"`\", \"'\", '\"', \":\", \"@\", \"#\", \"~\"))\n    _IGNORED_NAME_GROUPS: dict[str, tuple[str, ...]] = {\n        \"vcs_metadata\": (\".DS_Store\", \".bzr\", \".git\", \".hg\", \".svn\"),\n        \"tooling_caches\": (\n            \".build\",\n            \".cache\",\n            \".coverage\",\n            \".fleet\",\n            \".gradle\",\n            \".idea\",\n            \".ipynb_checkpoints\",\n            \".pnpm-store\",\n            \".pytest_cache\",\n            \".pub-cache\",\n            \".ruff_cache\",\n            \".swiftpm\",\n            \".tox\",\n            \".venv\",\n            \".vs\",\n            \".vscode\",\n            \".yarn\",\n            \".yarn-cache\",\n        ),\n        \"js_frontend\": (\n            \".next\",\n            \".nuxt\",\n            \".parcel-cache\",\n            \".svelte-kit\",\n            \".turbo\",\n            \".vercel\",\n            \"node_modules\",\n        ),\n        \"python_packaging\": (\n            \"__pycache__\",\n            \"build\",\n            \"coverage\",\n            \"dist\",\n            \"htmlcov\",\n            \"pip-wheel-metadata\",\n            \"venv\",\n        ),\n        \"java_jvm\": (\".mvn\", \"out\", \"target\"),\n        \"dotnet_native\": (\"bin\", \"cmake-build-debug\", \"cmake-build-release\", \"obj\"),\n        \"bazel_buck\": (\"bazel-bin\", \"bazel-out\", \"bazel-testlogs\", \"buck-out\"),\n        \"misc_artifacts\": (\n            \".dart_tool\",\n            \".serverless\",\n            \".stack-work\",\n            \".terraform\",\n            \".terragrunt-cache\",\n            \"DerivedData\",\n            \"Pods\",\n            \"deps\",\n            \"tmp\",\n            \"vendor\",\n        ),\n    }\n    _IGNORED_NAMES = frozenset(name for group in _IGNORED_NAME_GROUPS.values() for name in group)\n    _IGNORED_PATTERN_PARTS: tuple[str, ...] = (\n        r\".*_cache$\",\n        r\".*-cache$\",\n        r\".*\\.egg-info$\",\n        r\".*\\.dist-info$\",\n        r\".*\\.py[co]$\",\n        r\".*\\.class$\",\n        r\".*\\.sw[po]$\",\n        r\".*~$\",\n        r\".*\\.(?:tmp|bak)$\",\n    )\n    _IGNORED_PATTERNS = re.compile(\n        \"|\".join(f\"(?:{part})\" for part in _IGNORED_PATTERN_PARTS),\n        re.IGNORECASE,\n    )\n\n    def __init__(\n        self,\n        root: Path,\n        *,\n        refresh_interval: float = 2.0,\n        limit: int = 1000,\n    ) -> None:\n        self._root = root\n        self._refresh_interval = refresh_interval\n        self._limit = limit\n        self._cache_time: float = 0.0\n        self._cached_paths: list[str] = []\n        self._top_cache_time: float = 0.0\n        self._top_cached_paths: list[str] = []\n        self._fragment_hint: str | None = None\n\n        self._word_completer = WordCompleter(\n            self._get_paths,\n            WORD=False,\n            pattern=self._FRAGMENT_PATTERN,\n        )\n\n        self._fuzzy = FuzzyCompleter(\n            self._word_completer,\n            WORD=False,\n            pattern=r\"^[^\\s@]*\",\n        )\n\n    @classmethod\n    def _is_ignored(cls, name: str) -> bool:\n        if not name:\n            return True\n        if name in cls._IGNORED_NAMES:\n            return True\n        return bool(cls._IGNORED_PATTERNS.fullmatch(name))\n\n    def _get_paths(self) -> list[str]:\n        fragment = self._fragment_hint or \"\"\n        if \"/\" not in fragment and len(fragment) < 3:\n            return self._get_top_level_paths()\n        return self._get_deep_paths()\n\n    def _get_top_level_paths(self) -> list[str]:\n        now = time.monotonic()\n        if now - self._top_cache_time <= self._refresh_interval:\n            return self._top_cached_paths\n\n        entries: list[str] = []\n        try:\n            for entry in sorted(self._root.iterdir(), key=lambda p: p.name):\n                name = entry.name\n                if self._is_ignored(name):\n                    continue\n                entries.append(f\"{name}/\" if entry.is_dir() else name)\n                if len(entries) >= self._limit:\n                    break\n        except OSError:\n            return self._top_cached_paths\n\n        self._top_cached_paths = entries\n        self._top_cache_time = now\n        return self._top_cached_paths\n\n    def _get_deep_paths(self) -> list[str]:\n        now = time.monotonic()\n        if now - self._cache_time <= self._refresh_interval:\n            return self._cached_paths\n\n        paths: list[str] = []\n        try:\n            for current_root, dirs, files in os.walk(self._root):\n                relative_root = Path(current_root).relative_to(self._root)\n\n                # Prevent descending into ignored directories.\n                dirs[:] = sorted(d for d in dirs if not self._is_ignored(d))\n\n                if relative_root.parts and any(\n                    self._is_ignored(part) for part in relative_root.parts\n                ):\n                    dirs[:] = []\n                    continue\n\n                if relative_root.parts:\n                    paths.append(relative_root.as_posix() + \"/\")\n                    if len(paths) >= self._limit:\n                        break\n\n                for file_name in sorted(files):\n                    if self._is_ignored(file_name):\n                        continue\n                    relative = (relative_root / file_name).as_posix()\n                    if not relative:\n                        continue\n                    paths.append(relative)\n                    if len(paths) >= self._limit:\n                        break\n\n                if len(paths) >= self._limit:\n                    break\n        except OSError:\n            return self._cached_paths\n\n        self._cached_paths = paths\n        self._cache_time = now\n        return self._cached_paths\n\n    @staticmethod\n    def _extract_fragment(text: str) -> str | None:\n        index = text.rfind(\"@\")\n        if index == -1:\n            return None\n\n        if index > 0:\n            prev = text[index - 1]\n            if prev.isalnum() or prev in LocalFileMentionCompleter._TRIGGER_GUARDS:\n                return None\n\n        fragment = text[index + 1 :]\n        if not fragment:\n            return \"\"\n\n        if any(ch.isspace() for ch in fragment):\n            return None\n\n        return fragment\n\n    def _is_completed_file(self, fragment: str) -> bool:\n        candidate = fragment.rstrip(\"/\")\n        if not candidate:\n            return False\n        try:\n            return (self._root / candidate).is_file()\n        except OSError:\n            return False\n\n    @override\n    def get_completions(\n        self, document: Document, complete_event: CompleteEvent\n    ) -> Iterable[Completion]:\n        fragment = self._extract_fragment(document.text_before_cursor)\n        if fragment is None:\n            return\n        if self._is_completed_file(fragment):\n            return\n\n        mention_doc = Document(text=fragment, cursor_position=len(fragment))\n        self._fragment_hint = fragment\n        try:\n            # First, ask the fuzzy completer for candidates.\n            candidates = list(self._fuzzy.get_completions(mention_doc, complete_event))\n\n            # re-rank: prefer basename matches\n            frag_lower = fragment.lower()\n\n            def _rank(c: Completion) -> tuple[int, ...]:\n                path = c.text\n                base = path.rstrip(\"/\").split(\"/\")[-1].lower()\n                if base.startswith(frag_lower):\n                    cat = 0\n                elif frag_lower in base:\n                    cat = 1\n                else:\n                    cat = 2\n                # preserve original FuzzyCompleter's order in the same category\n                return (cat,)\n\n            candidates.sort(key=_rank)\n            yield from candidates\n        finally:\n            self._fragment_hint = None\n\n\nclass _HistoryEntry(BaseModel):\n    content: str\n\n\ndef _load_history_entries(history_file: Path) -> list[_HistoryEntry]:\n    entries: list[_HistoryEntry] = []\n    if not history_file.exists():\n        return entries\n\n    try:\n        with history_file.open(encoding=\"utf-8\") as f:\n            for raw_line in f:\n                line = raw_line.strip()\n                if not line:\n                    continue\n                try:\n                    record = json.loads(line)\n                except json.JSONDecodeError:\n                    logger.warning(\n                        \"Failed to parse user history line; skipping: {line}\",\n                        line=line,\n                    )\n                    continue\n                try:\n                    entry = _HistoryEntry.model_validate(record)\n                    entries.append(entry)\n                except ValidationError:\n                    logger.warning(\n                        \"Failed to validate user history entry; skipping: {line}\",\n                        line=line,\n                    )\n                    continue\n    except OSError as exc:\n        logger.warning(\n            \"Failed to load user history file: {file} ({error})\",\n            file=history_file,\n            error=exc,\n        )\n\n    return entries\n\n\nclass PromptMode(Enum):\n    AGENT = \"agent\"\n    SHELL = \"shell\"\n\n    def toggle(self) -> PromptMode:\n        return PromptMode.SHELL if self == PromptMode.AGENT else PromptMode.AGENT\n\n    def __str__(self) -> str:\n        return self.value\n\n\nclass UserInput(BaseModel):\n    mode: PromptMode\n    command: str\n    \"\"\"The plain text representation of the user input.\"\"\"\n    content: list[ContentPart]\n    \"\"\"The rich content parts.\"\"\"\n\n    def __str__(self) -> str:\n        return self.command\n\n    def __bool__(self) -> bool:\n        return bool(self.command)\n\n\n_REFRESH_INTERVAL = 1.0\n\n\n@dataclass(slots=True)\nclass _ToastEntry:\n    topic: str | None\n    \"\"\"There can be only one toast of each non-None topic in the queue.\"\"\"\n    message: str\n    duration: float\n\n\n_toast_queues: dict[Literal[\"left\", \"right\"], deque[_ToastEntry]] = {\n    \"left\": deque(),\n    \"right\": deque(),\n}\n\"\"\"The queue of toasts to show, including the one currently being shown (the first one).\"\"\"\n\n\ndef toast(\n    message: str,\n    duration: float = 5.0,\n    topic: str | None = None,\n    immediate: bool = False,\n    position: Literal[\"left\", \"right\"] = \"left\",\n) -> None:\n    queue = _toast_queues[position]\n    duration = max(duration, _REFRESH_INTERVAL)\n    entry = _ToastEntry(topic=topic, message=message, duration=duration)\n    if topic is not None:\n        # Remove existing toasts with the same topic\n        for existing in list(queue):\n            if existing.topic == topic:\n                queue.remove(existing)\n    if immediate:\n        queue.appendleft(entry)\n    else:\n        queue.append(entry)\n\n\ndef _current_toast(position: Literal[\"left\", \"right\"] = \"left\") -> _ToastEntry | None:\n    queue = _toast_queues[position]\n    if not queue:\n        return None\n    return queue[0]\n\n\n_ATTACHMENT_PLACEHOLDER_RE = re.compile(\n    r\"\\[(?P<type>[a-zA-Z0-9_\\-]+):(?P<id>[a-zA-Z0-9_\\-\\.]+)\"\n    r\"(?:,(?P<width>\\d+)x(?P<height>\\d+))?\\]\"\n)\n\n\ndef _guess_image_mime(path: Path) -> str:\n    mime, _ = mimetypes.guess_type(path.name)\n    if mime:\n        return mime\n    # fallback to PNG\n    return \"image/png\"\n\n\ndef _build_image_part(image_bytes: bytes, mime_type: str) -> ImageURLPart:\n    image_base64 = base64.b64encode(image_bytes).decode(\"ascii\")\n    return ImageURLPart(\n        image_url=ImageURLPart.ImageURL(\n            url=f\"data:{mime_type};base64,{image_base64}\",\n        )\n    )\n\n\ntype CachedAttachmentKind = Literal[\"image\"]\n\n\n@dataclass(slots=True)\nclass CachedAttachment:\n    kind: CachedAttachmentKind\n    attachment_id: str\n    path: Path\n\n\nclass AttachmentCache:\n    def __init__(self, root: Path | None = None) -> None:\n        self._root = root or Path(\"/tmp/kimi\")\n        self._dir_map: dict[CachedAttachmentKind, str] = {\"image\": \"images\"}\n        self._payload_map: dict[tuple[CachedAttachmentKind, str, str], CachedAttachment] = {}\n\n    def _dir_for(self, kind: CachedAttachmentKind) -> Path:\n        return self._root / self._dir_map[kind]\n\n    def _ensure_dir(self, kind: CachedAttachmentKind) -> Path | None:\n        path = self._dir_for(kind)\n        try:\n            path.mkdir(parents=True, exist_ok=True)\n        except OSError as exc:\n            logger.warning(\n                \"Failed to create attachment cache dir: {dir} ({error})\",\n                dir=path,\n                error=exc,\n            )\n            return None\n        return path\n\n    def _reserve_id(self, dir_path: Path, suffix: str) -> str:\n        for _ in range(5):\n            candidate = f\"{random_string(8)}{suffix}\"\n            if not (dir_path / candidate).exists():\n                return candidate\n        return f\"{random_string(12)}{suffix}\"\n\n    def store_bytes(\n        self, kind: CachedAttachmentKind, suffix: str, payload: bytes\n    ) -> CachedAttachment | None:\n        dir_path = self._ensure_dir(kind)\n        if dir_path is None:\n            return None\n        payload_hash = sha256(payload).hexdigest()\n        cache_key = (kind, suffix, payload_hash)\n        cached = self._payload_map.get(cache_key)\n        if cached is not None:\n            if cached.path.exists():\n                return cached\n            self._payload_map.pop(cache_key, None)\n\n        attachment_id = self._reserve_id(dir_path, suffix)\n        path = dir_path / attachment_id\n        try:\n            path.write_bytes(payload)\n        except OSError as exc:\n            logger.warning(\n                \"Failed to write cached attachment: {file} ({error})\",\n                file=path,\n                error=exc,\n            )\n            return None\n        cached = CachedAttachment(kind=kind, attachment_id=attachment_id, path=path)\n        self._payload_map[cache_key] = cached\n        return cached\n\n    def store_image(self, image: Image.Image) -> CachedAttachment | None:\n        png_bytes = BytesIO()\n        image.save(png_bytes, format=\"PNG\")\n        return self.store_bytes(\"image\", \".png\", png_bytes.getvalue())\n\n    def load_bytes(\n        self, kind: CachedAttachmentKind, attachment_id: str\n    ) -> tuple[Path, bytes] | None:\n        path = self._dir_for(kind) / attachment_id\n        if not path.exists():\n            return None\n        try:\n            return path, path.read_bytes()\n        except OSError as exc:\n            logger.warning(\n                \"Failed to read cached attachment: {file} ({error})\",\n                file=path,\n                error=exc,\n            )\n            return None\n\n    def load_content_parts(\n        self, kind: CachedAttachmentKind, attachment_id: str\n    ) -> list[ContentPart] | None:\n        if kind == \"image\":\n            payload = self.load_bytes(kind, attachment_id)\n            if payload is None:\n                return None\n            path, image_bytes = payload\n            mime_type = _guess_image_mime(path)\n            part = _build_image_part(image_bytes, mime_type)\n            return wrap_media_part(part, tag=\"image\", attrs={\"path\": str(path)})\n        return None\n\n\ndef _parse_attachment_kind(raw_kind: str) -> CachedAttachmentKind | None:\n    if raw_kind == \"image\":\n        return \"image\"\n    return None\n\n\ndef _sanitize_surrogates(text: str) -> str:\n    \"\"\"Sanitize UTF-16 surrogate characters that cannot be encoded to UTF-8.\n\n    This is particularly common on Windows when copying text from applications\n    that use UTF-16 internally and don't properly convert surrogate pairs.\n    \"\"\"\n    return text.encode(\"utf-8\", errors=\"surrogatepass\").decode(\"utf-8\", errors=\"replace\")\n\n\nclass CustomPromptSession:\n    def __init__(\n        self,\n        *,\n        status_provider: Callable[[], StatusSnapshot],\n        model_capabilities: set[ModelCapability],\n        model_name: str | None,\n        thinking: bool,\n        agent_mode_slash_commands: Sequence[SlashCommand[Any]],\n        shell_mode_slash_commands: Sequence[SlashCommand[Any]],\n    ) -> None:\n        history_dir = get_share_dir() / \"user-history\"\n        history_dir.mkdir(parents=True, exist_ok=True)\n        work_dir_id = md5(str(KaosPath.cwd()).encode(encoding=\"utf-8\")).hexdigest()\n        self._history_file = (history_dir / work_dir_id).with_suffix(\".jsonl\")\n        self._status_provider = status_provider\n        self._model_capabilities = model_capabilities\n        self._model_name = model_name\n        self._last_history_content: str | None = None\n        self._mode: PromptMode = PromptMode.AGENT\n        self._thinking = thinking\n        self._attachment_cache = AttachmentCache()\n\n        history_entries = _load_history_entries(self._history_file)\n        history = InMemoryHistory()\n        for entry in history_entries:\n            history.append_string(entry.content)\n\n        if history_entries:\n            # for consecutive deduplication\n            self._last_history_content = history_entries[-1].content\n\n        # Build completers\n        self._agent_mode_completer = merge_completers(\n            [\n                SlashCommandCompleter(agent_mode_slash_commands),\n                # TODO(kaos): we need an async KaosFileMentionCompleter\n                LocalFileMentionCompleter(KaosPath.cwd().unsafe_to_local_path()),\n            ],\n            deduplicate=True,\n        )\n        self._shell_mode_completer = SlashCommandCompleter(shell_mode_slash_commands)\n\n        # Build key bindings\n        _kb = KeyBindings()\n\n        @_kb.add(\"enter\", filter=has_completions)\n        def _(event: KeyPressEvent) -> None:\n            \"\"\"Accept the first completion when Enter is pressed and completions are shown.\"\"\"\n            buff = event.current_buffer\n            if buff.complete_state and buff.complete_state.completions:\n                # Get the current completion, or use the first one if none is selected\n                completion = buff.complete_state.current_completion\n                if not completion:\n                    completion = buff.complete_state.completions[0]\n                buff.apply_completion(completion)\n\n        @_kb.add(\"c-x\", eager=True)\n        def _(event: KeyPressEvent) -> None:\n            self._mode = self._mode.toggle()\n            # Apply mode-specific settings\n            self._apply_mode(event)\n            # Redraw UI\n            event.app.invalidate()\n\n        @_kb.add(\"escape\", \"enter\", eager=True)\n        @_kb.add(\"c-j\", eager=True)\n        def _(event: KeyPressEvent) -> None:\n            \"\"\"Insert a newline when Alt-Enter or Ctrl-J is pressed.\"\"\"\n            event.current_buffer.insert_text(\"\\n\")\n\n        if is_clipboard_available():\n\n            @_kb.add(\"c-v\", eager=True)\n            def _(event: KeyPressEvent) -> None:\n                if self._try_paste_image(event):\n                    return\n                clipboard_data = event.app.clipboard.get_data()\n                event.current_buffer.paste_clipboard_data(clipboard_data)\n\n            clipboard = PyperclipClipboard()\n        else:\n            clipboard = None\n\n        self._session = PromptSession[str](\n            message=self._render_message,\n            # prompt_continuation=FormattedText([(\"fg:#4d4d4d\", \"... \")]),\n            completer=self._agent_mode_completer,\n            complete_while_typing=True,\n            key_bindings=_kb,\n            clipboard=clipboard,\n            history=history,\n            bottom_toolbar=self._render_bottom_toolbar,\n            style=Style.from_dict({\"bottom-toolbar\": \"noreverse\"}),\n        )\n\n        # Allow completion to be triggered when the text is changed,\n        # such as when backspace is used to delete text.\n        @self._session.default_buffer.on_text_changed.add_handler\n        def _(buffer: Buffer) -> None:\n            if buffer.complete_while_typing():\n                buffer.start_completion()\n\n        self._status_refresh_task: asyncio.Task[None] | None = None\n\n    def _render_message(self) -> FormattedText:\n        if self._mode == PromptMode.SHELL:\n            return FormattedText([(\"bold\", f\"{PROMPT_SYMBOL_SHELL} \")])\n        symbol = PROMPT_SYMBOL_THINKING if self._thinking else PROMPT_SYMBOL\n        return FormattedText([(\"\", f\"{symbol} \")])\n\n    def _apply_mode(self, event: KeyPressEvent | None = None) -> None:\n        # Apply mode to the active buffer (not the PromptSession itself)\n        try:\n            buff = event.current_buffer if event is not None else self._session.default_buffer\n        except Exception:\n            buff = None\n\n        if self._mode == PromptMode.SHELL:\n            if buff is not None:\n                buff.completer = self._shell_mode_completer\n        else:\n            if buff is not None:\n                buff.completer = self._agent_mode_completer\n\n    def __enter__(self) -> CustomPromptSession:\n        if self._status_refresh_task is not None and not self._status_refresh_task.done():\n            return self\n\n        async def _refresh(interval: float) -> None:\n            try:\n                while True:\n                    app = get_app_or_none()\n                    if app is not None:\n                        app.invalidate()\n\n                    try:\n                        asyncio.get_running_loop()\n                    except RuntimeError:\n                        logger.warning(\"No running loop found, exiting status refresh task\")\n                        self._status_refresh_task = None\n                        break\n\n                    await asyncio.sleep(interval)\n            except asyncio.CancelledError:\n                # graceful exit\n                pass\n\n        self._status_refresh_task = asyncio.create_task(_refresh(_REFRESH_INTERVAL))\n        return self\n\n    def __exit__(self, *_) -> None:\n        if self._status_refresh_task is not None and not self._status_refresh_task.done():\n            self._status_refresh_task.cancel()\n        self._status_refresh_task = None\n\n    def _try_paste_image(self, event: KeyPressEvent) -> bool:\n        \"\"\"Try to paste an image from the clipboard. Return True if successful.\"\"\"\n        image = grab_image_from_clipboard()\n        if image is None:\n            return False\n\n        if \"image_in\" not in self._model_capabilities:\n            console.print(\"[yellow]Image input is not supported by the selected LLM model[/yellow]\")\n            return False\n\n        cached = self._attachment_cache.store_image(image)\n        if cached is None:\n            return False\n        logger.debug(\n            \"Pasted image from clipboard: {attachment_id}, {image_size}\",\n            attachment_id=cached.attachment_id,\n            image_size=image.size,\n        )\n\n        placeholder = f\"[image:{cached.attachment_id},{image.width}x{image.height}]\"\n        event.current_buffer.insert_text(placeholder)\n        event.app.invalidate()\n        return True\n\n    async def prompt(self) -> UserInput:\n        with patch_stdout(raw=True):\n            command = str(await self._session.prompt_async()).strip()\n            command = command.replace(\"\\x00\", \"\")  # just in case null bytes are somehow inserted\n            # Sanitize UTF-16 surrogates that may come from Windows clipboard\n            command = _sanitize_surrogates(command)\n        self._append_history_entry(command)\n\n        # Parse rich content parts\n        content: list[ContentPart] = []\n        remaining_command = command\n        while match := _ATTACHMENT_PLACEHOLDER_RE.search(remaining_command):\n            start, end = match.span()\n            if start > 0:\n                content.append(TextPart(text=remaining_command[:start]))\n            attachment_id = match.group(\"id\")\n            attachment_kind = _parse_attachment_kind(match.group(\"type\"))\n            part = None\n            if attachment_kind is not None:\n                part = self._attachment_cache.load_content_parts(attachment_kind, attachment_id)\n            if part is not None:\n                content.extend(part)\n            else:\n                logger.warning(\n                    \"Attachment placeholder found but no matching attachment part: {placeholder}\",\n                    placeholder=match.group(0),\n                )\n                content.append(TextPart(text=match.group(0)))\n            remaining_command = remaining_command[end:]\n\n        if remaining_command:\n            content.append(TextPart(text=remaining_command))\n\n        return UserInput(\n            mode=self._mode,\n            content=content,\n            command=command,\n        )\n\n    def _append_history_entry(self, text: str) -> None:\n        entry = _HistoryEntry(content=text.strip())\n        if not entry.content:\n            return\n\n        # skip if same as last entry\n        if entry.content == self._last_history_content:\n            return\n\n        try:\n            self._history_file.parent.mkdir(parents=True, exist_ok=True)\n            with self._history_file.open(\"a\", encoding=\"utf-8\") as f:\n                f.write(entry.model_dump_json(ensure_ascii=False) + \"\\n\")\n            self._last_history_content = entry.content\n        except OSError as exc:\n            logger.warning(\n                \"Failed to append user history entry: {file} ({error})\",\n                file=self._history_file,\n                error=exc,\n            )\n\n    def _render_bottom_toolbar(self) -> FormattedText:\n        app = get_app_or_none()\n        assert app is not None\n        columns = app.output.get_size().columns\n\n        fragments: list[tuple[str, str]] = []\n\n        fragments.append((\"fg:#4d4d4d\", \"─\" * columns))\n        fragments.append((\"\", \"\\n\"))\n\n        now_text = datetime.now().strftime(\"%H:%M\")\n        fragments.extend([(\"\", now_text), (\"\", \" \" * 2)])\n        columns -= len(now_text) + 2\n\n        mode = str(self._mode).lower()\n        if self._mode == PromptMode.AGENT:\n            mode_details: list[str] = []\n            if self._model_name:\n                mode_details.append(self._model_name)\n            if self._thinking:\n                mode_details.append(\"thinking\")\n            if mode_details:\n                mode += f\" ({', '.join(mode_details)})\"\n        status = self._status_provider()\n        if status.yolo_enabled:\n            fragments.extend([(\"bold fg:#ffff00\", \"yolo\"), (\"\", \" \" * 2)])\n            columns -= len(\"yolo\") + 2\n        fragments.extend([(\"\", f\"{mode}\"), (\"\", \" \" * 2)])\n        columns -= len(mode) + 2\n        right_text = self._render_right_span(status)\n\n        current_toast_left = _current_toast(\"left\")\n        if current_toast_left is not None:\n            fragments.extend([(\"\", current_toast_left.message), (\"\", \" \" * 2)])\n            columns -= len(current_toast_left.message) + 2\n            current_toast_left.duration -= _REFRESH_INTERVAL\n            if current_toast_left.duration <= 0.0:\n                _toast_queues[\"left\"].popleft()\n        else:\n            shortcut_candidates = [\n                \"ctrl-x: toggle mode | ctrl-j / alt-enter: newline\",\n                \"ctrl-j / alt-enter: newline\",\n            ]\n            for shortcuts in shortcut_candidates:\n                if columns - len(right_text) > len(shortcuts) + 2:\n                    fragments.extend([(\"\", shortcuts), (\"\", \" \" * 2)])\n                    columns -= len(shortcuts) + 2\n                    break\n\n        padding = max(1, columns - len(right_text))\n        fragments.append((\"\", \" \" * padding))\n        fragments.append((\"\", right_text))\n\n        return FormattedText(fragments)\n\n    @staticmethod\n    def _render_right_span(status: StatusSnapshot) -> str:\n        current_toast = _current_toast(\"right\")\n        if current_toast is None:\n            bounded = max(0.0, min(status.context_usage, 1.0))\n            return f\"context: {bounded:.1%}\"\n\n        current_toast.duration -= _REFRESH_INTERVAL\n        if current_toast.duration <= 0.0:\n            _toast_queues[\"right\"].popleft()\n        return current_toast.message\n"
+      "source_summary": "from __future__ import annotations\n\nimport asyncio\nimport base64\nimport json\nimport mimetypes\nimport os\nimport re\nimport time\nfrom collections import deque\nfrom collections.abc import Callable, Iterable, Sequence\nfrom dataclasses import dataclass\nfrom datetime import datetime\nfrom enum import Enum\nfrom hashlib import md5, sha256\nfrom io import BytesIO\nfrom pathlib import Path\nfrom typing import Any, Literal, override\n\nfrom kaos.path import KaosPath\nfrom PIL import Image\nfrom prompt_toolkit import PromptSession\nfrom prompt_toolkit.application.current import get_app_or_none\nfrom prompt_toolkit.buffer import Buffer\nfrom prompt_toolkit.clipboard.pyperclip import PyperclipClipboard\nfrom prompt_toolkit.completion import (\n    CompleteEvent,\n    Completer,\n    Completion,\n    FuzzyCompleter,\n    WordCompleter,\n    merge_completers,\n)\nfrom prompt_toolkit.document import Document\nfrom prompt_toolkit.filters import has_completions\nfrom prompt_toolkit.formatted_text import FormattedText\nfrom prompt_toolkit.history import InMemoryHistory\nfrom prompt_toolkit.key_binding import KeyBindings, KeyPressEvent\nfrom prompt_toolkit.patch_stdout import patch_stdout\nfrom prompt_toolkit.styles import Style\nfrom pydantic import BaseModel, ValidationError\n\nfrom kimi_cli.llm import ModelCapability\nfrom kimi_cli.share import get_share_dir\nfrom kimi_cli.soul import StatusSnapshot\nfrom kimi_cli.ui.shell.console import console\nfrom kimi_cli.utils.clipboard import grab_image_from_clipboard, is_clipboard_available\nfrom kimi_cli.utils.logging import logger\nfrom kimi_cli.utils.media_tags import wrap_media_part\nfrom kimi_cli.utils.slashcmd import SlashCommand\nfrom kimi_cli.utils.string import random_string\nfrom kimi_cli.wire.types import ContentPart, ImageURLPart, TextPart\n\nPROMPT_SYMBOL = \"✨\"\nPROMPT_SYMBOL_SHELL = \"$\"\nPROMPT_SYMBOL_THINKING = \"💫\"\n\n\nclass SlashCommandCompleter(Completer):\n    \"\"\"\n    A completer that:\n    - Shows one line per slash command in the form: \"/name (alias1, alias2)\"\n    - Fuzzy-matches by primary name or any alias while inserting the canonical \"/name\"\n    - Only activates when the current token starts with '/'\n    \"\"\"\n\n    def __init__(self, available_commands: Sequence[SlashCommand[Any]]) -> None:\n        super().__init__()\n        self._available_commands = list(available_commands)\n        self._command_lookup: dict[str, list[SlashCommand[Any]]] = {}\n        words: list[str] = []\n\n        for cmd in sorted(self._available_commands, key=lambda c: c.name):\n            if cmd.name not in self._command_lookup:\n                self._command_lookup[cmd.name] = []\n                words.append(cmd.name)\n            self._command_lookup[cmd.name].append(cmd)\n            for alias in cmd.aliases:\n                if alias in self._command_lookup:\n                    self._command_lookup[alias].append(cmd)\n                else:\n                    self._command_lookup[alias] = [cmd]\n                    words.append(alias)\n\n        self._word_pattern = re.compile(r\"[^\\s]+\")\n        self._fuzzy_pattern = r\"^[^\\s]*\"\n        self._word_completer = WordCompleter(words, WORD=False, pattern=self._word_pattern)\n        self._fuzzy = FuzzyCompleter(self._word_completer, WORD=False, pattern=self._fuzzy_pattern)\n\n    @override\n    def get_completions(\n        self, document: Document, complete_event: CompleteEvent\n    ) -> Iterable[Completion]:\n        text = document.text_before_cursor\n\n        # Only autocomplete when the input buffer has no other content.\n        if document.text_after_cursor.strip():\n            return\n\n        # Only consider the last token (allowing future arguments after a space)\n        last_space = text.rfind(\" \")\n        token = text[last_space + 1 :]\n        prefix = text[: last_space + 1] if last_space != -1 else \"\"\n\n        if prefix.strip():\n            return\n        if not token.startswith(\"/\"):\n            return\n\n        typed = token[1:]\n        if typed and typed in self._command_lookup:\n            return\n        mention_doc = Document(text=typed, cursor_position=len(typed))\n        candidates = list(self._fuzzy.get_completions(mention_doc, complete_event))\n\n        seen: set[str] = set()\n\n        for candidate in candidates:\n            commands = self._command_lookup.get(candidate.text)\n            if not commands:\n                continue\n            for cmd in commands:\n                if cmd.name in seen:\n                    continue\n                seen.add(cmd.name)\n                yield Completion(\n                    text=f\"/{cmd.name}\",\n                    start_position=-len(token),\n                    display=cmd.slash_name(),\n                    display_meta=cmd.description,\n                )\n\n\nclass LocalFileMentionCompleter(Completer):\n    \"\"\"Offer fuzzy `@` path completion by indexing workspace files.\"\"\"\n\n    _FRAGMENT_PATTERN = re.compile(r\"[^\\s@]+\")\n    _TRIGGER_GUARDS = frozenset((\".\", \"-\", \"_\", \"`\", \"'\", '\"', \":\", \"@\", \"#\", \"~\"))\n    _IGNORED_NAME_GROUPS: dict[str, tuple[str, ...]] = {\n        \"vcs_metadata\": (\".DS_Store\", \".bzr\", \".git\", \".hg\", \".svn\"),\n        \"tooling_caches\": (\n            \".build\",\n            \".cache\",\n            \".coverage\",\n            \".fleet\",\n            \".gradle\",\n            \".idea\",\n            \".ipynb_checkpoints\",\n            \".pnpm-store\",\n            \".pytest_cache\",\n            \".pub-cache\",\n            \".ruff_cache\",\n            \".swiftpm\",\n            \".tox\",\n            \".venv\",\n            \".vs\",\n            \".vscode\",\n            \".yarn\",\n            \".yarn-cache\",\n        ),\n        \"js_frontend\": (\n            \".next\",\n            \".nuxt\",\n            \".parcel-cache\",\n            \".svelte-kit\",\n            \".turbo\",\n            \".vercel\",\n            \"node_modules\",\n        ),\n        \"python_packaging\": (\n            \"__pycache__\",\n            \"build\",\n            \"coverage\",\n            \"dist\",\n            \"htmlcov\",\n            \"pip-wheel-metadata\",\n            \"venv\",\n        ),\n        \"java_jvm\": (\".mvn\", \"out\", \"target\"),\n        \"dotnet_native\": (\"bin\", \"cmake-build-debug\", \"cmake-build-release\", \"obj\"),\n        \"bazel_buck\": (\"bazel-bin\", \"bazel-out\", \"bazel-testlogs\", \"buck-out\"),\n        \"misc_artifacts\": (\n            \".dart_tool\",\n            \".serverless\",\n            \".stack-work\",\n            \".terraform\",\n            \".terragrunt-cache\",\n            \"DerivedData\",\n            \"Pods\",\n            \"deps\",\n            \"tmp\",\n            \"vendor\",\n        ),\n    }\n    _IGNORED_NAMES = frozenset(name for group in _IGNORED_NAME_GROUPS.values() for name in group)\n    _IGNORED_PATTERN_PARTS: tuple[str, ...] = (\n        r\".*_cache$\",\n        r\".*-cache$\",\n        r\".*\\.egg-info$\",\n        r\".*\\.dist-info$\",\n        r\".*\\.py[co]$\",\n        r\".*\\.class$\",\n        r\".*\\.sw[po]$\",\n        r\".*~$\",\n        r\".*\\.(?:tmp|bak)$\",\n    )\n    _IGNORED_PATTERNS = re.compile(\n        \"|\".join(f\"(?:{part})\" for part in _IGNORED_PATTERN_PARTS),\n        re.IGNORECASE,\n    )\n\n    def __init__(\n        self,\n        root: Path,\n        *,\n        refresh_interval: float = 2.0,\n        limit: int = 1000,\n    ) -> None:\n        self._root = root\n        self._refresh_interval = refresh_interval\n        self._limit = limit\n        self._cache_time: float = 0.0\n        self._cached_paths: list[str] = []\n        self._top_cache_time: float = 0.0\n        self._top_cached_paths: list[str] = []\n        self._fragment_hint: str | None = None\n\n        self._word_completer = WordCompleter(\n            self._get_paths,\n            WORD=False,\n            pattern=self._FRAGMENT_PATTERN,\n        )\n\n        self._fuzzy = FuzzyCompleter(\n            self._word_completer,\n            WORD=False,\n            pattern=r\"^[^\\s@]*\",\n        )\n\n    @classmethod\n    def _is_ignored(cls, name: str) -> bool:\n        if not name:\n            return True\n        if name in cls._IGNORED_NAMES:\n            return True\n        return bool(cls._IGNORED_PATTERNS.fullmatch(name))\n\n    def _get_paths(self) -> list[str]:\n        fragment = self._fragment_hint or \"\"\n        if \"/\" not in fragment and len(fragment) < 3:\n            return self._get_top_level_paths()\n        return self._get_deep_paths()\n\n    def _get_top_level_paths(self) -> list[str]:\n        now = time.monotonic()\n        if now - self._top_cache_time <= self._refresh_interval:\n            return self._top_cached_paths\n\n        entries: list[str] = []\n        try:\n            for entry in sorted(self._root.iterdir(), key=lambda p: p.name):\n                name = entry.name\n                if self._is_ignored(name):\n                    continue\n                entries.append(f\"{name}/\" if entry.is_dir() else name)\n                if len(entries) >= self._limit:\n                    break\n        except OSError:\n            return self._top_cached_paths\n\n        self._top_cached_paths = entries\n        self._top_cache_time = now\n        return self._top_cached_paths\n\n    def _get_deep_paths(self) -> list[str]:\n        now = time.monotonic()\n        if now - self._cache_time <= self._refresh_interval:\n            return self._cached_paths\n\n        paths: list[str] = []\n        try:\n            for current_root, dirs, files in os.walk(self._root):\n                relative_root = Path(current_root).relative_to(self._root)\n\n                # Prevent descending into ignored directories.\n                dirs[:] = sorted(d for d in dirs if not self._is_ignored(d))\n\n                if relative_root.parts and any(\n                    self._is_ignored(part) for part in relative_root.parts\n                ):\n                    dirs[:] = []\n                    continue\n\n                if relative_root.parts:\n                    paths.append(relative_root.as_posix() + \"/\")\n                    if len(paths) >= self._limit:\n                        break\n\n                for file_name in sorted(files):\n                    if self._is_ignored(file_name):\n                        continue\n                    relative = (relative_root / file_name).as_posix()\n                    if not relative:\n                        continue\n                    paths.append(relative)\n                    if len(paths) >= self._limit:\n                        break\n\n                if len(paths) >= self._limit:\n                    break\n        except OSError:\n            return self._cached_paths\n\n        self._cached_paths = paths\n        self._cache_time = now\n        return self._cached_paths\n\n    @staticmethod\n    def _extract_fragment(text: str) -> str | None:\n        index = text.rfind(\"@\")\n        if index == -1:\n            return None\n\n        if index > 0:\n            prev = text[index - 1]\n            if prev.isalnum() or prev in LocalFileMentionCompleter._TRIGGER_GUARDS:\n                return None\n\n        fragment = text[index + 1 :]\n        if not fragment:\n            return \"\"\n\n        if any(ch.isspace() for ch in fragment):\n            return None\n\n        return fragment\n\n    def _is_completed_file(self, fragment: str) -> bool:\n        candidate = fragment.rstrip(\"/\")\n        if not candidate:\n            return False\n        try:\n            return (self._root / candidate).is_file()\n        except OSError:\n            return False\n\n    @override\n    def get_completions(\n        self, document: Document, complete_event: CompleteEvent\n    ) -> Iterable[Completion]:\n        fragment = self._extract_fragment(document.text_before_cursor)\n        if fragment is None:\n            return\n        if self._is_completed_file(fragment):\n            return\n\n        mention_doc = Document(text=fragment, cursor_position=len(fragment))\n        self._fragment_hint = fragment\n        try:\n            # First, ask the fuzzy completer for candidates.\n            candidates = list(self._fuzzy.get_completions(mention_doc, complete_event))\n\n            # re-rank: prefer basename matches\n            frag_lower = fragment.lower()\n\n            def _rank(c: Completion) -> tuple[int, ...]:\n                path = c.text\n                base = path.rstrip(\"/\").split(\"/\")[-1].lower()\n                if base.startswith(frag_lower):\n                    cat = 0\n                elif frag_lower in base:\n                    cat = 1\n                else:\n                    cat = 2\n                # preserve original FuzzyCompleter's order in the same category\n                return (cat,)\n\n            candidates.sort(key=_rank)\n            yield from candidates\n        finally:\n            self._fragment_hint = None\n\n\nclass _HistoryEntry(BaseModel):\n    content: str\n\n\ndef _load_history_entries(history_file: Path) -> list[_HistoryEntry]:\n    entries: list[_HistoryEntry] = []\n    if not history_file.exists():\n        return entries\n\n    try:\n        with history_file.open(encoding=\"utf-8\") as f:\n            for raw_line in f:\n                line = raw_line.strip()\n                if not line:\n                    continue\n                try:\n                    record = json.loads(line)\n                except json.JSONDecodeError:\n                    logger.warning(\n                        \"Failed to parse user history line; skipping: {line}\",\n                        line=line,\n                    )\n                    continue\n                try:\n                    entry = _HistoryEntry.model_validate(record)\n                    entries.append(entry)\n                except ValidationError:\n                    logger.warning(\n                        \"Failed to validate user history entry; skipping: {line}\",\n                        line=line,\n                    )\n                    continue\n    except OSError as exc:\n        logger.warning(\n            \"Failed to load user history file: {file} ({error})\",\n            file=history_file,\n            error=exc,\n        )\n\n    return entries\n\n\nclass PromptMode(Enum):\n    AGENT = \"agent\"\n    SHELL = \"shell\"\n\n    def toggle(self) -> PromptMode:\n        return PromptMode.SHELL if self == PromptMode.AGENT else PromptMode.AGENT\n\n    def __str__(self) -> str:\n        return self.value\n\n\nclass UserInput(BaseModel):\n    mode: PromptMode\n    command: str\n    \"\"\"The plain text representation of the user input.\"\"\"\n    content: list[ContentPart]\n    \"\"\"The rich content parts.\"\"\"\n\n    def __str__(self) -> str:\n        return self.command\n\n    def __bool__(self) -> bool:\n        return bool(self.command)\n\n\n_REFRESH_INTERVAL = 1.0\n\n\n@dataclass(slots=True)\nclass _ToastEntry:\n    topic: str | None\n    \"\"\"There can be only one toast of each non-None topic in the queue.\"\"\"\n    message: str\n    duration: float\n\n\n_toast_queues: dict[Literal[\"left\", \"right\"], deque[_ToastEntry]] = {\n    \"left\": deque(),\n    \"right\": deque(),\n}\n\"\"\"The queue of toasts to show, including the one currently being shown (the first one).\"\"\"\n\n\ndef toast(\n    message: str,\n    duration: float = 5.0,\n    topic: str | None = None,\n    immediate: bool = False,\n    position: Literal[\"left\", \"right\"] = \"left\",\n) -> None:\n    queue = _toast_queues[position]\n    duration = max(duration, _REFRESH_INTERVAL)\n    entry = _ToastEntry(topic=topic, message=message, duration=duration)\n    if topic is not None:\n        # Remove existing toasts with the same topic\n        for existing in list(queue):\n            if existing.topic == topic:\n                queue.remove(existing)\n    if immediate:\n        queue.appendleft(entry)\n    else:\n        queue.append(entry)\n\n\ndef _current_toast(position: Literal[\"left\", \"right\"] = \"left\") -> _ToastEntry | None:\n    queue = _toast_queues[position]\n    if not queue:\n        return None\n    return queue[0]\n\n\n_ATTACHMENT_PLACEHOLDER_RE = re.compile(\n    r\"\\[(?P<type>[a-zA-Z0-9_\\-]+):(?P<id>[a-zA-Z0-9_\\-\\.]+)\"\n    r\"(?:,(?P<width>\\d+)x(?P<height>\\d+))?\\]\"\n)\n\n\ndef _guess_image_mime(path: Path) -> str:\n    mime, _ = mimetypes.guess_type(path.name)\n    if mime:\n        return mime\n    # fallback to PNG\n    return \"image/png\"\n\n\ndef _build_image_part(image_bytes: bytes, mime_type: str) -> ImageURLPart:\n    image_base64 = base64.b64encode(image_bytes).decode(\"ascii\")\n    return ImageURLPart(\n        image_url=ImageURLPart.ImageURL(\n            url=f\"data:{mime_type};base64,{image_base64}\",\n        )\n    )\n\n\ntype CachedAttachmentKind = Literal[\"image\"]\n\n\n@dataclass(slots=True)\nclass CachedAttachment:\n    kind: CachedAttachmentKind\n    attachment_id: str\n    path: Path\n\n\nclass AttachmentCache:\n    def __init__(self, root: Path | None = None) -> None:\n        self._root = root or Path(\"/tmp/kimi\")\n        self._dir_map: dict[CachedAttachmentKind, str] = {\"image\": \"images\"}\n        self._payload_map: dict[tuple[CachedAttachmentKind, str, str], CachedAttachment] = {}\n\n    def _dir_for(self, kind: CachedAttachmentKind) -> Path:\n        return self._root / self._dir_map[kind]\n\n    def _ensure_dir(self, kind: CachedAttachmentKind) -> Path | None:\n        path = self._dir_for(kind)\n        try:\n            path.mkdir(parents=True, exist_ok=True)\n        except OSError as exc:\n            logger.warning(\n                \"Failed to create attachment cache dir: {dir} ({error})\",\n                dir=path,\n                error=exc,\n            )\n            return None\n        return path\n\n    def _reserve_id(self, dir_path: Path, suffix: str) -> str:\n        for _ in range(5):\n            candidate = f\"{random_string(8)}{suffix}\"\n            if not (dir_path / candidate).exists():\n                return candidate\n        return f\"{random_string(12)}{suffix}\"\n\n    def store_bytes(\n        self, kind: CachedAttachmentKind, suffix: str, payload: bytes\n    ) -> CachedAttachment | None:\n        dir_path = self._ensure_dir(kind)\n        if dir_path is None:\n            return None\n        payload_hash = sha256(payload).hexdigest()\n        cache_key = (kind, suffix, payload_hash)\n        cached = self._payload_map.get(cache_key)\n        if cached is not None:\n            if cached.path.exists():\n                return cached\n            self._payload_map.pop(cache_key, None)\n\n        attachment_id = self._reserve_id(dir_path, suffix)\n        path = dir_path / attachment_id\n        try:\n            path.write_bytes(payload)\n        except OSError as exc:\n            logger.warning(\n                \"Failed to write cached attachment: {file} ({error})\",\n                file=path,\n                error=exc,\n            )\n            return None\n        cached = CachedAttachment(kind=kind, attachment_id=attachment_id, path=path)\n        self._payload_map[cache_key] = cached\n        return cached\n\n    def store_image(self, image: Image.Image) -> CachedAttachment | None:\n        png_bytes = BytesIO()\n        image.save(png_bytes, format=\"PNG\")\n        return self.store_bytes(\"image\", \".png\", png_bytes.getvalue())\n\n    def load_bytes(\n        self, kind: CachedAttachmentKind, attachment_id: str\n    ) -> tuple[Path, bytes] | None:\n        path = self._dir_for(kind) / attachment_id\n        if not path.exists():\n            return None\n        try:\n            return path, path.read_bytes()\n        except OSError as exc:\n            logger.warning(\n                \"Failed to read cached attachment: {file} ({error})\",\n                file=path,\n                error=exc,\n            )\n            return None\n\n    def load_content_parts(\n        self, kind: CachedAttachmentKind, attachment_id: str\n    ) -> list[ContentPart] | None:\n        if kind == \"image\":\n            payload = self.load_bytes(kind, attachment_id)\n            if payload is None:\n                return None\n            path, image_bytes = payload\n            mime_type = _guess_image_mime(path)\n            part = _build_image_part(image_bytes, mime_type)\n            return wrap_media_part(part, tag=\"image\", attrs={\"path\": str(path)})\n        return None\n\n\ndef _parse_attachment_kind(raw_kind: str) -> CachedAttachmentKind | None:\n    if raw_kind == \"image\":\n        return \"image\"\n    return None\n\n\ndef _sanitize_surrogates(text: str) -> str:\n    \"\"\"Sanitize UTF-16 surrogate characters that cannot be encoded to UTF-8.\n\n    This is particularly common on Windows when copying text from applications\n    that use UTF-16 internally and don't properly convert surrogate pairs.\n    \"\"\"\n    return text.encode(\"utf-8\", errors=\"surrogatepass\").decode(\"utf-8\", errors=\"replace\")\n\n\nclass CustomPromptSession:\n    def __init__(\n        self,\n        *,\n        status_provider: Callable[[], StatusSnapshot],\n        model_capabilities: set[ModelCapability],\n        model_name: str | None,\n        thinking: bool,\n        agent_mode_slash_commands: Sequence[SlashCommand[Any]],\n        shell_mode_slash_commands: Sequence[SlashCommand[Any]],\n        editor_command_provider: Callable[[], str] = lambda: \"\",\n    ) -> None:\n        history_dir = get_share_dir() / \"user-history\"\n        history_dir.mkdir(parents=True, exist_ok=True)\n        work_dir_id = md5(str(KaosPath.cwd()).encode(encoding=\"utf-8\")).hexdigest()\n        self._history_file = (history_dir / work_dir_id).with_suffix(\".jsonl\")\n        self._status_provider = status_provider\n        self._editor_command_provider = editor_command_provider\n        self._model_capabilities = model_capabilities\n        self._model_name = model_name\n        self._last_history_content: str | None = None\n        self._mode: PromptMode = PromptMode.AGENT\n        self._thinking = thinking\n        self._attachment_cache = AttachmentCache()\n\n        history_entries = _load_history_entries(self._history_file)\n        history = InMemoryHistory()\n        for entry in history_entries:\n            history.append_string(entry.content)\n\n        if history_entries:\n            # for consecutive deduplication\n            self._last_history_content = history_entries[-1].content\n\n        # Build completers\n        self._agent_mode_completer = merge_completers(\n            [\n                SlashCommandCompleter(agent_mode_slash_commands),\n                # TODO(kaos): we need an async KaosFileMentionCompleter\n                LocalFileMentionCompleter(KaosPath.cwd().unsafe_to_local_path()),\n            ],\n            deduplicate=True,\n        )\n        self._shell_mode_completer = SlashCommandCompleter(shell_mode_slash_commands)\n\n        # Build key bindings\n        _kb = KeyBindings()\n\n        @_kb.add(\"enter\", filter=has_completions)\n        def _(event: KeyPressEvent) -> None:\n            \"\"\"Accept the first completion when Enter is pressed and completions are shown.\"\"\"\n            buff = event.current_buffer\n            if buff.complete_state and buff.complete_state.completions:\n                # Get the current completion, or use the first one if none is selected\n                completion = buff.complete_state.current_completion\n                if not completion:\n                    completion = buff.complete_state.completions[0]\n                buff.apply_completion(completion)\n\n        @_kb.add(\"c-x\", eager=True)\n        def _(event: KeyPressEvent) -> None:\n            self._mode = self._mode.toggle()\n            # Apply mode-specific settings\n            self._apply_mode(event)\n            # Redraw UI\n            event.app.invalidate()\n\n        @_kb.add(\"escape\", \"enter\", eager=True)\n        @_kb.add(\"c-j\", eager=True)\n        def _(event: KeyPressEvent) -> None:\n            \"\"\"Insert a newline when Alt-Enter or Ctrl-J is pressed.\"\"\"\n            event.current_buffer.insert_text(\"\\n\")\n\n        @_kb.add(\"c-o\", eager=True)\n        def _(event: KeyPressEvent) -> None:\n            \"\"\"Open current buffer in external editor.\"\"\"\n            self._open_in_external_editor(event)\n\n        if is_clipboard_available():\n\n            @_kb.add(\"c-v\", eager=True)\n            def _(event: KeyPressEvent) -> None:\n                if self._try_paste_image(event):\n                    return\n                clipboard_data = event.app.clipboard.get_data()\n                event.current_buffer.paste_clipboard_data(clipboard_data)\n\n            clipboard = PyperclipClipboard()\n        else:\n            clipboard = None\n\n        self._session = PromptSession[str](\n            message=self._render_message,\n            # prompt_continuation=FormattedText([(\"fg:#4d4d4d\", \"... \")]),\n            completer=self._agent_mode_completer,\n            complete_while_typing=True,\n            key_bindings=_kb,\n            clipboard=clipboard,\n            history=history,\n            bottom_toolbar=self._render_bottom_toolbar,\n            style=Style.from_dict({\"bottom-toolbar\": \"noreverse\"}),\n        )\n\n        # Allow completion to be triggered when the text is changed,\n        # such as when backspace is used to delete text.\n        @self._session.default_buffer.on_text_changed.add_handler\n        def _(buffer: Buffer) -> None:\n            if buffer.complete_while_typing():\n                buffer.start_completion()\n\n        self._status_refresh_task: asyncio.Task[None] | None = None\n\n    def _render_message(self) -> FormattedText:\n        if self._mode == PromptMode.SHELL:\n            return FormattedText([(\"bold\", f\"{PROMPT_SYMBOL_SHELL} \")])\n        symbol = PROMPT_SYMBOL_THINKING if self._thinking else PROMPT_SYMBOL\n        return FormattedText([(\"\", f\"{symbol} \")])\n\n    def _open_in_external_editor(self, event: KeyPressEvent) -> None:\n        \"\"\"Open the current buffer content in an external editor.\"\"\"\n        from prompt_toolkit.application.run_in_terminal import run_in_terminal\n\n        from kimi_cli.utils.editor import edit_text_in_editor, get_editor_command\n\n        configured = self._editor_command_provider()\n\n        if get_editor_command(configured) is None:\n            toast(\"No editor found. Set $VISUAL/$EDITOR or run /editor.\")\n            return\n\n        buff = event.current_buffer\n        original_text = buff.text\n\n        async def _run_editor() -> None:\n            result = await run_in_terminal(\n                lambda: edit_text_in_editor(original_text, configured), in_executor=True\n            )\n            if result is not None:\n                buff.document = Document(text=result, cursor_position=len(result))\n\n        event.app.create_background_task(_run_editor())\n\n    def _apply_mode(self, event: KeyPressEvent | None = None) -> None:\n        # Apply mode to the active buffer (not the PromptSession itself)\n        try:\n            buff = event.current_buffer if event is not None else self._session.default_buffer\n        except Exception:\n            buff = None\n\n        if self._mode == PromptMode.SHELL:\n            if buff is not None:\n                buff.completer = self._shell_mode_completer\n        else:\n            if buff is not None:\n                buff.completer = self._agent_mode_completer\n\n    def __enter__(self) -> CustomPromptSession:\n        if self._status_refresh_task is not None and not self._status_refresh_task.done():\n            return self\n\n        async def _refresh(interval: float) -> None:\n            try:\n                while True:\n                    app = get_app_or_none()\n                    if app is not None:\n                        app.invalidate()\n\n                    try:\n                        asyncio.get_running_loop()\n                    except RuntimeError:\n                        logger.warning(\"No running loop found, exiting status refresh task\")\n                        self._status_refresh_task = None\n                        break\n\n                    await asyncio.sleep(interval)\n            except asyncio.CancelledError:\n                # graceful exit\n                pass\n\n        self._status_refresh_task = asyncio.create_task(_refresh(_REFRESH_INTERVAL))\n        return self\n\n    def __exit__(self, *_) -> None:\n        if self._status_refresh_task is not None and not self._status_refresh_task.done():\n            self._status_refresh_task.cancel()\n        self._status_refresh_task = None\n\n    def _try_paste_image(self, event: KeyPressEvent) -> bool:\n        \"\"\"Try to paste an image from the clipboard. Return True if successful.\"\"\"\n        image = grab_image_from_clipboard()\n        if image is None:\n            return False\n\n        if \"image_in\" not in self._model_capabilities:\n            console.print(\"[yellow]Image input is not supported by the selected LLM model[/yellow]\")\n            return False\n\n        cached = self._attachment_cache.store_image(image)\n        if cached is None:\n            return False\n        logger.debug(\n            \"Pasted image from clipboard: {attachment_id}, {image_size}\",\n            attachment_id=cached.attachment_id,\n            image_size=image.size,\n        )\n\n        placeholder = f\"[image:{cached.attachment_id},{image.width}x{image.height}]\"\n        event.current_buffer.insert_text(placeholder)\n        event.app.invalidate()\n        return True\n\n    async def prompt(self) -> UserInput:\n        with patch_stdout(raw=True):\n            command = str(await self._session.prompt_async()).strip()\n            command = command.replace(\"\\x00\", \"\")  # just in case null bytes are somehow inserted\n            # Sanitize UTF-16 surrogates that may come from Windows clipboard\n            command = _sanitize_surrogates(command)\n        self._append_history_entry(command)\n\n        # Parse rich content parts\n        content: list[ContentPart] = []\n        remaining_command = command\n        while match := _ATTACHMENT_PLACEHOLDER_RE.search(remaining_command):\n            start, end = match.span()\n            if start > 0:\n                content.append(TextPart(text=remaining_command[:start]))\n            attachment_id = match.group(\"id\")\n            attachment_kind = _parse_attachment_kind(match.group(\"type\"))\n            part = None\n            if attachment_kind is not None:\n                part = self._attachment_cache.load_content_parts(attachment_kind, attachment_id)\n            if part is not None:\n                content.extend(part)\n            else:\n                logger.warning(\n                    \"Attachment placeholder found but no matching attachment part: {placeholder}\",\n                    placeholder=match.group(0),\n                )\n                content.append(TextPart(text=match.group(0)))\n            remaining_command = remaining_command[end:]\n\n        if remaining_command:\n            content.append(TextPart(text=remaining_command))\n\n        return UserInput(\n            mode=self._mode,\n            content=content,\n            command=command,\n        )\n\n    def _append_history_entry(self, text: str) -> None:\n        entry = _HistoryEntry(content=text.strip())\n        if not entry.content:\n            return\n\n        # skip if same as last entry\n        if entry.content == self._last_history_content:\n            return\n\n        try:\n            self._history_file.parent.mkdir(parents=True, exist_ok=True)\n            with self._history_file.open(\"a\", encoding=\"utf-8\") as f:\n                f.write(entry.model_dump_json(ensure_ascii=False) + \"\\n\")\n            self._last_history_content = entry.content\n        except OSError as exc:\n            logger.warning(\n                \"Failed to append user history entry: {file} ({error})\",\n                file=self._history_file,\n                error=exc,\n            )\n\n    def _render_bottom_toolbar(self) -> FormattedText:\n        app = get_app_or_none()\n        assert app is not None\n        columns = app.output.get_size().columns\n\n        fragments: list[tuple[str, str]] = []\n\n        fragments.append((\"fg:#4d4d4d\", \"─\" * columns))\n        fragments.append((\"\", \"\\n\"))\n\n        now_text = datetime.now().strftime(\"%H:%M\")\n        fragments.extend([(\"\", now_text), (\"\", \" \" * 2)])\n        columns -= len(now_text) + 2\n\n        mode = str(self._mode).lower()\n        if self._mode == PromptMode.AGENT:\n            mode_details: list[str] = []\n            if self._model_name:\n                mode_details.append(self._model_name)\n            if self._thinking:\n                mode_details.append(\"thinking\")\n            if mode_details:\n                mode += f\" ({', '.join(mode_details)})\"\n        status = self._status_provider()\n        if status.yolo_enabled:\n            fragments.extend([(\"bold fg:#ffff00\", \"yolo\"), (\"\", \" \" * 2)])\n            columns -= len(\"yolo\") + 2\n        fragments.extend([(\"\", f\"{mode}\"), (\"\", \" \" * 2)])\n        columns -= len(mode) + 2\n        right_text = self._render_right_span(status)\n\n        current_toast_left = _current_toast(\"left\")\n        if current_toast_left is not None:\n            fragments.extend([(\"\", current_toast_left.message), (\"\", \" \" * 2)])\n            columns -= len(current_toast_left.message) + 2\n            current_toast_left.duration -= _REFRESH_INTERVAL\n            if current_toast_left.duration <= 0.0:\n                _toast_queues[\"left\"].popleft()\n        else:\n            shortcut_candidates = [\n                \"ctrl-x: toggle mode | ctrl-o: editor | ctrl-j: newline\",\n                \"ctrl-o: editor | ctrl-j: newline\",\n                \"ctrl-j / alt-enter: newline\",\n            ]\n            for shortcuts in shortcut_candidates:\n                if columns - len(right_text) > len(shortcuts) + 2:\n                    fragments.extend([(\"\", shortcuts), (\"\", \" \" * 2)])\n                    columns -= len(shortcuts) + 2\n                    break\n\n        padding = max(1, columns - len(right_text))\n        fragments.append((\"\", \" \" * padding))\n        fragments.append((\"\", right_text))\n\n        return FormattedText(fragments)\n\n    @staticmethod\n    def _render_right_span(status: StatusSnapshot) -> str:\n        current_toast = _current_toast(\"right\")\n        if current_toast is None:\n            bounded = max(0.0, min(status.context_usage, 1.0))\n            return f\"context: {bounded:.1%}\"\n\n        current_toast.duration -= _REFRESH_INTERVAL\n        if current_toast.duration <= 0.0:\n            _toast_queues[\"right\"].popleft()\n        return current_toast.message\n"
     },
     "complexity_metrics": {
-      "cyclomatic_complexity": 114.0,
-      "lines_of_code": 943,
-      "number_of_classes": 7,
-      "number_of_functions": 22
+      "cyclomatic_complexity": 116.0,
+      "lines_of_code": 975,
+      "number_of_classes": 9,
+      "number_of_functions": 40
     },
     "dependencies": [
       {
-        "dependency_type": "library",
+        "dependency_type": "import",
         "is_external": true,
         "line_number": null,
         "name": "prompt_toolkit",
@@ -29852,15 +30006,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "library",
-        "is_external": true,
-        "line_number": null,
-        "name": "PIL",
-        "path": null,
-        "version": null
-      },
-      {
-        "dependency_type": "library",
+        "dependency_type": "import",
         "is_external": true,
         "line_number": null,
         "name": "pydantic",
@@ -29868,184 +30014,217 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "module",
+        "dependency_type": "import",
+        "is_external": true,
+        "line_number": null,
+        "name": "PIL.Image",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "import",
         "is_external": false,
-        "line_number": 46,
+        "line_number": null,
         "name": "kimi_cli.llm",
-        "path": "kimi_cli/llm",
+        "path": "src/kimi_cli/llm",
         "version": null
       },
       {
-        "dependency_type": "module",
+        "dependency_type": "import",
         "is_external": false,
-        "line_number": 47,
-        "name": "kimi_cli.share",
-        "path": "kimi_cli/share",
-        "version": null
-      },
-      {
-        "dependency_type": "module",
-        "is_external": false,
-        "line_number": 48,
+        "line_number": null,
         "name": "kimi_cli.soul",
-        "path": "kimi_cli/soul",
+        "path": "src/kimi_cli/soul",
         "version": null
       },
       {
-        "dependency_type": "module",
+        "dependency_type": "import",
         "is_external": false,
-        "line_number": 49,
+        "line_number": null,
         "name": "kimi_cli.ui.shell.console",
-        "path": "kimi_cli/ui/shell/console",
+        "path": "src/kimi_cli/ui/shell/console",
         "version": null
       },
       {
-        "dependency_type": "module",
+        "dependency_type": "import",
         "is_external": false,
-        "line_number": 50,
+        "line_number": null,
         "name": "kimi_cli.utils.clipboard",
-        "path": "kimi_cli/utils/clipboard",
+        "path": "src/kimi_cli/utils/clipboard",
         "version": null
       },
       {
-        "dependency_type": "module",
+        "dependency_type": "import",
         "is_external": false,
-        "line_number": 51,
+        "line_number": null,
         "name": "kimi_cli.utils.logging",
-        "path": "kimi_cli/utils/logging",
+        "path": "src/kimi_cli/utils/logging",
         "version": null
       },
       {
-        "dependency_type": "module",
+        "dependency_type": "import",
         "is_external": false,
-        "line_number": 52,
-        "name": "kimi_cli.utils.media_tags",
-        "path": "kimi_cli/utils/media_tags",
-        "version": null
-      },
-      {
-        "dependency_type": "module",
-        "is_external": false,
-        "line_number": 53,
+        "line_number": null,
         "name": "kimi_cli.utils.slashcmd",
-        "path": "kimi_cli/utils/slashcmd",
+        "path": "src/kimi_cli/utils/slashcmd",
         "version": null
       },
       {
-        "dependency_type": "module",
+        "dependency_type": "import",
         "is_external": false,
-        "line_number": 54,
-        "name": "kimi_cli.utils.string",
-        "path": "kimi_cli/utils/string",
-        "version": null
-      },
-      {
-        "dependency_type": "module",
-        "is_external": false,
-        "line_number": 55,
+        "line_number": null,
         "name": "kimi_cli.wire.types",
-        "path": "kimi_cli/wire/types",
+        "path": "src/kimi_cli/wire/types",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": true,
+        "line_number": null,
+        "name": "kaos.path",
+        "path": null,
         "version": null
       }
     ],
-    "detailed_description": "This is a sophisticated interactive shell prompt component that provides a dual-mode interface for Kimi CLI. It supports both agent mode (AI assistant) and shell mode (command line), with intelligent autocompletion for slash commands and local file mentions. The component handles rich content including images from clipboard, manages user history persistence, provides toast notifications, and maintains an attachment cache for media files. It features a real-time status display, context-aware completers, and robust error handling for various edge cases.",
+    "detailed_description": "This component implements a comprehensive interactive prompt interface for the kimi_cli AI assistant application. It provides: (1) Multi-mode prompt system with AGENT mode for AI interaction and SHELL mode for command execution; (2) Intelligent auto-completion via SlashCommandCompleter for fuzzy-matched slash commands and LocalFileMentionCompleter for file path suggestions using @ mention syntax; (3) Rich content support handling text and image content parts with clipboard image paste functionality; (4) Persistent JSONL-based command history with workspace-specific isolation via MD5 hashing; (5) Toast notification system for temporary status messages; (6) External editor integration via Ctrl+O; (7) Dynamic bottom toolbar rendering with real-time status updates. The component serves as the primary user interface layer bridging terminal input with backend AI/shell processing systems.",
     "interfaces": [
       {
-        "description": "Provides slash command completions with fuzzy matching",
-        "interface_type": "method",
-        "name": "SlashCommandCompleter.get_completions",
-        "parameters": [
-          {
-            "description": "Document object containing text context",
-            "is_optional": false,
-            "name": "document",
-            "param_type": "Document"
-          },
-          {
-            "description": "Completion event trigger",
-            "is_optional": false,
-            "name": "complete_event",
-            "param_type": "CompleteEvent"
-          }
-        ],
-        "return_type": "Iterable[Completion]",
-        "visibility": "public"
-      },
-      {
-        "description": "Provides local file path completions with @ mentions",
-        "interface_type": "method",
-        "name": "LocalFileMentionCompleter.get_completions",
-        "parameters": [
-          {
-            "description": "Document object containing text context",
-            "is_optional": false,
-            "name": "document",
-            "param_type": "Document"
-          },
-          {
-            "description": "Completion event trigger",
-            "is_optional": false,
-            "name": "complete_event",
-            "param_type": "CompleteEvent"
-          }
-        ],
-        "return_type": "Iterable[Completion]",
-        "visibility": "public"
-      },
-      {
-        "description": "Main entry point for getting user input with rich content parsing",
-        "interface_type": "method",
-        "name": "CustomPromptSession.prompt",
+        "description": "Completer for slash commands with fuzzy matching and alias support, shows one line per command in format '/name (alias1, alias2)'",
+        "interface_type": "class",
+        "name": "SlashCommandCompleter",
         "parameters": [],
-        "return_type": "UserInput",
+        "return_type": null,
         "visibility": "public"
       },
       {
-        "description": "Displays toast notification in the prompt interface",
+        "description": "Offers fuzzy @ path completion by indexing workspace files with extensive ignore patterns for VCS, build artifacts, and cache directories",
+        "interface_type": "class",
+        "name": "LocalFileMentionCompleter",
+        "parameters": [],
+        "return_type": null,
+        "visibility": "public"
+      },
+      {
+        "description": "Enum for prompt modes: AGENT for AI assistant interaction, SHELL for command execution",
+        "interface_type": "enum",
+        "name": "PromptMode",
+        "parameters": [],
+        "return_type": null,
+        "visibility": "public"
+      },
+      {
+        "description": "Pydantic model representing user input with mode, plain text command, and rich content parts list",
+        "interface_type": "model",
+        "name": "UserInput",
+        "parameters": [],
+        "return_type": null,
+        "visibility": "public"
+      },
+      {
+        "description": "Caching mechanism for attachments (primarily images) with SHA256-based deduplication and persistent storage",
+        "interface_type": "class",
+        "name": "AttachmentCache",
+        "parameters": [],
+        "return_type": null,
+        "visibility": "public"
+      },
+      {
+        "description": "Main session class managing the interactive prompt with context manager support, key bindings, completion, and async status refresh",
+        "interface_type": "class",
+        "name": "CustomPromptSession",
+        "parameters": [
+          {
+            "description": null,
+            "is_optional": false,
+            "name": "status_provider",
+            "param_type": "Callable[[], StatusSnapshot]"
+          },
+          {
+            "description": null,
+            "is_optional": false,
+            "name": "model_capabilities",
+            "param_type": "set[ModelCapability]"
+          },
+          {
+            "description": null,
+            "is_optional": false,
+            "name": "model_name",
+            "param_type": "str | None"
+          },
+          {
+            "description": null,
+            "is_optional": false,
+            "name": "thinking",
+            "param_type": "bool"
+          },
+          {
+            "description": null,
+            "is_optional": false,
+            "name": "agent_mode_slash_commands",
+            "param_type": "Sequence[SlashCommand[Any]]"
+          },
+          {
+            "description": null,
+            "is_optional": false,
+            "name": "shell_mode_slash_commands",
+            "param_type": "Sequence[SlashCommand[Any]]"
+          },
+          {
+            "description": null,
+            "is_optional": true,
+            "name": "editor_command_provider",
+            "param_type": "Callable[[], str]"
+          }
+        ],
+        "return_type": null,
+        "visibility": "public"
+      },
+      {
+        "description": "Queue a toast notification message with optional topic for deduplication and positioning support",
         "interface_type": "function",
         "name": "toast",
         "parameters": [
           {
-            "description": "Toast message to display",
+            "description": null,
             "is_optional": false,
             "name": "message",
             "param_type": "str"
           },
           {
-            "description": "Duration in seconds (default: 5.0)",
+            "description": null,
             "is_optional": true,
             "name": "duration",
             "param_type": "float"
           },
           {
-            "description": "Topic for deduplication",
+            "description": null,
             "is_optional": true,
             "name": "topic",
             "param_type": "str | None"
           },
           {
-            "description": "Show immediately (default: False)",
+            "description": null,
             "is_optional": true,
             "name": "immediate",
             "param_type": "bool"
           },
           {
-            "description": "Position on screen (default: left)",
+            "description": null,
             "is_optional": true,
             "name": "position",
-            "param_type": "Literal[\"left\", \"right\"]"
+            "param_type": "Literal['left', 'right']"
           }
         ],
-        "return_type": "None",
+        "return_type": null,
         "visibility": "public"
       }
     ],
     "responsibilities": [
-      "Interactive user input handling with dual modes (agent/shell)",
-      "Intelligent autocompletion for slash commands and local files",
-      "Attachment management and media content handling",
-      "User history persistence and management",
-      "Real-time status display and toast notifications"
+      "Interactive user input collection with multiline support and keyboard shortcuts",
+      "Autocomplete intelligence for slash commands and file mentions with fuzzy matching",
+      "Session state management including prompt mode, thinking state, and command history",
+      "Multimodal content handling with image clipboard paste and base64 encoding",
+      "Dynamic UI rendering including prompt symbols, status toolbar, and toast notifications"
     ]
   },
   {
@@ -32365,34 +32544,31 @@ Code analysis results from preprocessing phase, including definitions of functio
   {
     "code_dossier": {
       "code_purpose": "tool",
-      "description": null,
+      "description": "A file writing tool that provides safe file write operations with two modes (overwrite/append), path validation against workspace boundaries, approval workflow integration, and visual diff display for tracking changes.",
       "file_path": "src/kimi_cli/tools/file/write.py",
       "functions": [
+        "__init__",
         "_validate_path",
         "__call__"
       ],
       "importance_score": 0.8,
       "interfaces": [
-        "Params",
         "WriteFile",
-        "_validate_path",
-        "__call__",
-        "overwrite",
-        "append"
+        "Params"
       ],
       "name": "write.py",
-      "source_summary": "from pathlib import Path\nfrom typing import Literal, override\n\nfrom kaos.path import KaosPath\nfrom kosong.tooling import CallableTool2, ToolError, ToolReturnValue\nfrom pydantic import BaseModel, Field\n\nfrom kimi_cli.soul.agent import BuiltinSystemPromptArgs\nfrom kimi_cli.soul.approval import Approval\nfrom kimi_cli.tools.display import DisplayBlock\nfrom kimi_cli.tools.file import FileActions\nfrom kimi_cli.tools.utils import ToolRejectedError, load_desc\nfrom kimi_cli.utils.diff import build_diff_blocks\nfrom kimi_cli.utils.path import is_within_directory\n\n\nclass Params(BaseModel):\n    path: str = Field(\n        description=(\n            \"The path to the file to write. Absolute paths are required when writing files \"\n            \"outside the working directory.\"\n        )\n    )\n    content: str = Field(description=\"The content to write to the file\")\n    mode: Literal[\"overwrite\", \"append\"] = Field(\n        description=(\n            \"The mode to use to write to the file. \"\n            \"Two modes are supported: `overwrite` for overwriting the whole file and \"\n            \"`append` for appending to the end of an existing file.\"\n        ),\n        default=\"overwrite\",\n    )\n\n\nclass WriteFile(CallableTool2[Params]):\n    name: str = \"WriteFile\"\n    description: str = load_desc(Path(__file__).parent / \"write.md\")\n    params: type[Params] = Params\n\n    def __init__(self, builtin_args: BuiltinSystemPromptArgs, approval: Approval):\n        super().__init__()\n        self._work_dir = builtin_args.KIMI_WORK_DIR\n        self._approval = approval\n\n    async def _validate_path(self, path: KaosPath) -> ToolError | None:\n        \"\"\"Validate that the path is safe to write.\"\"\"\n        resolved_path = path.canonical()\n\n        if not is_within_directory(resolved_path, self._work_dir) and not path.is_absolute():\n            return ToolError(\n                message=(\n                    f\"`{path}` is not an absolute path. \"\n                    \"You must provide an absolute path to write a file \"\n                    \"outside the working directory.\"\n                ),\n                brief=\"Invalid path\",\n            )\n        return None\n\n    @override\n    async def __call__(self, params: Params) -> ToolReturnValue:\n        # TODO: checks:\n        # - check if the path may contain secrets\n        if not params.path:\n            return ToolError(\n                message=\"File path cannot be empty.\",\n                brief=\"Empty file path\",\n            )\n\n        try:\n            p = KaosPath(params.path).expanduser()\n\n            if err := await self._validate_path(p):\n                return err\n            p = p.canonical()\n\n            if not await p.parent.exists():\n                return ToolError(\n                    message=f\"`{params.path}` parent directory does not exist.\",\n                    brief=\"Parent directory not found\",\n                )\n\n            # Validate mode parameter\n            if params.mode not in [\"overwrite\", \"append\"]:\n                return ToolError(\n                    message=(\n                        f\"Invalid write mode: `{params.mode}`. \"\n                        \"Mode must be either `overwrite` or `append`.\"\n                    ),\n                    brief=\"Invalid write mode\",\n                )\n\n            file_existed = await p.exists()\n            old_text = None\n            if file_existed:\n                old_text = await p.read_text(errors=\"replace\")\n\n            new_text = (\n                params.content if params.mode == \"overwrite\" else (old_text or \"\") + params.content\n            )\n            diff_blocks: list[DisplayBlock] = list(\n                build_diff_blocks(\n                    str(p),\n                    old_text or \"\",\n                    new_text,\n                )\n            )\n\n            action = (\n                FileActions.EDIT\n                if is_within_directory(p, self._work_dir)\n                else FileActions.EDIT_OUTSIDE\n            )\n\n            # Request approval\n            if not await self._approval.request(\n                self.name,\n                action,\n                f\"Write file `{p}`\",\n                display=diff_blocks,\n            ):\n                return ToolRejectedError()\n\n            # Write content to file\n            match params.mode:\n                case \"overwrite\":\n                    await p.write_text(params.content)\n                case \"append\":\n                    await p.append_text(params.content)\n\n            # Get file info for success message\n            file_size = (await p.stat()).st_size\n            action = \"overwritten\" if params.mode == \"overwrite\" else \"appended to\"\n            return ToolReturnValue(\n                is_error=False,\n                output=\"\",\n                message=(f\"File successfully {action}. Current size: {file_size} bytes.\"),\n                display=diff_blocks,\n            )\n\n        except Exception as e:\n            return ToolError(\n                message=f\"Failed to write to {params.path}. Error: {e}\",\n                brief=\"Failed to write file\",\n            )\n"
+      "source_summary": "from pathlib import Path\nfrom typing import Literal, override\n\nfrom kaos.path import KaosPath\nfrom kosong.tooling import CallableTool2, ToolError, ToolReturnValue\nfrom pydantic import BaseModel, Field\n\nfrom kimi_cli.soul.agent import Runtime\nfrom kimi_cli.soul.approval import Approval\nfrom kimi_cli.tools.display import DisplayBlock\nfrom kimi_cli.tools.file import FileActions\nfrom kimi_cli.tools.utils import ToolRejectedError, load_desc\nfrom kimi_cli.utils.diff import build_diff_blocks\nfrom kimi_cli.utils.path import is_within_workspace\n\n\nclass Params(BaseModel):\n    path: str = Field(\n        description=(\n            \"The path to the file to write. Absolute paths are required when writing files \"\n            \"outside the working directory.\"\n        )\n    )\n    content: str = Field(description=\"The content to write to the file\")\n    mode: Literal[\"overwrite\", \"append\"] = Field(\n        description=(\n            \"The mode to use to write to the file. \"\n            \"Two modes are supported: `overwrite` for overwriting the whole file and \"\n            \"`append` for appending to the end of an existing file.\"\n        ),\n        default=\"overwrite\",\n    )\n\n\nclass WriteFile(CallableTool2[Params]):\n    name: str = \"WriteFile\"\n    description: str = load_desc(Path(__file__).parent / \"write.md\")\n    params: type[Params] = Params\n\n    def __init__(self, runtime: Runtime, approval: Approval):\n        super().__init__()\n        self._work_dir = runtime.builtin_args.KIMI_WORK_DIR\n        self._additional_dirs = runtime.additional_dirs\n        self._approval = approval\n\n    async def _validate_path(self, path: KaosPath) -> ToolError | None:\n        \"\"\"Validate that the path is safe to write.\"\"\"\n        resolved_path = path.canonical()\n\n        if (\n            not is_within_workspace(resolved_path, self._work_dir, self._additional_dirs)\n            and not path.is_absolute()\n        ):\n            return ToolError(\n                message=(\n                    f\"`{path}` is not an absolute path. \"\n                    \"You must provide an absolute path to write a file \"\n                    \"outside the working directory.\"\n                ),\n                brief=\"Invalid path\",\n            )\n        return None\n\n    @override\n    async def __call__(self, params: Params) -> ToolReturnValue:\n        # TODO: checks:\n        # - check if the path may contain secrets\n        if not params.path:\n            return ToolError(\n                message=\"File path cannot be empty.\",\n                brief=\"Empty file path\",\n            )\n\n        try:\n            p = KaosPath(params.path).expanduser()\n\n            if err := await self._validate_path(p):\n                return err\n            p = p.canonical()\n\n            if not await p.parent.exists():\n                return ToolError(\n                    message=f\"`{params.path}` parent directory does not exist.\",\n                    brief=\"Parent directory not found\",\n                )\n\n            # Validate mode parameter\n            if params.mode not in [\"overwrite\", \"append\"]:\n                return ToolError(\n                    message=(\n                        f\"Invalid write mode: `{params.mode}`. \"\n                        \"Mode must be either `overwrite` or `append`.\"\n                    ),\n                    brief=\"Invalid write mode\",\n                )\n\n            file_existed = await p.exists()\n            old_text = None\n            if file_existed:\n                old_text = await p.read_text(errors=\"replace\")\n\n            new_text = (\n                params.content if params.mode == \"overwrite\" else (old_text or \"\") + params.content\n            )\n            diff_blocks: list[DisplayBlock] = list(\n                build_diff_blocks(\n                    str(p),\n                    old_text or \"\",\n                    new_text,\n                )\n            )\n\n            action = (\n                FileActions.EDIT\n                if is_within_workspace(p, self._work_dir, self._additional_dirs)\n                else FileActions.EDIT_OUTSIDE\n            )\n\n            # Request approval\n            if not await self._approval.request(\n                self.name,\n                action,\n                f\"Write file `{p}`\",\n                display=diff_blocks,\n            ):\n                return ToolRejectedError()\n\n            # Write content to file\n            match params.mode:\n                case \"overwrite\":\n                    await p.write_text(params.content)\n                case \"append\":\n                    await p.append_text(params.content)\n\n            # Get file info for success message\n            file_size = (await p.stat()).st_size\n            action = \"overwritten\" if params.mode == \"overwrite\" else \"appended to\"\n            return ToolReturnValue(\n                is_error=False,\n                output=\"\",\n                message=(f\"File successfully {action}. Current size: {file_size} bytes.\"),\n                display=diff_blocks,\n            )\n\n        except Exception as e:\n            return ToolError(\n                message=f\"Failed to write to {params.path}. Error: {e}\",\n                brief=\"Failed to write file\",\n            )\n"
     },
     "complexity_metrics": {
       "cyclomatic_complexity": 18.0,
-      "lines_of_code": 145,
+      "lines_of_code": 149,
       "number_of_classes": 2,
-      "number_of_functions": 2
+      "number_of_functions": 3
     },
     "dependencies": [
       {
         "dependency_type": "import",
-        "is_external": true,
+        "is_external": false,
         "line_number": 1,
         "name": "Path",
         "path": "pathlib",
@@ -32400,7 +32576,7 @@ Code analysis results from preprocessing phase, including definitions of functio
       },
       {
         "dependency_type": "import",
-        "is_external": true,
+        "is_external": false,
         "line_number": 2,
         "name": "Literal",
         "path": "typing",
@@ -32408,7 +32584,7 @@ Code analysis results from preprocessing phase, including definitions of functio
       },
       {
         "dependency_type": "import",
-        "is_external": true,
+        "is_external": false,
         "line_number": 2,
         "name": "override",
         "path": "typing",
@@ -32416,7 +32592,7 @@ Code analysis results from preprocessing phase, including definitions of functio
       },
       {
         "dependency_type": "import",
-        "is_external": true,
+        "is_external": false,
         "line_number": 4,
         "name": "KaosPath",
         "path": "kaos.path",
@@ -32424,7 +32600,7 @@ Code analysis results from preprocessing phase, including definitions of functio
       },
       {
         "dependency_type": "import",
-        "is_external": true,
+        "is_external": false,
         "line_number": 5,
         "name": "CallableTool2",
         "path": "kosong.tooling",
@@ -32432,7 +32608,7 @@ Code analysis results from preprocessing phase, including definitions of functio
       },
       {
         "dependency_type": "import",
-        "is_external": true,
+        "is_external": false,
         "line_number": 5,
         "name": "ToolError",
         "path": "kosong.tooling",
@@ -32440,7 +32616,7 @@ Code analysis results from preprocessing phase, including definitions of functio
       },
       {
         "dependency_type": "import",
-        "is_external": true,
+        "is_external": false,
         "line_number": 5,
         "name": "ToolReturnValue",
         "path": "kosong.tooling",
@@ -32463,15 +32639,15 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 8,
-        "name": "BuiltinSystemPromptArgs",
+        "name": "Runtime",
         "path": "kimi_cli.soul.agent",
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 9,
         "name": "Approval",
@@ -32479,63 +32655,60 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 10,
         "name": "DisplayBlock",
         "path": "kimi_cli.tools.display",
         "version": null
-      },
-      {
-        "dependency_type": "internal",
-        "is_external": false,
-        "line_number": 11,
-        "name": "FileActions",
-        "path": "kimi_cli.tools.file",
-        "version": null
-      },
-      {
-        "dependency_type": "internal",
-        "is_external": false,
-        "line_number": 12,
-        "name": "ToolRejectedError",
-        "path": "kimi_cli.tools.utils",
-        "version": null
-      },
-      {
-        "dependency_type": "internal",
-        "is_external": false,
-        "line_number": 12,
-        "name": "load_desc",
-        "path": "kimi_cli.tools.utils",
-        "version": null
-      },
-      {
-        "dependency_type": "internal",
-        "is_external": false,
-        "line_number": 13,
-        "name": "build_diff_blocks",
-        "path": "kimi_cli.utils.diff",
-        "version": null
-      },
-      {
-        "dependency_type": "internal",
-        "is_external": false,
-        "line_number": 14,
-        "name": "is_within_directory",
-        "path": "kimi_cli.utils.path",
-        "version": null
       }
     ],
-    "detailed_description": "A file writing tool that provides controlled file operations with safety validations, user approval mechanisms, and change visualization. It supports both overwrite and append modes, validates file paths for security, generates diff displays for user review, and implements comprehensive error handling for file operations.",
+    "detailed_description": "WriteFile is a callable tool component designed for safe file writing operations in a CLI application context. It extends CallableTool2 and implements a secure file writing mechanism with the following capabilities:\\n\\n1. **Dual Write Modes**: Supports 'overwrite' mode (replaces entire file content) and 'append' mode (adds content to end of existing file)\\n\\n2. **Path Validation**: Validates that file paths are either within the configured workspace directories or are absolute paths when writing outside the workspace. This prevents accidental writes to unauthorized locations.\\n\\n3. **Approval Workflow**: Integrates with an approval system that requires user confirmation before performing file modifications, displaying a diff preview of changes.\\n\\n4. **Diff Visualization**: Generates and displays diff blocks showing the comparison between old and new file content, enabling users to review changes before approval.\\n\\n5. **Error Handling**: Provides comprehensive error handling for scenarios including empty paths, non-existent parent directories, invalid write modes, and file system exceptions.\\n\\n6. **File Metadata**: Reports file size after successful write operations.\\n\\nThe tool uses Pydantic's BaseModel for parameter validation and follows an async pattern for non-blocking file operations.\"",
     "interfaces": [
       {
-        "description": "Validates that the file path is safe to write, checking if it's within the working directory or uses absolute paths for external operations",
+        "description": "Pydantic BaseModel defining the parameters for file write operations: path (str), content (str), and mode (Literal['overwrite', 'append'])",
+        "interface_type": "class",
+        "name": "Params",
+        "parameters": [],
+        "return_type": null,
+        "visibility": "public"
+      },
+      {
+        "description": "Main tool class extending CallableTool2[Params] that implements the file writing functionality with validation, approval, and diff display",
+        "interface_type": "class",
+        "name": "WriteFile",
+        "parameters": [],
+        "return_type": null,
+        "visibility": "public"
+      },
+      {
+        "description": "Initializes the WriteFile tool with workspace directories and approval system",
+        "interface_type": "method",
+        "name": "__init__",
+        "parameters": [
+          {
+            "description": "Runtime object containing workspace directory configuration",
+            "is_optional": false,
+            "name": "runtime",
+            "param_type": "Runtime"
+          },
+          {
+            "description": "Approval system for requesting user confirmation",
+            "is_optional": false,
+            "name": "approval",
+            "param_type": "Approval"
+          }
+        ],
+        "return_type": "None",
+        "visibility": "public"
+      },
+      {
+        "description": "Validates that the path is within workspace or is an absolute path for writes outside workspace",
         "interface_type": "method",
         "name": "_validate_path",
         "parameters": [
           {
-            "description": null,
+            "description": "The file path to validate",
             "is_optional": false,
             "name": "path",
             "param_type": "KaosPath"
@@ -32545,12 +32718,12 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "private"
       },
       {
-        "description": "Main execution method that orchestrates file writing operations including validation, approval, and execution",
+        "description": "Main execution method that performs path validation, approval request, and file write operation",
         "interface_type": "method",
         "name": "__call__",
         "parameters": [
           {
-            "description": null,
+            "description": "Parameters containing path, content, and mode for the write operation",
             "is_optional": false,
             "name": "params",
             "param_type": "Params"
@@ -32560,82 +32733,52 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Parameter model defining file writing operation inputs including path, content, and mode",
-        "interface_type": "class",
-        "name": "Params",
+        "description": "Tool name identifier set to 'WriteFile'",
+        "interface_type": "attribute",
+        "name": "name",
         "parameters": [],
-        "return_type": null,
-        "visibility": "public"
-      },
-      {
-        "description": "Main tool class implementing file writing functionality",
-        "interface_type": "class",
-        "name": "WriteFile",
-        "parameters": [],
-        "return_type": null,
-        "visibility": "public"
-      },
-      {
-        "description": "Write mode that replaces entire file content",
-        "interface_type": "parameter",
-        "name": "overwrite",
-        "parameters": [],
-        "return_type": null,
-        "visibility": "public"
-      },
-      {
-        "description": "Write mode that adds content to the end of existing file",
-        "interface_type": "parameter",
-        "name": "append",
-        "parameters": [],
-        "return_type": null,
+        "return_type": "str",
         "visibility": "public"
       }
     ],
     "responsibilities": [
-      "File path validation and security checks",
-      "File content writing with overwrite/append modes",
-      "User approval workflow management",
-      "Change visualization through diff generation",
-      "Error handling and safety enforcement"
+      "Execute file write operations in overwrite or append mode with proper validation",
+      "Validate file paths to ensure they are within allowed workspace directories or use absolute paths",
+      "Request user approval before performing file modifications through the approval workflow",
+      "Generate and display visual diff blocks showing changes between old and new file content",
+      "Handle and report errors for invalid paths, missing directories, and file system exceptions"
     ]
   },
   {
     "code_dossier": {
       "code_purpose": "tool",
-      "description": null,
+      "description": "A functional tool for reading and processing media files (images and videos) in the kimi_cli system. This tool validates file paths, detects file types using magic bytes, enforces size limits, and converts media content to appropriate formats for LLM consumption (base64 data URLs or platform-specific upload). It provides security through workspace boundary validation and capability-aware processing based on the LLM's supported input types.",
       "file_path": "src/kimi_cli/tools/file/read_media.py",
       "functions": [
         "_to_data_url",
         "_extract_image_size",
+        "__init__",
         "_validate_path",
         "_read_media",
         "__call__"
       ],
       "importance_score": 0.8,
       "interfaces": [
-        "Params",
         "ReadMediaFile",
-        "_to_data_url",
-        "_extract_image_size",
-        "_validate_path",
-        "_read_media",
-        "__call__",
-        "MAX_MEDIA_MEGABYTES",
-        "MEDIA_SNIFF_BYTES"
+        "Params"
       ],
       "name": "read_media.py",
-      "source_summary": "import base64\nfrom io import BytesIO\nfrom pathlib import Path\nfrom typing import override\n\nfrom kaos.path import KaosPath\nfrom kosong.chat_provider.kimi import Kimi\nfrom kosong.tooling import CallableTool2, ToolError, ToolOk, ToolReturnValue\nfrom pydantic import BaseModel, Field\n\nfrom kimi_cli.soul.agent import Runtime\nfrom kimi_cli.tools import SkipThisTool\nfrom kimi_cli.tools.file.utils import MEDIA_SNIFF_BYTES, FileType, detect_file_type\nfrom kimi_cli.tools.utils import load_desc\nfrom kimi_cli.utils.media_tags import wrap_media_part\nfrom kimi_cli.utils.path import is_within_directory\nfrom kimi_cli.wire.types import ImageURLPart, VideoURLPart\n\nMAX_MEDIA_MEGABYTES = 100\n\n\ndef _to_data_url(mime_type: str, data: bytes) -> str:\n    encoded = base64.b64encode(data).decode(\"ascii\")\n    return f\"data:{mime_type};base64,{encoded}\"\n\n\ndef _extract_image_size(data: bytes) -> tuple[int, int] | None:\n    try:\n        from PIL import Image\n    except Exception:\n        return None\n    try:\n        with Image.open(BytesIO(data)) as image:\n            image.load()\n            return image.size\n    except Exception:\n        return None\n\n\nclass Params(BaseModel):\n    path: str = Field(\n        description=(\n            \"The path to the file to read. Absolute paths are required when reading files \"\n            \"outside the working directory.\"\n        )\n    )\n\n\nclass ReadMediaFile(CallableTool2[Params]):\n    name: str = \"ReadMediaFile\"\n    params: type[Params] = Params\n\n    def __init__(self, runtime: Runtime) -> None:\n        capabilities = runtime.llm.capabilities if runtime.llm else set[str]()\n        if \"image_in\" not in capabilities and \"video_in\" not in capabilities:\n            raise SkipThisTool()\n\n        description = load_desc(\n            Path(__file__).parent / \"read_media.md\",\n            {\n                \"MAX_MEDIA_MEGABYTES\": MAX_MEDIA_MEGABYTES,\n                \"capabilities\": capabilities,\n            },\n        )\n        super().__init__(description=description)\n\n        self._runtime = runtime\n        self._work_dir = runtime.builtin_args.KIMI_WORK_DIR\n        self._capabilities = capabilities\n\n    async def _validate_path(self, path: KaosPath) -> ToolError | None:\n        \"\"\"Validate that the path is safe to read.\"\"\"\n        resolved_path = path.canonical()\n\n        if not is_within_directory(resolved_path, self._work_dir) and not path.is_absolute():\n            # Outside files can only be read with absolute paths\n            return ToolError(\n                message=(\n                    f\"`{path}` is not an absolute path. \"\n                    \"You must provide an absolute path to read a file \"\n                    \"outside the working directory.\"\n                ),\n                brief=\"Invalid path\",\n            )\n        return None\n\n    async def _read_media(self, path: KaosPath, file_type: FileType) -> ToolReturnValue:\n        assert file_type.kind in (\"image\", \"video\")\n\n        media_path = str(path)\n        stat = await path.stat()\n        size = stat.st_size\n        if size == 0:\n            return ToolError(\n                message=f\"`{path}` is empty.\",\n                brief=\"Empty file\",\n            )\n        if size > (MAX_MEDIA_MEGABYTES << 20):\n            return ToolError(\n                message=(\n                    f\"`{path}` is {size} bytes, which exceeds the max \"\n                    f\"{MAX_MEDIA_MEGABYTES}MB bytes for media files.\"\n                ),\n                brief=\"File too large\",\n            )\n\n        match file_type.kind:\n            case \"image\":\n                data = await path.read_bytes()\n                data_url = _to_data_url(file_type.mime_type, data)\n                part = ImageURLPart(image_url=ImageURLPart.ImageURL(url=data_url))\n                wrapped = wrap_media_part(part, tag=\"image\", attrs={\"path\": media_path})\n                image_size = _extract_image_size(data)\n            case \"video\":\n                data = await path.read_bytes()\n                if (llm := self._runtime.llm) and isinstance(llm.chat_provider, Kimi):\n                    part = await llm.chat_provider.files.upload_video(\n                        data=data,\n                        mime_type=file_type.mime_type,\n                    )\n                    wrapped = wrap_media_part(part, tag=\"video\", attrs={\"path\": media_path})\n                else:\n                    data_url = _to_data_url(file_type.mime_type, data)\n                    part = VideoURLPart(video_url=VideoURLPart.VideoURL(url=data_url))\n                    wrapped = wrap_media_part(part, tag=\"video\", attrs={\"path\": media_path})\n                image_size = None\n\n        size_hint = \"\"\n        if image_size:\n            size_hint = f\", original size {image_size[0]}x{image_size[1]}px\"\n        note = (\n            \" If you need to output coordinates, output relative coordinates first and \"\n            \"compute absolute coordinates using the original image size; if you generate or \"\n            \"edit images/videos via commands or scripts, read the result back immediately \"\n            \"before continuing.\"\n        )\n        return ToolOk(\n            output=wrapped,\n            message=(\n                f\"Loaded {file_type.kind} file `{path}` \"\n                f\"({file_type.mime_type}, {size} bytes{size_hint}).{note}\"\n            ),\n        )\n\n    @override\n    async def __call__(self, params: Params) -> ToolReturnValue:\n        if not params.path:\n            return ToolError(\n                message=\"File path cannot be empty.\",\n                brief=\"Empty file path\",\n            )\n\n        try:\n            p = KaosPath(params.path).expanduser()\n            if err := await self._validate_path(p):\n                return err\n            p = p.canonical()\n\n            if not await p.exists():\n                return ToolError(\n                    message=f\"`{params.path}` does not exist.\",\n                    brief=\"File not found\",\n                )\n            if not await p.is_file():\n                return ToolError(\n                    message=f\"`{params.path}` is not a file.\",\n                    brief=\"Invalid path\",\n                )\n\n            header = await p.read_bytes(MEDIA_SNIFF_BYTES)\n            file_type = detect_file_type(str(p), header=header)\n            if file_type.kind == \"text\":\n                return ToolError(\n                    message=f\"`{params.path}` is a text file. Use ReadFile to read text files.\",\n                    brief=\"Unsupported file type\",\n                )\n            if file_type.kind == \"unknown\":\n                return ToolError(\n                    message=(\n                        f\"`{params.path}` seems not readable as an image or video file. \"\n                        \"You may need to read it with proper shell commands, Python tools \"\n                        \"or MCP tools if available. \"\n                        \"If you read/operate it with Python, you MUST ensure that any \"\n                        \"third-party packages are installed in a virtual environment (venv).\"\n                    ),\n                    brief=\"File not readable\",\n                )\n\n            if file_type.kind == \"image\" and \"image_in\" not in self._capabilities:\n                return ToolError(\n                    message=(\n                        \"The current model does not support image input. \"\n                        \"Tell the user to use a model with image input capability.\"\n                    ),\n                    brief=\"Unsupported media type\",\n                )\n            if file_type.kind == \"video\" and \"video_in\" not in self._capabilities:\n                return ToolError(\n                    message=(\n                        \"The current model does not support video input. \"\n                        \"Tell the user to use a model with video input capability.\"\n                    ),\n                    brief=\"Unsupported media type\",\n                )\n\n            return await self._read_media(p, file_type)\n        except Exception as e:\n            return ToolError(\n                message=f\"Failed to read {params.path}. Error: {e}\",\n                brief=\"Failed to read file\",\n            )\n"
+      "source_summary": "import base64\nfrom io import BytesIO\nfrom pathlib import Path\nfrom typing import override\n\nfrom kaos.path import KaosPath\nfrom kosong.chat_provider.kimi import Kimi\nfrom kosong.tooling import CallableTool2, ToolError, ToolOk, ToolReturnValue\nfrom pydantic import BaseModel, Field\n\nfrom kimi_cli.soul.agent import Runtime\nfrom kimi_cli.tools import SkipThisTool\nfrom kimi_cli.tools.file.utils import MEDIA_SNIFF_BYTES, FileType, detect_file_type\nfrom kimi_cli.tools.utils import load_desc\nfrom kimi_cli.utils.media_tags import wrap_media_part\nfrom kimi_cli.utils.path import is_within_workspace\nfrom kimi_cli.wire.types import ImageURLPart, VideoURLPart\n\nMAX_MEDIA_MEGABYTES = 100\n\n\ndef _to_data_url(mime_type: str, data: bytes) -> str:\n    encoded = base64.b64encode(data).decode(\"ascii\")\n    return f\"data:{mime_type};base64,{encoded}\"\n\n\ndef _extract_image_size(data: bytes) -> tuple[int, int] | None:\n    try:\n        from PIL import Image\n    except Exception:\n        return None\n    try:\n        with Image.open(BytesIO(data)) as image:\n            image.load()\n            return image.size\n    except Exception:\n        return None\n\n\nclass Params(BaseModel):\n    path: str = Field(\n        description=(\n            \"The path to the file to read. Absolute paths are required when reading files \"\n            \"outside the working directory.\"\n        )\n    )\n\n\nclass ReadMediaFile(CallableTool2[Params]):\n    name: str = \"ReadMediaFile\"\n    params: type[Params] = Params\n\n    def __init__(self, runtime: Runtime) -> None:\n        capabilities = runtime.llm.capabilities if runtime.llm else set[str]()\n        if \"image_in\" not in capabilities and \"video_in\" not in capabilities:\n            raise SkipThisTool()\n\n        description = load_desc(\n            Path(__file__).parent / \"read_media.md\",\n            {\n                \"MAX_MEDIA_MEGABYTES\": MAX_MEDIA_MEGABYTES,\n                \"capabilities\": capabilities,\n            },\n        )\n        super().__init__(description=description)\n\n        self._runtime = runtime\n        self._work_dir = runtime.builtin_args.KIMI_WORK_DIR\n        self._additional_dirs = runtime.additional_dirs\n        self._capabilities = capabilities\n\n    async def _validate_path(self, path: KaosPath) -> ToolError | None:\n        \"\"\"Validate that the path is safe to read.\"\"\"\n        resolved_path = path.canonical()\n\n        if (\n            not is_within_workspace(resolved_path, self._work_dir, self._additional_dirs)\n            and not path.is_absolute()\n        ):\n            # Outside files can only be read with absolute paths\n            return ToolError(\n                message=(\n                    f\"`{path}` is not an absolute path. \"\n                    \"You must provide an absolute path to read a file \"\n                    \"outside the working directory.\"\n                ),\n                brief=\"Invalid path\",\n            )\n        return None\n\n    async def _read_media(self, path: KaosPath, file_type: FileType) -> ToolReturnValue:\n        assert file_type.kind in (\"image\", \"video\")\n\n        media_path = str(path)\n        stat = await path.stat()\n        size = stat.st_size\n        if size == 0:\n            return ToolError(\n                message=f\"`{path}` is empty.\",\n                brief=\"Empty file\",\n            )\n        if size > (MAX_MEDIA_MEGABYTES << 20):\n            return ToolError(\n                message=(\n                    f\"`{path}` is {size} bytes, which exceeds the max \"\n                    f\"{MAX_MEDIA_MEGABYTES}MB bytes for media files.\"\n                ),\n                brief=\"File too large\",\n            )\n\n        match file_type.kind:\n            case \"image\":\n                data = await path.read_bytes()\n                data_url = _to_data_url(file_type.mime_type, data)\n                part = ImageURLPart(image_url=ImageURLPart.ImageURL(url=data_url))\n                wrapped = wrap_media_part(part, tag=\"image\", attrs={\"path\": media_path})\n                image_size = _extract_image_size(data)\n            case \"video\":\n                data = await path.read_bytes()\n                if (llm := self._runtime.llm) and isinstance(llm.chat_provider, Kimi):\n                    part = await llm.chat_provider.files.upload_video(\n                        data=data,\n                        mime_type=file_type.mime_type,\n                    )\n                    wrapped = wrap_media_part(part, tag=\"video\", attrs={\"path\": media_path})\n                else:\n                    data_url = _to_data_url(file_type.mime_type, data)\n                    part = VideoURLPart(video_url=VideoURLPart.VideoURL(url=data_url))\n                    wrapped = wrap_media_part(part, tag=\"video\", attrs={\"path\": media_path})\n                image_size = None\n\n        size_hint = \"\"\n        if image_size:\n            size_hint = f\", original size {image_size[0]}x{image_size[1]}px\"\n        note = (\n            \" If you need to output coordinates, output relative coordinates first and \"\n            \"compute absolute coordinates using the original image size; if you generate or \"\n            \"edit images/videos via commands or scripts, read the result back immediately \"\n            \"before continuing.\"\n        )\n        return ToolOk(\n            output=wrapped,\n            message=(\n                f\"Loaded {file_type.kind} file `{path}` \"\n                f\"({file_type.mime_type}, {size} bytes{size_hint}).{note}\"\n            ),\n        )\n\n    @override\n    async def __call__(self, params: Params) -> ToolReturnValue:\n        if not params.path:\n            return ToolError(\n                message=\"File path cannot be empty.\",\n                brief=\"Empty file path\",\n            )\n\n        try:\n            p = KaosPath(params.path).expanduser()\n            if err := await self._validate_path(p):\n                return err\n            p = p.canonical()\n\n            if not await p.exists():\n                return ToolError(\n                    message=f\"`{params.path}` does not exist.\",\n                    brief=\"File not found\",\n                )\n            if not await p.is_file():\n                return ToolError(\n                    message=f\"`{params.path}` is not a file.\",\n                    brief=\"Invalid path\",\n                )\n\n            header = await p.read_bytes(MEDIA_SNIFF_BYTES)\n            file_type = detect_file_type(str(p), header=header)\n            if file_type.kind == \"text\":\n                return ToolError(\n                    message=f\"`{params.path}` is a text file. Use ReadFile to read text files.\",\n                    brief=\"Unsupported file type\",\n                )\n            if file_type.kind == \"unknown\":\n                return ToolError(\n                    message=(\n                        f\"`{params.path}` seems not readable as an image or video file. \"\n                        \"You may need to read it with proper shell commands, Python tools \"\n                        \"or MCP tools if available. \"\n                        \"If you read/operate it with Python, you MUST ensure that any \"\n                        \"third-party packages are installed in a virtual environment (venv).\"\n                    ),\n                    brief=\"File not readable\",\n                )\n\n            if file_type.kind == \"image\" and \"image_in\" not in self._capabilities:\n                return ToolError(\n                    message=(\n                        \"The current model does not support image input. \"\n                        \"Tell the user to use a model with image input capability.\"\n                    ),\n                    brief=\"Unsupported media type\",\n                )\n            if file_type.kind == \"video\" and \"video_in\" not in self._capabilities:\n                return ToolError(\n                    message=(\n                        \"The current model does not support video input. \"\n                        \"Tell the user to use a model with video input capability.\"\n                    ),\n                    brief=\"Unsupported media type\",\n                )\n\n            return await self._read_media(p, file_type)\n        except Exception as e:\n            return ToolError(\n                message=f\"Failed to read {params.path}. Error: {e}\",\n                brief=\"Failed to read file\",\n            )\n"
     },
     "complexity_metrics": {
       "cyclomatic_complexity": 22.0,
-      "lines_of_code": 211,
+      "lines_of_code": 215,
       "number_of_classes": 2,
-      "number_of_functions": 5
+      "number_of_functions": 6
     },
     "dependencies": [
       {
-        "dependency_type": "standard_library",
+        "dependency_type": "module",
         "is_external": true,
         "line_number": 1,
         "name": "base64",
@@ -32643,7 +32786,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "standard_library",
+        "dependency_type": "module",
         "is_external": true,
         "line_number": 2,
         "name": "io.BytesIO",
@@ -32651,7 +32794,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "standard_library",
+        "dependency_type": "module",
         "is_external": true,
         "line_number": 3,
         "name": "pathlib.Path",
@@ -32659,7 +32802,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "standard_library",
+        "dependency_type": "module",
         "is_external": true,
         "line_number": 4,
         "name": "typing.override",
@@ -32667,7 +32810,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "module",
         "is_external": false,
         "line_number": 6,
         "name": "kaos.path.KaosPath",
@@ -32675,7 +32818,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "module",
         "is_external": false,
         "line_number": 7,
         "name": "kosong.chat_provider.kimi.Kimi",
@@ -32683,23 +32826,55 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "module",
         "is_external": false,
         "line_number": 8,
-        "name": "kosong.tooling",
+        "name": "kosong.tooling.CallableTool2",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "external_library",
+        "dependency_type": "module",
+        "is_external": false,
+        "line_number": 8,
+        "name": "kosong.tooling.ToolError",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "module",
+        "is_external": false,
+        "line_number": 8,
+        "name": "kosong.tooling.ToolOk",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "module",
+        "is_external": false,
+        "line_number": 8,
+        "name": "kosong.tooling.ToolReturnValue",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "module",
         "is_external": true,
         "line_number": 9,
-        "name": "pydantic",
+        "name": "pydantic.BaseModel",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "module",
+        "is_external": true,
+        "line_number": 9,
+        "name": "pydantic.Field",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "module",
         "is_external": false,
         "line_number": 11,
         "name": "kimi_cli.soul.agent.Runtime",
@@ -32707,7 +32882,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "module",
         "is_external": false,
         "line_number": 12,
         "name": "kimi_cli.tools.SkipThisTool",
@@ -32715,15 +32890,31 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "module",
         "is_external": false,
         "line_number": 13,
-        "name": "kimi_cli.tools.file.utils",
+        "name": "kimi_cli.tools.file.utils.MEDIA_SNIFF_BYTES",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "module",
+        "is_external": false,
+        "line_number": 13,
+        "name": "kimi_cli.tools.file.utils.FileType",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "module",
+        "is_external": false,
+        "line_number": 13,
+        "name": "kimi_cli.tools.file.utils.detect_file_type",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "module",
         "is_external": false,
         "line_number": 14,
         "name": "kimi_cli.tools.utils.load_desc",
@@ -32731,7 +32922,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "module",
         "is_external": false,
         "line_number": 15,
         "name": "kimi_cli.utils.media_tags.wrap_media_part",
@@ -32739,70 +32930,93 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "module",
         "is_external": false,
         "line_number": 16,
-        "name": "kimi_cli.utils.path.is_within_directory",
+        "name": "kimi_cli.utils.path.is_within_workspace",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "module",
         "is_external": false,
         "line_number": 17,
-        "name": "kimi_cli.wire.types",
+        "name": "kimi_cli.wire.types.ImageURLPart",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "external_library",
+        "dependency_type": "module",
+        "is_external": false,
+        "line_number": 17,
+        "name": "kimi_cli.wire.types.VideoURLPart",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "module",
         "is_external": true,
-        "line_number": 26,
+        "line_number": 33,
         "name": "PIL.Image",
         "path": null,
         "version": null
       }
     ],
-    "detailed_description": "This component implements a media file reading tool that handles image and video files for AI model processing. It provides comprehensive file validation, media type detection, size checking, and data encoding for different AI model capabilities. The tool supports both data URL encoding for local processing and direct upload to Kimi service for video files. It includes security measures for path validation and appropriate error handling for various failure scenarios.",
+    "detailed_description": "This component is a specialized tool within the kimi_cli system designed for reading and processing media files (images and videos). It serves as an interface between the file system and the LLM, ensuring that media content is properly formatted and validated before being passed to the AI model.\\n\\nThe tool implements several key functionalities:\\n\\n1. **Path Security Validation**: Ensures that files outside the workspace can only be accessed via absolute paths, preventing accidental or malicious access to sensitive files.\\n\\n2. **File Type Detection**: Uses magic byte sniffing (first bytes of file) to detect whether a file is an image, video, text, or unknown type, independent of file extensions.\\n\\n3. **Size Enforcement**: Enforces a 100MB limit on media files to prevent resource exhaustion and ensure reasonable processing times.\\n\\n4. **Capability-Aware Processing**: Checks the LLM's capabilities (image_in, video_in) and returns appropriate errors if the model doesn't support the detected media type.\\n\\n5. **Format Conversion**: Converts media files to appropriate formats for LLM consumption - either base64-encoded data URLs or, for video files with Kimi provider, uploads to the platform's file service.\\n\\n6. **Image Metadata Extraction**: Optionally extracts image dimensions using PIL when available, providing useful context for coordinate calculations.\\n\\nThe tool follows a clean error handling pattern, returning structured error or success responses that guide the user toward corrective actions when issues arise.",
     "interfaces": [
       {
-        "description": "Converts binary data to data URL format",
-        "interface_type": "function",
-        "name": "_to_data_url",
+        "description": "Pydantic model defining the parameters for the ReadMediaFile tool, containing the file path specification",
+        "interface_type": "class",
+        "name": "Params",
+        "parameters": [
+          {
+            "description": "The path to the file to read. Absolute paths are required when reading files outside the working directory.",
+            "is_optional": false,
+            "name": "path",
+            "param_type": "str"
+          }
+        ],
+        "return_type": null,
+        "visibility": "public"
+      },
+      {
+        "description": "Main tool class for reading and processing media files. Extends CallableTool2 with async media processing capabilities, security validation, and LLM-aware formatting",
+        "interface_type": "class",
+        "name": "ReadMediaFile",
+        "parameters": [
+          {
+            "description": "The runtime environment containing LLM capabilities, working directory, and additional directory configurations",
+            "is_optional": false,
+            "name": "runtime",
+            "param_type": "Runtime"
+          }
+        ],
+        "return_type": null,
+        "visibility": "public"
+      },
+      {
+        "description": "Initializes the ReadMediaFile tool with runtime context, validates LLM capabilities, and loads tool description",
+        "interface_type": "method",
+        "name": "__init__",
         "parameters": [
           {
             "description": null,
             "is_optional": false,
-            "name": "mime_type",
-            "param_type": "str"
+            "name": "self",
+            "param_type": "ReadMediaFile"
           },
           {
-            "description": null,
+            "description": "Runtime environment for accessing LLM capabilities and workspace configuration",
             "is_optional": false,
-            "name": "data",
-            "param_type": "bytes"
+            "name": "runtime",
+            "param_type": "Runtime"
           }
         ],
-        "return_type": "str",
-        "visibility": "private"
+        "return_type": null,
+        "visibility": "public"
       },
       {
-        "description": "Extracts image dimensions using PIL library",
-        "interface_type": "function",
-        "name": "_extract_image_size",
-        "parameters": [
-          {
-            "description": null,
-            "is_optional": false,
-            "name": "data",
-            "param_type": "bytes"
-          }
-        ],
-        "return_type": "tuple[int, int] | None",
-        "visibility": "private"
-      },
-      {
-        "description": "Validates file path security and accessibility",
+        "description": "Validates that the provided path is safe to read, enforcing workspace boundary restrictions",
         "interface_type": "method",
         "name": "_validate_path",
         "parameters": [
@@ -32813,7 +33027,7 @@ Code analysis results from preprocessing phase, including definitions of functio
             "param_type": "ReadMediaFile"
           },
           {
-            "description": null,
+            "description": "The path to validate",
             "is_optional": false,
             "name": "path",
             "param_type": "KaosPath"
@@ -32823,7 +33037,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "private"
       },
       {
-        "description": "Processes and encodes media files based on type",
+        "description": "Reads and processes a media file, converting it to appropriate LLM format with size validation and metadata extraction",
         "interface_type": "method",
         "name": "_read_media",
         "parameters": [
@@ -32834,13 +33048,13 @@ Code analysis results from preprocessing phase, including definitions of functio
             "param_type": "ReadMediaFile"
           },
           {
-            "description": null,
+            "description": "The canonical path to the media file",
             "is_optional": false,
             "name": "path",
             "param_type": "KaosPath"
           },
           {
-            "description": null,
+            "description": "Detected file type information",
             "is_optional": false,
             "name": "file_type",
             "param_type": "FileType"
@@ -32850,7 +33064,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "private"
       },
       {
-        "description": "Main entry point for tool execution",
+        "description": "Main entry point for the tool. Orchestrates path validation, file existence checks, type detection, capability validation, and media reading",
         "interface_type": "method",
         "name": "__call__",
         "parameters": [
@@ -32861,7 +33075,7 @@ Code analysis results from preprocessing phase, including definitions of functio
             "param_type": "ReadMediaFile"
           },
           {
-            "description": null,
+            "description": "Tool parameters containing the file path",
             "is_optional": false,
             "name": "params",
             "param_type": "Params"
@@ -32869,14 +33083,50 @@ Code analysis results from preprocessing phase, including definitions of functio
         ],
         "return_type": "ToolReturnValue",
         "visibility": "public"
+      },
+      {
+        "description": "Converts raw bytes to a base64-encoded data URL with the specified MIME type",
+        "interface_type": "function",
+        "name": "_to_data_url",
+        "parameters": [
+          {
+            "description": "The MIME type for the data URL",
+            "is_optional": false,
+            "name": "mime_type",
+            "param_type": "str"
+          },
+          {
+            "description": "Raw byte data to encode",
+            "is_optional": false,
+            "name": "data",
+            "param_type": "bytes"
+          }
+        ],
+        "return_type": "str",
+        "visibility": "private"
+      },
+      {
+        "description": "Extracts image dimensions using PIL when available, with graceful fallback on errors",
+        "interface_type": "function",
+        "name": "_extract_image_size",
+        "parameters": [
+          {
+            "description": "Raw image byte data",
+            "is_optional": false,
+            "name": "data",
+            "param_type": "bytes"
+          }
+        ],
+        "return_type": "tuple[int, int] | None",
+        "visibility": "private"
       }
     ],
     "responsibilities": [
-      "Media file validation and security checking",
-      "File type detection and capability-based filtering",
-      "Media data encoding and processing",
-      "Error handling and user feedback",
-      "Integration with AI model capabilities"
+      "Validate and secure file access paths within workspace boundaries",
+      "Detect and classify media file types (image/video) using magic byte sniffing",
+      "Enforce file size limits and capability checks for LLM compatibility",
+      "Convert media files to LLM-consumable formats (base64 data URLs or platform uploads)",
+      "Provide comprehensive error handling with actionable guidance for users"
     ]
   },
   {
@@ -33224,9 +33474,10 @@ Code analysis results from preprocessing phase, including definitions of functio
   {
     "code_dossier": {
       "code_purpose": "tool",
-      "description": "Security-focused file globbing tool with pattern validation and directory restrictions",
+      "description": "A tool implementation for performing safe glob pattern matching within workspace boundaries, with validation and result limiting capabilities.",
       "file_path": "src/kimi_cli/tools/file/glob.py",
       "functions": [
+        "__init__",
         "_validate_pattern",
         "_validate_directory",
         "__call__"
@@ -33237,19 +33488,16 @@ Code analysis results from preprocessing phase, including definitions of functio
         "Params",
         "_validate_pattern",
         "_validate_directory",
-        "__call__",
-        "name",
-        "description",
-        "params"
+        "__call__"
       ],
       "name": "glob.py",
-      "source_summary": "\"\"\"Glob tool implementation.\"\"\"\n\nfrom pathlib import Path\nfrom typing import override\n\nfrom kaos.path import KaosPath\nfrom kosong.tooling import CallableTool2, ToolError, ToolOk, ToolReturnValue\nfrom pydantic import BaseModel, Field\n\nfrom kimi_cli.soul.agent import BuiltinSystemPromptArgs\nfrom kimi_cli.tools.utils import load_desc\nfrom kimi_cli.utils.path import is_within_directory, list_directory\n\nMAX_MATCHES = 1000\n\n\nclass Params(BaseModel):\n    pattern: str = Field(description=(\"Glob pattern to match files/directories.\"))\n    directory: str | None = Field(\n        description=(\n            \"Absolute path to the directory to search in (defaults to working directory).\"\n        ),\n        default=None,\n    )\n    include_dirs: bool = Field(\n        description=\"Whether to include directories in results.\",\n        default=True,\n    )\n\n\nclass Glob(CallableTool2[Params]):\n    name: str = \"Glob\"\n    description: str = load_desc(\n        Path(__file__).parent / \"glob.md\",\n        {\n            \"MAX_MATCHES\": str(MAX_MATCHES),\n        },\n    )\n    params: type[Params] = Params\n\n    def __init__(self, builtin_args: BuiltinSystemPromptArgs) -> None:\n        super().__init__()\n        self._work_dir = builtin_args.KIMI_WORK_DIR\n\n    async def _validate_pattern(self, pattern: str) -> ToolError | None:\n        \"\"\"Validate that the pattern is safe to use.\"\"\"\n        if pattern.startswith(\"**\"):\n            ls_result = await list_directory(self._work_dir)\n            return ToolError(\n                output=ls_result,\n                message=(\n                    f\"Pattern `{pattern}` starts with '**' which is not allowed. \"\n                    \"This would recursively search all directories and may include large \"\n                    \"directories like `node_modules`. Use more specific patterns instead. \"\n                    \"For your convenience, a list of all files and directories in the \"\n                    \"top level of the working directory is provided below.\"\n                ),\n                brief=\"Unsafe pattern\",\n            )\n        return None\n\n    async def _validate_directory(self, directory: KaosPath) -> ToolError | None:\n        \"\"\"Validate that the directory is safe to search.\"\"\"\n        resolved_dir = directory.canonical()\n\n        # Ensure the directory is within work directory\n        if not is_within_directory(resolved_dir, self._work_dir):\n            return ToolError(\n                message=(\n                    f\"`{directory}` is outside the working directory. \"\n                    \"You can only search within the working directory.\"\n                ),\n                brief=\"Directory outside working directory\",\n            )\n        return None\n\n    @override\n    async def __call__(self, params: Params) -> ToolReturnValue:\n        try:\n            # Validate pattern safety\n            pattern_error = await self._validate_pattern(params.pattern)\n            if pattern_error:\n                return pattern_error\n\n            dir_path = KaosPath(params.directory) if params.directory else self._work_dir\n\n            if not dir_path.is_absolute():\n                return ToolError(\n                    message=(\n                        f\"`{params.directory}` is not an absolute path. \"\n                        \"You must provide an absolute path to search.\"\n                    ),\n                    brief=\"Invalid directory\",\n                )\n\n            # Validate directory safety\n            dir_error = await self._validate_directory(dir_path)\n            if dir_error:\n                return dir_error\n\n            if not await dir_path.exists():\n                return ToolError(\n                    message=f\"`{params.directory}` does not exist.\",\n                    brief=\"Directory not found\",\n                )\n            if not await dir_path.is_dir():\n                return ToolError(\n                    message=f\"`{params.directory}` is not a directory.\",\n                    brief=\"Invalid directory\",\n                )\n\n            # Perform the glob search - users can use ** directly in pattern\n            matches: list[KaosPath] = []\n            async for match in dir_path.glob(params.pattern):\n                matches.append(match)\n\n            # Filter out directories if not requested\n            if not params.include_dirs:\n                matches = [p for p in matches if await p.is_file()]\n\n            # Sort for consistent output\n            matches.sort()\n\n            # Limit matches\n            message = (\n                f\"Found {len(matches)} matches for pattern `{params.pattern}`.\"\n                if len(matches) > 0\n                else f\"No matches found for pattern `{params.pattern}`.\"\n            )\n            if len(matches) > MAX_MATCHES:\n                matches = matches[:MAX_MATCHES]\n                message += (\n                    f\" Only the first {MAX_MATCHES} matches are returned. \"\n                    \"You may want to use a more specific pattern.\"\n                )\n\n            return ToolOk(\n                output=\"\\n\".join(str(p.relative_to(dir_path)) for p in matches),\n                message=message,\n            )\n\n        except Exception as e:\n            return ToolError(\n                message=f\"Failed to search for pattern {params.pattern}. Error: {e}\",\n                brief=\"Glob failed\",\n            )\n"
+      "source_summary": "\"\"\"Glob tool implementation.\"\"\"\n\nfrom pathlib import Path\nfrom typing import override\n\nfrom kaos.path import KaosPath\nfrom kosong.tooling import CallableTool2, ToolError, ToolOk, ToolReturnValue\nfrom pydantic import BaseModel, Field\n\nfrom kimi_cli.soul.agent import Runtime\nfrom kimi_cli.tools.utils import load_desc\nfrom kimi_cli.utils.path import is_within_workspace, list_directory\n\nMAX_MATCHES = 1000\n\n\nclass Params(BaseModel):\n    pattern: str = Field(description=(\"Glob pattern to match files/directories.\"))\n    directory: str | None = Field(\n        description=(\n            \"Absolute path to the directory to search in (defaults to working directory).\"\n        ),\n        default=None,\n    )\n    include_dirs: bool = Field(\n        description=\"Whether to include directories in results.\",\n        default=True,\n    )\n\n\nclass Glob(CallableTool2[Params]):\n    name: str = \"Glob\"\n    description: str = load_desc(\n        Path(__file__).parent / \"glob.md\",\n        {\n            \"MAX_MATCHES\": str(MAX_MATCHES),\n        },\n    )\n    params: type[Params] = Params\n\n    def __init__(self, runtime: Runtime) -> None:\n        super().__init__()\n        self._work_dir = runtime.builtin_args.KIMI_WORK_DIR\n        self._additional_dirs = runtime.additional_dirs\n\n    async def _validate_pattern(self, pattern: str) -> ToolError | None:\n        \"\"\"Validate that the pattern is safe to use.\"\"\"\n        if pattern.startswith(\"**\"):\n            ls_result = await list_directory(self._work_dir)\n            return ToolError(\n                output=ls_result,\n                message=(\n                    f\"Pattern `{pattern}` starts with '**' which is not allowed. \"\n                    \"This would recursively search all directories and may include large \"\n                    \"directories like `node_modules`. Use more specific patterns instead. \"\n                    \"For your convenience, a list of all files and directories in the \"\n                    \"top level of the working directory is provided below.\"\n                ),\n                brief=\"Unsafe pattern\",\n            )\n        return None\n\n    async def _validate_directory(self, directory: KaosPath) -> ToolError | None:\n        \"\"\"Validate that the directory is safe to search.\"\"\"\n        resolved_dir = directory.canonical()\n\n        # Ensure the directory is within the workspace (work_dir or additional dirs)\n        if not is_within_workspace(resolved_dir, self._work_dir, self._additional_dirs):\n            return ToolError(\n                message=(\n                    f\"`{directory}` is outside the workspace. \"\n                    \"You can only search within the working directory \"\n                    \"and additional directories.\"\n                ),\n                brief=\"Directory outside workspace\",\n            )\n        return None\n\n    @override\n    async def __call__(self, params: Params) -> ToolReturnValue:\n        try:\n            # Validate pattern safety\n            pattern_error = await self._validate_pattern(params.pattern)\n            if pattern_error:\n                return pattern_error\n\n            dir_path = KaosPath(params.directory) if params.directory else self._work_dir\n\n            if not dir_path.is_absolute():\n                return ToolError(\n                    message=(\n                        f\"`{params.directory}` is not an absolute path. \"\n                        \"You must provide an absolute path to search.\"\n                    ),\n                    brief=\"Invalid directory\",\n                )\n\n            # Validate directory safety\n            dir_error = await self._validate_directory(dir_path)\n            if dir_error:\n                return dir_error\n\n            if not await dir_path.exists():\n                return ToolError(\n                    message=f\"`{params.directory}` does not exist.\",\n                    brief=\"Directory not found\",\n                )\n            if not await dir_path.is_dir():\n                return ToolError(\n                    message=f\"`{params.directory}` is not a directory.\",\n                    brief=\"Invalid directory\",\n                )\n\n            # Perform the glob search - users can use ** directly in pattern\n            matches: list[KaosPath] = []\n            async for match in dir_path.glob(params.pattern):\n                matches.append(match)\n\n            # Filter out directories if not requested\n            if not params.include_dirs:\n                matches = [p for p in matches if await p.is_file()]\n\n            # Sort for consistent output\n            matches.sort()\n\n            # Limit matches\n            message = (\n                f\"Found {len(matches)} matches for pattern `{params.pattern}`.\"\n                if len(matches) > 0\n                else f\"No matches found for pattern `{params.pattern}`.\"\n            )\n            if len(matches) > MAX_MATCHES:\n                matches = matches[:MAX_MATCHES]\n                message += (\n                    f\" Only the first {MAX_MATCHES} matches are returned. \"\n                    \"You may want to use a more specific pattern.\"\n                )\n\n            return ToolOk(\n                output=\"\\n\".join(str(p.relative_to(dir_path)) for p in matches),\n                message=message,\n            )\n\n        except Exception as e:\n            return ToolError(\n                message=f\"Failed to search for pattern {params.pattern}. Error: {e}\",\n                brief=\"Glob failed\",\n            )\n"
     },
     "complexity_metrics": {
       "cyclomatic_complexity": 23.0,
-      "lines_of_code": 146,
+      "lines_of_code": 148,
       "number_of_classes": 2,
-      "number_of_functions": 3
+      "number_of_functions": 4
     },
     "dependencies": [
       {
@@ -33288,15 +33536,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "dependency_type": "import",
         "is_external": true,
         "line_number": 8,
-        "name": "pydantic.BaseModel",
-        "path": "pydantic",
-        "version": null
-      },
-      {
-        "dependency_type": "import",
-        "is_external": true,
-        "line_number": 8,
-        "name": "pydantic.Field",
+        "name": "pydantic",
         "path": "pydantic",
         "version": null
       },
@@ -33304,8 +33544,8 @@ Code analysis results from preprocessing phase, including definitions of functio
         "dependency_type": "import",
         "is_external": false,
         "line_number": 10,
-        "name": "kimi_cli.soul.agent.BuiltinSystemPromptArgs",
-        "path": "kimi_cli/soul/agent",
+        "name": "kimi_cli.soul.agent.Runtime",
+        "path": "kimi_cli.soul.agent",
         "version": null
       },
       {
@@ -33313,30 +33553,22 @@ Code analysis results from preprocessing phase, including definitions of functio
         "is_external": false,
         "line_number": 11,
         "name": "kimi_cli.tools.utils.load_desc",
-        "path": "kimi_cli/tools/utils",
+        "path": "kimi_cli.tools.utils",
         "version": null
       },
       {
         "dependency_type": "import",
         "is_external": false,
         "line_number": 12,
-        "name": "kimi_cli.utils.path.is_within_directory",
-        "path": "kimi_cli/utils/path",
-        "version": null
-      },
-      {
-        "dependency_type": "import",
-        "is_external": false,
-        "line_number": 12,
-        "name": "kimi_cli.utils.path.list_directory",
-        "path": "kimi_cli/utils/path",
+        "name": "kimi_cli.utils.path",
+        "path": "kimi_cli.utils.path",
         "version": null
       }
     ],
-    "detailed_description": "The Glob component is a file system pattern matching tool that provides safe, controlled globbing functionality within a restricted working directory. It implements security measures to prevent unsafe recursive searches (patterns starting with '**') and directory traversal attacks. The tool validates both patterns and target directories, ensures searches are confined to the working directory, and limits results to prevent overwhelming outputs. It supports configurable directory inclusion/exclusion and provides helpful error messages and user feedback.",
+    "detailed_description": "This component implements a secure glob pattern matching tool for the Kimi CLI system. It extends CallableTool2 to provide file and directory search functionality using glob patterns. The tool enforces strict security boundaries by validating that searches only occur within authorized workspace directories (work_dir and additional_dirs). It prevents potentially dangerous patterns like those starting with '**' which could recursively search large directories. The implementation includes comprehensive validation for both patterns and directories, limits results to MAX_MATCHES (1000) to prevent overwhelming output, and provides user-friendly error messages. The tool supports optional directory inclusion/exclusion and returns relative paths for better readability. It integrates with the Runtime system to access workspace configuration and uses KaosPath for cross-platform path handling.",
     "interfaces": [
       {
-        "description": "Main glob tool class implementing CallableTool2 interface",
+        "description": "Main tool class that implements glob pattern matching functionality, extending CallableTool2[Params]",
         "interface_type": "class",
         "name": "Glob",
         "parameters": [],
@@ -33344,7 +33576,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Parameter model for glob tool configuration",
+        "description": "Pydantic model defining input parameters: pattern (str), directory (str|None), and include_dirs (bool)",
         "interface_type": "class",
         "name": "Params",
         "parameters": [],
@@ -33352,12 +33584,39 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Validates pattern safety, prevents recursive '**' patterns",
+        "description": "Initializes the Glob tool with runtime configuration, extracting work_dir and additional_dirs",
+        "interface_type": "method",
+        "name": "__init__",
+        "parameters": [
+          {
+            "description": null,
+            "is_optional": false,
+            "name": "self",
+            "param_type": "Glob"
+          },
+          {
+            "description": "Runtime context providing workspace configuration",
+            "is_optional": false,
+            "name": "runtime",
+            "param_type": "Runtime"
+          }
+        ],
+        "return_type": "None",
+        "visibility": "public"
+      },
+      {
+        "description": "Validates pattern safety, rejecting patterns starting with '**' and providing directory listing as alternative",
         "interface_type": "method",
         "name": "_validate_pattern",
         "parameters": [
           {
-            "description": "Glob pattern to validate for safety",
+            "description": null,
+            "is_optional": false,
+            "name": "self",
+            "param_type": "Glob"
+          },
+          {
+            "description": "Glob pattern to validate",
             "is_optional": false,
             "name": "pattern",
             "param_type": "str"
@@ -33367,10 +33626,16 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "private"
       },
       {
-        "description": "Ensures directory is within working directory boundaries",
+        "description": "Validates that the directory is within workspace boundaries using is_within_workspace utility",
         "interface_type": "method",
         "name": "_validate_directory",
         "parameters": [
+          {
+            "description": null,
+            "is_optional": false,
+            "name": "self",
+            "param_type": "Glob"
+          },
           {
             "description": "Directory path to validate",
             "is_optional": false,
@@ -33382,12 +33647,18 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "private"
       },
       {
-        "description": "Main execution method performing glob search with validation",
+        "description": "Executes the glob search with comprehensive validation, filtering, sorting, and result limiting",
         "interface_type": "method",
         "name": "__call__",
         "parameters": [
           {
-            "description": "Tool parameters including pattern and directory",
+            "description": null,
+            "is_optional": false,
+            "name": "self",
+            "param_type": "Glob"
+          },
+          {
+            "description": "Validated parameters containing pattern, directory, and include_dirs",
             "is_optional": false,
             "name": "params",
             "param_type": "Params"
@@ -33395,14 +33666,28 @@ Code analysis results from preprocessing phase, including definitions of functio
         ],
         "return_type": "ToolReturnValue",
         "visibility": "public"
+      },
+      {
+        "description": "Utility function to list directory contents, used when rejecting unsafe patterns",
+        "interface_type": "function",
+        "name": "list_directory",
+        "parameters": [
+          {
+            "description": null,
+            "is_optional": false,
+            "name": "path",
+            "param_type": "KaosPath"
+          }
+        ],
+        "return_type": "str",
+        "visibility": "public"
       }
     ],
     "responsibilities": [
-      "Safe pattern validation to prevent recursive directory traversal",
-      "Directory security enforcement within working directory boundaries",
-      "Efficient file matching with configurable filtering options",
-      "Error handling and user-friendly feedback for invalid operations",
-      "Result limiting and sorting for consistent output"
+      "Perform secure glob pattern matching within authorized workspace boundaries, validating that search directories are within work_dir or additional_dirs",
+      "Validate and sanitize glob patterns to prevent unsafe operations, specifically blocking patterns starting with '**' that could cause recursive searches of large directories",
+      "Limit and format search results to prevent overwhelming output, capping at MAX_MATCHES (1000) and providing relative paths for readability",
+      "Provide comprehensive error handling and user-friendly feedback for invalid patterns, directories outside workspace, non-existent paths, and search failures"
     ]
   },
   {
@@ -33546,130 +33831,154 @@ Code analysis results from preprocessing phase, including definitions of functio
   {
     "code_dossier": {
       "code_purpose": "tool",
-      "description": "File reading tool for CLI applications with safety and resource constraints",
+      "description": "A file reading tool that provides safe, controlled access to file contents with validation, type detection, and content truncation capabilities for AI agent operations.",
       "file_path": "src/kimi_cli/tools/file/read.py",
       "functions": [
-        "_validate_path",
-        "__call__"
+        "ReadFile.__init__",
+        "ReadFile.__call__",
+        "ReadFile._validate_path"
       ],
       "importance_score": 0.8,
       "interfaces": [
         "ReadFile",
         "Params",
-        "line_offset",
-        "n_lines",
-        "path",
         "_validate_path",
         "__call__"
       ],
       "name": "read.py",
-      "source_summary": "from pathlib import Path\nfrom typing import override\n\nfrom kaos.path import KaosPath\nfrom kosong.tooling import CallableTool2, ToolError, ToolOk, ToolReturnValue\nfrom pydantic import BaseModel, Field\n\nfrom kimi_cli.soul.agent import Runtime\nfrom kimi_cli.tools.file.utils import MEDIA_SNIFF_BYTES, detect_file_type\nfrom kimi_cli.tools.utils import load_desc, truncate_line\nfrom kimi_cli.utils.path import is_within_directory\n\nMAX_LINES = 1000\nMAX_LINE_LENGTH = 2000\nMAX_BYTES = 100 << 10  # 100KB\n\n\nclass Params(BaseModel):\n    path: str = Field(\n        description=(\n            \"The path to the file to read. Absolute paths are required when reading files \"\n            \"outside the working directory.\"\n        )\n    )\n    line_offset: int = Field(\n        description=(\n            \"The line number to start reading from. \"\n            \"By default read from the beginning of the file. \"\n            \"Set this when the file is too large to read at once.\"\n        ),\n        default=1,\n        ge=1,\n    )\n    n_lines: int = Field(\n        description=(\n            \"The number of lines to read. \"\n            f\"By default read up to {MAX_LINES} lines, which is the max allowed value. \"\n            \"Set this value when the file is too large to read at once.\"\n        ),\n        default=MAX_LINES,\n        ge=1,\n    )\n\n\nclass ReadFile(CallableTool2[Params]):\n    name: str = \"ReadFile\"\n    params: type[Params] = Params\n\n    def __init__(self, runtime: Runtime) -> None:\n        description = load_desc(\n            Path(__file__).parent / \"read.md\",\n            {\n                \"MAX_LINES\": MAX_LINES,\n                \"MAX_LINE_LENGTH\": MAX_LINE_LENGTH,\n                \"MAX_BYTES\": MAX_BYTES,\n            },\n        )\n        super().__init__(description=description)\n        self._runtime = runtime\n        self._work_dir = runtime.builtin_args.KIMI_WORK_DIR\n\n    async def _validate_path(self, path: KaosPath) -> ToolError | None:\n        \"\"\"Validate that the path is safe to read.\"\"\"\n        resolved_path = path.canonical()\n\n        if not is_within_directory(resolved_path, self._work_dir) and not path.is_absolute():\n            # Outside files can only be read with absolute paths\n            return ToolError(\n                message=(\n                    f\"`{path}` is not an absolute path. \"\n                    \"You must provide an absolute path to read a file \"\n                    \"outside the working directory.\"\n                ),\n                brief=\"Invalid path\",\n            )\n        return None\n\n    @override\n    async def __call__(self, params: Params) -> ToolReturnValue:\n        # TODO: checks:\n        # - check if the path may contain secrets\n\n        if not params.path:\n            return ToolError(\n                message=\"File path cannot be empty.\",\n                brief=\"Empty file path\",\n            )\n\n        try:\n            p = KaosPath(params.path).expanduser()\n            if err := await self._validate_path(p):\n                return err\n            p = p.canonical()\n\n            if not await p.exists():\n                return ToolError(\n                    message=f\"`{params.path}` does not exist.\",\n                    brief=\"File not found\",\n                )\n            if not await p.is_file():\n                return ToolError(\n                    message=f\"`{params.path}` is not a file.\",\n                    brief=\"Invalid path\",\n                )\n\n            header = await p.read_bytes(MEDIA_SNIFF_BYTES)\n            file_type = detect_file_type(str(p), header=header)\n            if file_type.kind in (\"image\", \"video\"):\n                return ToolError(\n                    message=(\n                        f\"`{params.path}` is a {file_type.kind} file. \"\n                        \"Use other appropriate tools to read image or video files.\"\n                    ),\n                    brief=\"Unsupported file type\",\n                )\n\n            if file_type.kind == \"unknown\":\n                return ToolError(\n                    message=(\n                        f\"`{params.path}` seems not readable. \"\n                        \"You may need to read it with proper shell commands, Python tools \"\n                        \"or MCP tools if available. \"\n                        \"If you read/operate it with Python, you MUST ensure that any \"\n                        \"third-party packages are installed in a virtual environment (venv).\"\n                    ),\n                    brief=\"File not readable\",\n                )\n\n            assert params.line_offset >= 1\n            assert params.n_lines >= 1\n\n            lines: list[str] = []\n            n_bytes = 0\n            truncated_line_numbers: list[int] = []\n            max_lines_reached = False\n            max_bytes_reached = False\n            current_line_no = 0\n            async for line in p.read_lines(errors=\"replace\"):\n                current_line_no += 1\n                if current_line_no < params.line_offset:\n                    continue\n                truncated = truncate_line(line, MAX_LINE_LENGTH)\n                if truncated != line:\n                    truncated_line_numbers.append(current_line_no)\n                lines.append(truncated)\n                n_bytes += len(truncated.encode(\"utf-8\"))\n                if len(lines) >= params.n_lines:\n                    break\n                if len(lines) >= MAX_LINES:\n                    max_lines_reached = True\n                    break\n                if n_bytes >= MAX_BYTES:\n                    max_bytes_reached = True\n                    break\n\n            # Format output with line numbers like `cat -n`\n            lines_with_no: list[str] = []\n            for line_num, line in zip(\n                range(params.line_offset, params.line_offset + len(lines)), lines, strict=True\n            ):\n                # Use 6-digit line number width, right-aligned, with tab separator\n                lines_with_no.append(f\"{line_num:6d}\\t{line}\")\n\n            message = (\n                f\"{len(lines)} lines read from file starting from line {params.line_offset}.\"\n                if len(lines) > 0\n                else \"No lines read from file.\"\n            )\n            if max_lines_reached:\n                message += f\" Max {MAX_LINES} lines reached.\"\n            elif max_bytes_reached:\n                message += f\" Max {MAX_BYTES} bytes reached.\"\n            elif len(lines) < params.n_lines:\n                message += \" End of file reached.\"\n            if truncated_line_numbers:\n                message += f\" Lines {truncated_line_numbers} were truncated.\"\n            return ToolOk(\n                output=\"\".join(lines_with_no),  # lines already contain \\n, just join them\n                message=message,\n            )\n        except Exception as e:\n            return ToolError(\n                message=f\"Failed to read {params.path}. Error: {e}\",\n                brief=\"Failed to read file\",\n            )\n"
+      "source_summary": "from pathlib import Path\nfrom typing import override\n\nfrom kaos.path import KaosPath\nfrom kosong.tooling import CallableTool2, ToolError, ToolOk, ToolReturnValue\nfrom pydantic import BaseModel, Field\n\nfrom kimi_cli.soul.agent import Runtime\nfrom kimi_cli.tools.file.utils import MEDIA_SNIFF_BYTES, detect_file_type\nfrom kimi_cli.tools.utils import load_desc, truncate_line\nfrom kimi_cli.utils.path import is_within_workspace\n\nMAX_LINES = 1000\nMAX_LINE_LENGTH = 2000\nMAX_BYTES = 100 << 10  # 100KB\n\n\nclass Params(BaseModel):\n    path: str = Field(\n        description=(\n            \"The path to the file to read. Absolute paths are required when reading files \"\n            \"outside the working directory.\"\n        )\n    )\n    line_offset: int = Field(\n        description=(\n            \"The line number to start reading from. \"\n            \"By default read from the beginning of the file. \"\n            \"Set this when the file is too large to read at once.\"\n        ),\n        default=1,\n        ge=1,\n    )\n    n_lines: int = Field(\n        description=(\n            \"The number of lines to read. \"\n            f\"By default read up to {MAX_LINES} lines, which is the max allowed value. \"\n            \"Set this value when the file is too large to read at once.\"\n        ),\n        default=MAX_LINES,\n        ge=1,\n    )\n\n\nclass ReadFile(CallableTool2[Params]):\n    name: str = \"ReadFile\"\n    params: type[Params] = Params\n\n    def __init__(self, runtime: Runtime) -> None:\n        description = load_desc(\n            Path(__file__).parent / \"read.md\",\n            {\n                \"MAX_LINES\": MAX_LINES,\n                \"MAX_LINE_LENGTH\": MAX_LINE_LENGTH,\n                \"MAX_BYTES\": MAX_BYTES,\n            },\n        )\n        super().__init__(description=description)\n        self._runtime = runtime\n        self._work_dir = runtime.builtin_args.KIMI_WORK_DIR\n        self._additional_dirs = runtime.additional_dirs\n\n    async def _validate_path(self, path: KaosPath) -> ToolError | None:\n        \"\"\"Validate that the path is safe to read.\"\"\"\n        resolved_path = path.canonical()\n\n        if (\n            not is_within_workspace(resolved_path, self._work_dir, self._additional_dirs)\n            and not path.is_absolute()\n        ):\n            # Outside files can only be read with absolute paths\n            return ToolError(\n                message=(\n                    f\"`{path}` is not an absolute path. \"\n                    \"You must provide an absolute path to read a file \"\n                    \"outside the working directory.\"\n                ),\n                brief=\"Invalid path\",\n            )\n        return None\n\n    @override\n    async def __call__(self, params: Params) -> ToolReturnValue:\n        # TODO: checks:\n        # - check if the path may contain secrets\n\n        if not params.path:\n            return ToolError(\n                message=\"File path cannot be empty.\",\n                brief=\"Empty file path\",\n            )\n\n        try:\n            p = KaosPath(params.path).expanduser()\n            if err := await self._validate_path(p):\n                return err\n            p = p.canonical()\n\n            if not await p.exists():\n                return ToolError(\n                    message=f\"`{params.path}` does not exist.\",\n                    brief=\"File not found\",\n                )\n            if not await p.is_file():\n                return ToolError(\n                    message=f\"`{params.path}` is not a file.\",\n                    brief=\"Invalid path\",\n                )\n\n            header = await p.read_bytes(MEDIA_SNIFF_BYTES)\n            file_type = detect_file_type(str(p), header=header)\n            if file_type.kind in (\"image\", \"video\"):\n                return ToolError(\n                    message=(\n                        f\"`{params.path}` is a {file_type.kind} file. \"\n                        \"Use other appropriate tools to read image or video files.\"\n                    ),\n                    brief=\"Unsupported file type\",\n                )\n\n            if file_type.kind == \"unknown\":\n                return ToolError(\n                    message=(\n                        f\"`{params.path}` seems not readable. \"\n                        \"You may need to read it with proper shell commands, Python tools \"\n                        \"or MCP tools if available. \"\n                        \"If you read/operate it with Python, you MUST ensure that any \"\n                        \"third-party packages are installed in a virtual environment (venv).\"\n                    ),\n                    brief=\"File not readable\",\n                )\n\n            assert params.line_offset >= 1\n            assert params.n_lines >= 1\n\n            lines: list[str] = []\n            n_bytes = 0\n            truncated_line_numbers: list[int] = []\n            max_lines_reached = False\n            max_bytes_reached = False\n            current_line_no = 0\n            async for line in p.read_lines(errors=\"replace\"):\n                current_line_no += 1\n                if current_line_no < params.line_offset:\n                    continue\n                truncated = truncate_line(line, MAX_LINE_LENGTH)\n                if truncated != line:\n                    truncated_line_numbers.append(current_line_no)\n                lines.append(truncated)\n                n_bytes += len(truncated.encode(\"utf-8\"))\n                if len(lines) >= params.n_lines:\n                    break\n                if len(lines) >= MAX_LINES:\n                    max_lines_reached = True\n                    break\n                if n_bytes >= MAX_BYTES:\n                    max_bytes_reached = True\n                    break\n\n            # Format output with line numbers like `cat -n`\n            lines_with_no: list[str] = []\n            for line_num, line in zip(\n                range(params.line_offset, params.line_offset + len(lines)), lines, strict=True\n            ):\n                # Use 6-digit line number width, right-aligned, with tab separator\n                lines_with_no.append(f\"{line_num:6d}\\t{line}\")\n\n            message = (\n                f\"{len(lines)} lines read from file starting from line {params.line_offset}.\"\n                if len(lines) > 0\n                else \"No lines read from file.\"\n            )\n            if max_lines_reached:\n                message += f\" Max {MAX_LINES} lines reached.\"\n            elif max_bytes_reached:\n                message += f\" Max {MAX_BYTES} bytes reached.\"\n            elif len(lines) < params.n_lines:\n                message += \" End of file reached.\"\n            if truncated_line_numbers:\n                message += f\" Lines {truncated_line_numbers} were truncated.\"\n            return ToolOk(\n                output=\"\".join(lines_with_no),  # lines already contain \\n, just join them\n                message=message,\n            )\n        except Exception as e:\n            return ToolError(\n                message=f\"Failed to read {params.path}. Error: {e}\",\n                brief=\"Failed to read file\",\n            )\n"
     },
     "complexity_metrics": {
       "cyclomatic_complexity": 22.0,
-      "lines_of_code": 185,
+      "lines_of_code": 189,
       "number_of_classes": 2,
-      "number_of_functions": 2
+      "number_of_functions": 3
     },
     "dependencies": [
       {
-        "dependency_type": "standard_library",
+        "dependency_type": "import",
         "is_external": true,
-        "line_number": null,
+        "line_number": 1,
         "name": "pathlib.Path",
-        "path": null,
+        "path": "pathlib",
         "version": null
       },
       {
-        "dependency_type": "standard_library",
+        "dependency_type": "import",
         "is_external": true,
-        "line_number": null,
+        "line_number": 2,
         "name": "typing.override",
-        "path": null,
+        "path": "typing",
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "import",
         "is_external": false,
-        "line_number": null,
+        "line_number": 4,
         "name": "kaos.path.KaosPath",
-        "path": "kaos/path.py",
+        "path": "kaos.path",
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "import",
         "is_external": false,
-        "line_number": null,
-        "name": "kosong.tooling.CallableTool2",
-        "path": "kosong/tooling.py",
+        "line_number": 5,
+        "name": "kosong.tooling",
+        "path": "kosong.tooling",
         "version": null
       },
       {
-        "dependency_type": "internal",
-        "is_external": false,
-        "line_number": null,
-        "name": "kosong.tooling.ToolError",
-        "path": "kosong/tooling.py",
-        "version": null
-      },
-      {
-        "dependency_type": "internal",
-        "is_external": false,
-        "line_number": null,
-        "name": "kosong.tooling.ToolOk",
-        "path": "kosong/tooling.py",
-        "version": null
-      },
-      {
-        "dependency_type": "internal",
-        "is_external": false,
-        "line_number": null,
-        "name": "kosong.tooling.ToolReturnValue",
-        "path": "kosong/tooling.py",
-        "version": null
-      },
-      {
-        "dependency_type": "external_library",
+        "dependency_type": "import",
         "is_external": true,
-        "line_number": null,
-        "name": "pydantic.BaseModel",
-        "path": null,
+        "line_number": 6,
+        "name": "pydantic",
+        "path": "pydantic",
         "version": null
       },
       {
-        "dependency_type": "external_library",
-        "is_external": true,
-        "line_number": null,
-        "name": "pydantic.Field",
-        "path": null,
+        "dependency_type": "import",
+        "is_external": false,
+        "line_number": 8,
+        "name": "kimi_cli.soul.agent.Runtime",
+        "path": "kimi_cli.soul.agent",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": false,
+        "line_number": 9,
+        "name": "kimi_cli.tools.file.utils",
+        "path": "kimi_cli.tools.file.utils",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": false,
+        "line_number": 10,
+        "name": "kimi_cli.tools.utils",
+        "path": "kimi_cli.tools.utils",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": false,
+        "line_number": 11,
+        "name": "kimi_cli.utils.path.is_within_workspace",
+        "path": "kimi_cli.utils.path",
         "version": null
       }
     ],
-    "detailed_description": "The ReadFile component is a specialized file reading tool designed for CLI applications that provides safe, controlled file reading capabilities with multiple safety mechanisms. It validates file paths for security, detects file types to prevent reading binary/unsupported files, implements resource limits (max lines, bytes, line length), and provides intelligent error handling. The tool supports reading files from specific line offsets and limited line counts, making it suitable for handling large files incrementally. It includes comprehensive validation for path safety, file existence, file type compatibility, and resource consumption control.",
+    "detailed_description": "This component implements a secure file reading tool (ReadFile) designed for AI agent runtime environments. It extends CallableTool2 to provide controlled file access with multiple safety mechanisms:\n\n1. **Path Validation & Security**: Validates file paths to ensure they're within authorized workspaces or use absolute paths for external files. Prevents unauthorized file access through path canonicalization and workspace boundary checks.\n\n2. **File Type Detection**: Uses header sniffing (MEDIA_SNIFF_BYTES) to detect file types and rejects non-text files (images, videos) or unknown binary formats, directing users to appropriate tools instead.\n\n3. **Content Chunking & Pagination**: Supports reading large files in chunks using line_offset and n_lines parameters, with configurable limits (MAX_LINES=1000, MAX_BYTES=100KB) to prevent memory exhaustion.\n\n4. **Content Formatting**: Formats output with line numbers (6-digit, right-aligned) similar to 'cat -n' command, and truncates excessively long lines (MAX_LINE_LENGTH=2000) while tracking which lines were modified.\n\n5. **Error Handling**: Provides detailed error messages with both verbose descriptions and brief summaries for different failure scenarios (file not found, invalid path, unsupported type, etc.).\n\nThe tool integrates with the Runtime environment to access working directory configuration and additional authorized directories, making it a critical component for safe file system operations in the AI CLI system.",
     "interfaces": [
       {
-        "description": "Main tool class for file reading operations",
-        "interface_type": "class",
-        "name": "ReadFile",
-        "parameters": [],
-        "return_type": null,
-        "visibility": "public"
-      },
-      {
-        "description": "Parameter model for file reading configuration",
+        "description": "Parameter model for ReadFile tool defining file path and pagination options",
         "interface_type": "class",
         "name": "Params",
-        "parameters": [],
+        "parameters": [
+          {
+            "description": "The path to the file to read. Absolute paths required for files outside working directory",
+            "is_optional": false,
+            "name": "path",
+            "param_type": "str"
+          },
+          {
+            "description": "Starting line number for reading (default: 1, minimum: 1)",
+            "is_optional": true,
+            "name": "line_offset",
+            "param_type": "int"
+          },
+          {
+            "description": "Number of lines to read (default: 1000, maximum: 1000, minimum: 1)",
+            "is_optional": true,
+            "name": "n_lines",
+            "param_type": "int"
+          }
+        ],
         "return_type": null,
         "visibility": "public"
       },
       {
-        "description": "Validates file path security and accessibility",
+        "description": "Main tool class extending CallableTool2 for secure file reading operations",
+        "interface_type": "class",
+        "name": "ReadFile",
+        "parameters": [
+          {
+            "description": "Runtime environment providing workspace configuration and additional directories",
+            "is_optional": false,
+            "name": "runtime",
+            "param_type": "Runtime"
+          }
+        ],
+        "return_type": null,
+        "visibility": "public"
+      },
+      {
+        "description": "Validates path is within authorized workspace or uses absolute path for external access",
         "interface_type": "method",
         "name": "_validate_path",
         "parameters": [
           {
-            "description": "Path to validate for security",
+            "description": "Path object to validate for safety and authorization",
             "is_optional": false,
             "name": "path",
             "param_type": "KaosPath"
@@ -33679,12 +33988,12 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "private"
       },
       {
-        "description": "Main execution method for file reading operation",
+        "description": "Main execution method that reads file content with validation, type checking, and formatting",
         "interface_type": "method",
         "name": "__call__",
         "parameters": [
           {
-            "description": "Reading parameters including path and line settings",
+            "description": "Parameters specifying file path and reading options",
             "is_optional": false,
             "name": "params",
             "param_type": "Params"
@@ -33692,36 +34001,20 @@ Code analysis results from preprocessing phase, including definitions of functio
         ],
         "return_type": "ToolReturnValue",
         "visibility": "public"
-      },
-      {
-        "description": "File path parameter with absolute path requirement for external files",
-        "interface_type": "property",
-        "name": "path",
-        "parameters": [],
-        "return_type": "str",
-        "visibility": "public"
-      },
-      {
-        "description": "Starting line number for reading (1-based)",
-        "interface_type": "property",
-        "name": "line_offset",
-        "parameters": [],
-        "return_type": "int",
-        "visibility": "public"
       }
     ],
     "responsibilities": [
-      "File path validation and security checking",
-      "File type detection and compatibility verification",
-      "Resource-constrained file reading with limits",
-      "Error handling and user feedback generation",
-      "Line-by-line processing with truncation capabilities"
+      "Validate and authorize file access requests by checking path safety, workspace boundaries, and absolute path requirements for external files",
+      "Detect file types through header analysis and reject unsupported formats (images, videos, binaries) with appropriate error guidance",
+      "Read and paginate file contents with configurable limits (lines, bytes) to handle large files safely without memory issues",
+      "Format output with line numbers and truncate excessively long lines while maintaining readability and tracking modifications",
+      "Provide comprehensive error handling and user feedback for various failure scenarios with actionable guidance"
     ]
   },
   {
     "code_dossier": {
       "code_purpose": "tool",
-      "description": "A string replacement tool for file editing operations with approval workflow",
+      "description": "A file editing tool that performs string replacement operations on files with approval workflow and diff visualization",
       "file_path": "src/kimi_cli/tools/file/replace.py",
       "functions": [
         "_validate_path",
@@ -33732,21 +34025,14 @@ Code analysis results from preprocessing phase, including definitions of functio
       "interfaces": [
         "StrReplaceFile",
         "Edit",
-        "Params",
-        "_validate_path",
-        "_apply_edit",
-        "__call__",
-        "name",
-        "description",
-        "params",
-        "__init__"
+        "Params"
       ],
       "name": "replace.py",
-      "source_summary": "from pathlib import Path\nfrom typing import override\n\nfrom kaos.path import KaosPath\nfrom kosong.tooling import CallableTool2, ToolError, ToolReturnValue\nfrom pydantic import BaseModel, Field\n\nfrom kimi_cli.soul.agent import BuiltinSystemPromptArgs\nfrom kimi_cli.soul.approval import Approval\nfrom kimi_cli.tools.display import DisplayBlock\nfrom kimi_cli.tools.file import FileActions\nfrom kimi_cli.tools.utils import ToolRejectedError, load_desc\nfrom kimi_cli.utils.diff import build_diff_blocks\nfrom kimi_cli.utils.path import is_within_directory\n\n\nclass Edit(BaseModel):\n    old: str = Field(description=\"The old string to replace. Can be multi-line.\")\n    new: str = Field(description=\"The new string to replace with. Can be multi-line.\")\n    replace_all: bool = Field(description=\"Whether to replace all occurrences.\", default=False)\n\n\nclass Params(BaseModel):\n    path: str = Field(\n        description=(\n            \"The path to the file to edit. Absolute paths are required when editing files \"\n            \"outside the working directory.\"\n        )\n    )\n    edit: Edit | list[Edit] = Field(\n        description=(\n            \"The edit(s) to apply to the file. \"\n            \"You can provide a single edit or a list of edits here.\"\n        )\n    )\n\n\nclass StrReplaceFile(CallableTool2[Params]):\n    name: str = \"StrReplaceFile\"\n    description: str = load_desc(Path(__file__).parent / \"replace.md\")\n    params: type[Params] = Params\n\n    def __init__(self, builtin_args: BuiltinSystemPromptArgs, approval: Approval):\n        super().__init__()\n        self._work_dir = builtin_args.KIMI_WORK_DIR\n        self._approval = approval\n\n    async def _validate_path(self, path: KaosPath) -> ToolError | None:\n        \"\"\"Validate that the path is safe to edit.\"\"\"\n        resolved_path = path.canonical()\n\n        if not is_within_directory(resolved_path, self._work_dir) and not path.is_absolute():\n            return ToolError(\n                message=(\n                    f\"`{path}` is not an absolute path. \"\n                    \"You must provide an absolute path to edit a file \"\n                    \"outside the working directory.\"\n                ),\n                brief=\"Invalid path\",\n            )\n        return None\n\n    def _apply_edit(self, content: str, edit: Edit) -> str:\n        \"\"\"Apply a single edit to the content.\"\"\"\n        if edit.replace_all:\n            return content.replace(edit.old, edit.new)\n        else:\n            return content.replace(edit.old, edit.new, 1)\n\n    @override\n    async def __call__(self, params: Params) -> ToolReturnValue:\n        if not params.path:\n            return ToolError(\n                message=\"File path cannot be empty.\",\n                brief=\"Empty file path\",\n            )\n\n        try:\n            p = KaosPath(params.path).expanduser()\n            if err := await self._validate_path(p):\n                return err\n            p = p.canonical()\n\n            if not await p.exists():\n                return ToolError(\n                    message=f\"`{params.path}` does not exist.\",\n                    brief=\"File not found\",\n                )\n            if not await p.is_file():\n                return ToolError(\n                    message=f\"`{params.path}` is not a file.\",\n                    brief=\"Invalid path\",\n                )\n\n            # Read the file content\n            content = await p.read_text(errors=\"replace\")\n\n            original_content = content\n            edits = [params.edit] if isinstance(params.edit, Edit) else params.edit\n\n            # Apply all edits\n            for edit in edits:\n                content = self._apply_edit(content, edit)\n\n            # Check if any changes were made\n            if content == original_content:\n                return ToolError(\n                    message=\"No replacements were made. The old string was not found in the file.\",\n                    brief=\"No replacements made\",\n                )\n\n            diff_blocks: list[DisplayBlock] = list(\n                build_diff_blocks(str(p), original_content, content)\n            )\n\n            action = (\n                FileActions.EDIT\n                if is_within_directory(p, self._work_dir)\n                else FileActions.EDIT_OUTSIDE\n            )\n\n            # Request approval\n            if not await self._approval.request(\n                self.name,\n                action,\n                f\"Edit file `{p}`\",\n                display=diff_blocks,\n            ):\n                return ToolRejectedError()\n\n            # Write the modified content back to the file\n            await p.write_text(content, errors=\"replace\")\n\n            # Count changes for success message\n            total_replacements = 0\n            for edit in edits:\n                if edit.replace_all:\n                    total_replacements += original_content.count(edit.old)\n                else:\n                    total_replacements += 1 if edit.old in original_content else 0\n\n            return ToolReturnValue(\n                is_error=False,\n                output=\"\",\n                message=(\n                    f\"File successfully edited. \"\n                    f\"Applied {len(edits)} edit(s) with {total_replacements} total replacement(s).\"\n                ),\n                display=diff_blocks,\n            )\n\n        except Exception as e:\n            return ToolError(\n                message=f\"Failed to edit. Error: {e}\",\n                brief=\"Failed to edit file\",\n            )\n"
+      "source_summary": "from pathlib import Path\nfrom typing import override\n\nfrom kaos.path import KaosPath\nfrom kosong.tooling import CallableTool2, ToolError, ToolReturnValue\nfrom pydantic import BaseModel, Field\n\nfrom kimi_cli.soul.agent import Runtime\nfrom kimi_cli.soul.approval import Approval\nfrom kimi_cli.tools.display import DisplayBlock\nfrom kimi_cli.tools.file import FileActions\nfrom kimi_cli.tools.utils import ToolRejectedError, load_desc\nfrom kimi_cli.utils.diff import build_diff_blocks\nfrom kimi_cli.utils.path import is_within_workspace\n\n\nclass Edit(BaseModel):\n    old: str = Field(description=\"The old string to replace. Can be multi-line.\")\n    new: str = Field(description=\"The new string to replace with. Can be multi-line.\")\n    replace_all: bool = Field(description=\"Whether to replace all occurrences.\", default=False)\n\n\nclass Params(BaseModel):\n    path: str = Field(\n        description=(\n            \"The path to the file to edit. Absolute paths are required when editing files \"\n            \"outside the working directory.\"\n        )\n    )\n    edit: Edit | list[Edit] = Field(\n        description=(\n            \"The edit(s) to apply to the file. \"\n            \"You can provide a single edit or a list of edits here.\"\n        )\n    )\n\n\nclass StrReplaceFile(CallableTool2[Params]):\n    name: str = \"StrReplaceFile\"\n    description: str = load_desc(Path(__file__).parent / \"replace.md\")\n    params: type[Params] = Params\n\n    def __init__(self, runtime: Runtime, approval: Approval):\n        super().__init__()\n        self._work_dir = runtime.builtin_args.KIMI_WORK_DIR\n        self._additional_dirs = runtime.additional_dirs\n        self._approval = approval\n\n    async def _validate_path(self, path: KaosPath) -> ToolError | None:\n        \"\"\"Validate that the path is safe to edit.\"\"\"\n        resolved_path = path.canonical()\n\n        if (\n            not is_within_workspace(resolved_path, self._work_dir, self._additional_dirs)\n            and not path.is_absolute()\n        ):\n            return ToolError(\n                message=(\n                    f\"`{path}` is not an absolute path. \"\n                    \"You must provide an absolute path to edit a file \"\n                    \"outside the working directory.\"\n                ),\n                brief=\"Invalid path\",\n            )\n        return None\n\n    def _apply_edit(self, content: str, edit: Edit) -> str:\n        \"\"\"Apply a single edit to the content.\"\"\"\n        if edit.replace_all:\n            return content.replace(edit.old, edit.new)\n        else:\n            return content.replace(edit.old, edit.new, 1)\n\n    @override\n    async def __call__(self, params: Params) -> ToolReturnValue:\n        if not params.path:\n            return ToolError(\n                message=\"File path cannot be empty.\",\n                brief=\"Empty file path\",\n            )\n\n        try:\n            p = KaosPath(params.path).expanduser()\n            if err := await self._validate_path(p):\n                return err\n            p = p.canonical()\n\n            if not await p.exists():\n                return ToolError(\n                    message=f\"`{params.path}` does not exist.\",\n                    brief=\"File not found\",\n                )\n            if not await p.is_file():\n                return ToolError(\n                    message=f\"`{params.path}` is not a file.\",\n                    brief=\"Invalid path\",\n                )\n\n            # Read the file content\n            content = await p.read_text(errors=\"replace\")\n\n            original_content = content\n            edits = [params.edit] if isinstance(params.edit, Edit) else params.edit\n\n            # Apply all edits\n            for edit in edits:\n                content = self._apply_edit(content, edit)\n\n            # Check if any changes were made\n            if content == original_content:\n                return ToolError(\n                    message=\"No replacements were made. The old string was not found in the file.\",\n                    brief=\"No replacements made\",\n                )\n\n            diff_blocks: list[DisplayBlock] = list(\n                build_diff_blocks(str(p), original_content, content)\n            )\n\n            action = (\n                FileActions.EDIT\n                if is_within_workspace(p, self._work_dir, self._additional_dirs)\n                else FileActions.EDIT_OUTSIDE\n            )\n\n            # Request approval\n            if not await self._approval.request(\n                self.name,\n                action,\n                f\"Edit file `{p}`\",\n                display=diff_blocks,\n            ):\n                return ToolRejectedError()\n\n            # Write the modified content back to the file\n            await p.write_text(content, errors=\"replace\")\n\n            # Count changes for success message\n            total_replacements = 0\n            for edit in edits:\n                if edit.replace_all:\n                    total_replacements += original_content.count(edit.old)\n                else:\n                    total_replacements += 1 if edit.old in original_content else 0\n\n            return ToolReturnValue(\n                is_error=False,\n                output=\"\",\n                message=(\n                    f\"File successfully edited. \"\n                    f\"Applied {len(edits)} edit(s) with {total_replacements} total replacement(s).\"\n                ),\n                display=diff_blocks,\n            )\n\n        except Exception as e:\n            return ToolError(\n                message=f\"Failed to edit. Error: {e}\",\n                brief=\"Failed to edit file\",\n            )\n"
     },
     "complexity_metrics": {
       "cyclomatic_complexity": 17.0,
-      "lines_of_code": 156,
+      "lines_of_code": 160,
       "number_of_classes": 3,
       "number_of_functions": 3
     },
@@ -33754,149 +34040,162 @@ Code analysis results from preprocessing phase, including definitions of functio
       {
         "dependency_type": "import",
         "is_external": true,
-        "line_number": null,
-        "name": "pathlib.Path",
+        "line_number": 1,
+        "name": "Path",
         "path": "pathlib",
         "version": null
       },
       {
         "dependency_type": "import",
         "is_external": true,
-        "line_number": null,
-        "name": "typing.override",
+        "line_number": 2,
+        "name": "override",
         "path": "typing",
         "version": null
       },
       {
         "dependency_type": "import",
-        "is_external": false,
-        "line_number": null,
-        "name": "kaos.path.KaosPath",
+        "is_external": true,
+        "line_number": 4,
+        "name": "KaosPath",
         "path": "kaos.path",
         "version": null
       },
       {
         "dependency_type": "import",
-        "is_external": false,
-        "line_number": null,
-        "name": "kosong.tooling.CallableTool2",
-        "path": "kosong.tooling",
-        "version": null
-      },
-      {
-        "dependency_type": "import",
-        "is_external": false,
-        "line_number": null,
-        "name": "kosong.tooling.ToolError",
-        "path": "kosong.tooling",
-        "version": null
-      },
-      {
-        "dependency_type": "import",
-        "is_external": false,
-        "line_number": null,
-        "name": "kosong.tooling.ToolReturnValue",
+        "is_external": true,
+        "line_number": 5,
+        "name": "CallableTool2",
         "path": "kosong.tooling",
         "version": null
       },
       {
         "dependency_type": "import",
         "is_external": true,
-        "line_number": null,
-        "name": "pydantic.BaseModel",
+        "line_number": 5,
+        "name": "ToolError",
+        "path": "kosong.tooling",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": true,
+        "line_number": 5,
+        "name": "ToolReturnValue",
+        "path": "kosong.tooling",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": true,
+        "line_number": 6,
+        "name": "BaseModel",
         "path": "pydantic",
         "version": null
       },
       {
         "dependency_type": "import",
         "is_external": true,
-        "line_number": null,
-        "name": "pydantic.Field",
+        "line_number": 6,
+        "name": "Field",
         "path": "pydantic",
         "version": null
       },
       {
         "dependency_type": "import",
         "is_external": false,
-        "line_number": null,
-        "name": "kimi_cli.soul.agent.BuiltinSystemPromptArgs",
+        "line_number": 8,
+        "name": "Runtime",
         "path": "kimi_cli.soul.agent",
         "version": null
       },
       {
         "dependency_type": "import",
         "is_external": false,
-        "line_number": null,
-        "name": "kimi_cli.soul.approval.Approval",
+        "line_number": 9,
+        "name": "Approval",
         "path": "kimi_cli.soul.approval",
         "version": null
       },
       {
         "dependency_type": "import",
         "is_external": false,
-        "line_number": null,
-        "name": "kimi_cli.tools.display.DisplayBlock",
+        "line_number": 10,
+        "name": "DisplayBlock",
         "path": "kimi_cli.tools.display",
         "version": null
       },
       {
         "dependency_type": "import",
         "is_external": false,
-        "line_number": null,
-        "name": "kimi_cli.tools.file.FileActions",
+        "line_number": 11,
+        "name": "FileActions",
         "path": "kimi_cli.tools.file",
         "version": null
       },
       {
         "dependency_type": "import",
         "is_external": false,
-        "line_number": null,
-        "name": "kimi_cli.tools.utils.ToolRejectedError",
+        "line_number": 12,
+        "name": "ToolRejectedError",
         "path": "kimi_cli.tools.utils",
         "version": null
       },
       {
         "dependency_type": "import",
         "is_external": false,
-        "line_number": null,
-        "name": "kimi_cli.tools.utils.load_desc",
+        "line_number": 12,
+        "name": "load_desc",
         "path": "kimi_cli.tools.utils",
         "version": null
       },
       {
         "dependency_type": "import",
         "is_external": false,
-        "line_number": null,
-        "name": "kimi_cli.utils.diff.build_diff_blocks",
+        "line_number": 13,
+        "name": "build_diff_blocks",
         "path": "kimi_cli.utils.diff",
         "version": null
       },
       {
         "dependency_type": "import",
         "is_external": false,
-        "line_number": null,
-        "name": "kimi_cli.utils.path.is_within_directory",
+        "line_number": 14,
+        "name": "is_within_workspace",
         "path": "kimi_cli.utils.path",
         "version": null
       }
     ],
-    "detailed_description": "This component implements a string replacement file editing tool that allows users to perform string substitutions in files with safety validations and approval workflows. It supports single or multiple edits, both single and all-occurrence replacements, and includes path validation to ensure operations only occur within permitted directories. The tool integrates with a display system to show diffs and requires user approval before applying changes.",
+    "detailed_description": "This component implements a string replacement tool (StrReplaceFile) for the Kimi CLI system. It provides safe, controlled file editing capabilities through string find-and-replace operations. The tool supports both single and multiple edits in one operation, with options for replacing all occurrences or just the first match. Key features include: (1) Path validation to ensure files are within authorized workspaces or use absolute paths for external files, (2) Approval workflow integration that displays diff previews before applying changes, (3) Comprehensive error handling for various failure scenarios (file not found, no matches, invalid paths), (4) Support for both single and batch edit operations, and (5) Detailed feedback on the number of replacements made. The tool is designed as part of an AI agent system where file modifications require user approval, ensuring safety and transparency in automated file operations.",
     "interfaces": [
       {
-        "description": "Main tool class for string replacement file operations",
+        "description": "Main tool class that implements file string replacement functionality with approval workflow",
         "interface_type": "class",
         "name": "StrReplaceFile",
-        "parameters": [],
-        "return_type": null,
+        "parameters": [
+          {
+            "description": "Runtime context providing workspace directory and additional authorized directories",
+            "is_optional": false,
+            "name": "runtime",
+            "param_type": "Runtime"
+          },
+          {
+            "description": "Approval service for requesting user permission before file modifications",
+            "is_optional": false,
+            "name": "approval",
+            "param_type": "Approval"
+          }
+        ],
+        "return_type": "None",
         "visibility": "public"
       },
       {
-        "description": "Validates file path safety and permissions",
+        "description": "Validates that the target path is safe to edit based on workspace boundaries",
         "interface_type": "method",
         "name": "_validate_path",
         "parameters": [
           {
-            "description": "Path to validate",
+            "description": "The file path to validate",
             "is_optional": false,
             "name": "path",
             "param_type": "KaosPath"
@@ -33906,18 +34205,18 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "private"
       },
       {
-        "description": "Applies single string replacement edit",
+        "description": "Applies a single edit operation to file content",
         "interface_type": "method",
         "name": "_apply_edit",
         "parameters": [
           {
-            "description": "Original file content",
+            "description": "The file content to modify",
             "is_optional": false,
             "name": "content",
             "param_type": "str"
           },
           {
-            "description": "Edit operation to apply",
+            "description": "The edit specification containing old/new strings and replace_all flag",
             "is_optional": false,
             "name": "edit",
             "param_type": "Edit"
@@ -33927,12 +34226,12 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "private"
       },
       {
-        "description": "Main execution method for the string replacement tool",
+        "description": "Main execution method that orchestrates the file replacement workflow",
         "interface_type": "method",
         "name": "__call__",
         "parameters": [
           {
-            "description": "Tool parameters including file path and edits",
+            "description": "Parameters containing file path and edit operations to perform",
             "is_optional": false,
             "name": "params",
             "param_type": "Params"
@@ -33942,28 +34241,60 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Data model for individual edit operations",
+        "description": "Data model representing a single string replacement operation",
         "interface_type": "class",
         "name": "Edit",
-        "parameters": [],
-        "return_type": null,
+        "parameters": [
+          {
+            "description": "The string to find and replace",
+            "is_optional": false,
+            "name": "old",
+            "param_type": "str"
+          },
+          {
+            "description": "The replacement string",
+            "is_optional": false,
+            "name": "new",
+            "param_type": "str"
+          },
+          {
+            "description": "Whether to replace all occurrences (default: False)",
+            "is_optional": true,
+            "name": "replace_all",
+            "param_type": "bool"
+          }
+        ],
+        "return_type": "None",
         "visibility": "public"
       },
       {
-        "description": "Data model for tool input parameters",
+        "description": "Parameter model for the StrReplaceFile tool",
         "interface_type": "class",
         "name": "Params",
-        "parameters": [],
-        "return_type": null,
+        "parameters": [
+          {
+            "description": "Path to the file to edit",
+            "is_optional": false,
+            "name": "path",
+            "param_type": "str"
+          },
+          {
+            "description": "Single edit or list of edits to apply",
+            "is_optional": false,
+            "name": "edit",
+            "param_type": "Edit | list[Edit]"
+          }
+        ],
+        "return_type": "None",
         "visibility": "public"
       }
     ],
     "responsibilities": [
-      "File path validation and security checks",
-      "String replacement logic execution",
-      "User approval workflow management",
-      "File content reading and writing operations",
-      "Change tracking and diff generation"
+      "Validate file paths to ensure they are within authorized workspaces or use absolute paths for external access",
+      "Perform string-based find-and-replace operations on file content with support for single or multiple replacements",
+      "Generate and display diff visualizations showing proposed changes before applying them",
+      "Integrate with approval workflow to request user permission before modifying files",
+      "Provide comprehensive error handling and user feedback for various failure scenarios"
     ]
   },
   {
@@ -35566,8 +35897,8 @@ Code analysis results from preprocessing phase, including definitions of functio
   },
   {
     "code_dossier": {
-      "code_purpose": "context",
-      "description": null,
+      "code_purpose": "model",
+      "description": "Session state management models and persistence layer for the Kimi CLI application",
       "file_path": "src/kimi_cli/session_state.py",
       "functions": [
         "load_session_state",
@@ -35576,139 +35907,113 @@ Code analysis results from preprocessing phase, including definitions of functio
       ],
       "importance_score": 0.8,
       "interfaces": [
+        "SessionState",
         "ApprovalStateData",
         "DynamicSubagentSpec",
-        "SessionState"
+        "load_session_state",
+        "save_session_state",
+        "_default_dynamic_subagents"
       ],
       "name": "session_state.py",
-      "source_summary": "from __future__ import annotations\n\nimport json\nfrom pathlib import Path\n\nfrom pydantic import BaseModel, Field, ValidationError\n\nfrom kimi_cli.utils.io import atomic_json_write\nfrom kimi_cli.utils.logging import logger\n\nSTATE_FILE_NAME = \"state.json\"\n\n\nclass ApprovalStateData(BaseModel):\n    yolo: bool = False\n    auto_approve_actions: set[str] = Field(default_factory=set)\n\n\nclass DynamicSubagentSpec(BaseModel):\n    name: str\n    system_prompt: str\n\n\ndef _default_dynamic_subagents() -> list[DynamicSubagentSpec]:\n    return []\n\n\nclass SessionState(BaseModel):\n    version: int = 1\n    approval: ApprovalStateData = Field(default_factory=ApprovalStateData)\n    dynamic_subagents: list[DynamicSubagentSpec] = Field(default_factory=_default_dynamic_subagents)\n\n\ndef load_session_state(session_dir: Path) -> SessionState:\n    state_file = session_dir / STATE_FILE_NAME\n    if not state_file.exists():\n        return SessionState()\n    try:\n        with open(state_file, encoding=\"utf-8\") as f:\n            return SessionState.model_validate(json.load(f))\n    except (json.JSONDecodeError, ValidationError, UnicodeDecodeError):\n        logger.warning(\"Corrupted state file, using defaults: {path}\", path=state_file)\n        return SessionState()\n\n\ndef save_session_state(state: SessionState, session_dir: Path) -> None:\n    state_file = session_dir / STATE_FILE_NAME\n    atomic_json_write(state.model_dump(mode=\"json\"), state_file)\n"
+      "source_summary": "from __future__ import annotations\n\nimport json\nfrom pathlib import Path\n\nfrom pydantic import BaseModel, Field, ValidationError\n\nfrom kimi_cli.utils.io import atomic_json_write\nfrom kimi_cli.utils.logging import logger\n\nSTATE_FILE_NAME = \"state.json\"\n\n\nclass ApprovalStateData(BaseModel):\n    yolo: bool = False\n    auto_approve_actions: set[str] = Field(default_factory=set)\n\n\nclass DynamicSubagentSpec(BaseModel):\n    name: str\n    system_prompt: str\n\n\ndef _default_dynamic_subagents() -> list[DynamicSubagentSpec]:\n    return []\n\n\nclass SessionState(BaseModel):\n    version: int = 1\n    approval: ApprovalStateData = Field(default_factory=ApprovalStateData)\n    dynamic_subagents: list[DynamicSubagentSpec] = Field(default_factory=_default_dynamic_subagents)\n    additional_dirs: list[str] = Field(default_factory=list)\n\n\ndef load_session_state(session_dir: Path) -> SessionState:\n    state_file = session_dir / STATE_FILE_NAME\n    if not state_file.exists():\n        return SessionState()\n    try:\n        with open(state_file, encoding=\"utf-8\") as f:\n            return SessionState.model_validate(json.load(f))\n    except (json.JSONDecodeError, ValidationError, UnicodeDecodeError):\n        logger.warning(\"Corrupted state file, using defaults: {path}\", path=state_file)\n        return SessionState()\n\n\ndef save_session_state(state: SessionState, session_dir: Path) -> None:\n    state_file = session_dir / STATE_FILE_NAME\n    atomic_json_write(state.model_dump(mode=\"json\"), state_file)\n"
     },
     "complexity_metrics": {
       "cyclomatic_complexity": 2.0,
-      "lines_of_code": 48,
+      "lines_of_code": 49,
       "number_of_classes": 3,
       "number_of_functions": 3
     },
     "dependencies": [
       {
-        "dependency_type": "external_library",
+        "dependency_type": "import",
         "is_external": true,
-        "line_number": 5,
-        "name": "pydantic",
-        "path": null,
+        "line_number": 1,
+        "name": "annotations",
+        "path": "__future__",
         "version": null
       },
       {
-        "dependency_type": "standard_library",
-        "is_external": false,
-        "line_number": 4,
-        "name": "pathlib.Path",
-        "path": null,
-        "version": null
-      },
-      {
-        "dependency_type": "standard_library",
-        "is_external": false,
-        "line_number": 4,
+        "dependency_type": "import",
+        "is_external": true,
+        "line_number": 3,
         "name": "json",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "internal_module",
-        "is_external": false,
-        "line_number": 7,
-        "name": "kimi_cli.utils.io.atomic_json_write",
-        "path": "src/kimi_cli/utils/io.py",
+        "dependency_type": "import",
+        "is_external": true,
+        "line_number": 4,
+        "name": "Path",
+        "path": "pathlib",
         "version": null
       },
       {
-        "dependency_type": "internal_module",
+        "dependency_type": "import",
+        "is_external": true,
+        "line_number": 6,
+        "name": "pydantic",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 8,
-        "name": "kimi_cli.utils.logging.logger",
-        "path": "src/kimi_cli/utils/logging.py",
+        "name": "atomic_json_write",
+        "path": "kimi_cli.utils.io",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": false,
+        "line_number": 9,
+        "name": "logger",
+        "path": "kimi_cli.utils.logging",
         "version": null
       }
     ],
-    "detailed_description": "SessionState is a context component responsible for managing persistent session state configuration for the kimi_cli application. It provides data models for approval settings (including YOLO mode and auto-approve actions), dynamic subagent specifications (name and system prompt), and implements robust file-based persistence operations. The component handles state loading with graceful degradation for corrupted files and ensures atomic writes for data integrity. It serves as the central state management layer that maintains user preferences and runtime configuration across application sessions.",
+    "detailed_description": "This module defines the session state data models and provides persistence functionality for the Kimi CLI application. It uses Pydantic for data validation and serialization. The SessionState model serves as the root container for all session-related data including approval settings (yolo mode and auto-approve actions), dynamic subagent specifications (name and system prompt), and additional directories. The module provides two key functions: load_session_state() which reads and deserializes state from a JSON file with error handling for corrupted data, and save_session_state() which atomically writes state to disk. The state file is named 'state.json' and stored in the session directory. The implementation includes defensive programming with fallback to default values when the state file is missing or corrupted.\n\n**Business Logic Analysis:**\n- ApprovalStateData manages user approval preferences with a 'yolo' flag for auto-approval mode and a set of specific actions that are auto-approved\n- DynamicSubagentSpec allows runtime configuration of AI subagents with custom system prompts\n- SessionState acts as the aggregate root with version tracking (currently v1) for future schema migrations\n- Load operation gracefully handles JSONDecodeError, ValidationError, and UnicodeDecodeError by logging warnings and returning defaults\n- Save operation uses atomic writes to prevent partial writes and data corruption during crashes\n\n**Architecture Role:**\nThis component serves as the data persistence layer for session management, sitting between the CLI application logic and the file system. It's a critical infrastructure component that enables stateful behavior across CLI invocations, particularly for approval workflows and dynamic subagent configurations. The use of Pydantic provides type safety and validation at the boundary between serialized JSON and in-memory Python objects.\n\n**Code Quality Assessment:**\n- Excellent use of Pydantic for type-safe data modeling with proper field defaults\n- Good error handling with multiple exception types caught and logged\n- Atomic write operation prevents data corruption\n- Clean separation of concerns between models and persistence functions\n- Proper use of type hints including future annotations for forward compatibility\n- Constant STATE_FILE_NAME improves maintainability\n- Low cyclomatic complexity (2.0) indicates simple, maintainable code\n\n**Dependency Analysis:**\nAll dependencies are appropriate and minimal:\n- Pydantic for data validation (essential for this use case)\n- Standard library json and pathlib for file operations\n- Internal utilities (atomic_json_write, logger) properly abstracted\n- No unnecessary external dependencies\n\n**Improvement Recommendations:**\n1. Add explicit error handling or return type for save_session_state to indicate success/failure rather than silent failures\n2. Consider adding a migration mechanism for the version field to handle future schema changes\n3. Add docstrings to classes and functions for better API documentation\n4. Consider making STATE_FILE_NAME configurable or moving to a config module\n5. Add type hints for the _default_dynamic_subagents return value in the Field definition for better IDE support\n6. Consider adding validation methods to SessionState for business rule enforcement (e.g., max number of dynamic subagents)\n7. Add unit tests coverage for error scenarios (corrupted JSON, invalid schema, permission errors)\n8. Consider adding a backup mechanism before overwriting state files for recovery purposes",
     "interfaces": [
       {
-        "description": "Data model for approval-related state configuration",
+        "description": "Pydantic model representing approval-related state with yolo flag and auto-approve action set",
         "interface_type": "class",
         "name": "ApprovalStateData",
-        "parameters": [
-          {
-            "description": "YOLO mode flag for bypassing approvals",
-            "is_optional": false,
-            "name": "yolo",
-            "param_type": "bool"
-          },
-          {
-            "description": "Set of actions that should be auto-approved",
-            "is_optional": false,
-            "name": "auto_approve_actions",
-            "param_type": "set[str]"
-          }
-        ],
+        "parameters": [],
         "return_type": null,
         "visibility": "public"
       },
       {
-        "description": "Data model for dynamic subagent specifications",
+        "description": "Pydantic model defining a dynamic subagent specification with name and system prompt",
         "interface_type": "class",
         "name": "DynamicSubagentSpec",
-        "parameters": [
-          {
-            "description": "Name identifier for the subagent",
-            "is_optional": false,
-            "name": "name",
-            "param_type": "str"
-          },
-          {
-            "description": "System prompt configuration for the subagent",
-            "is_optional": false,
-            "name": "system_prompt",
-            "param_type": "str"
-          }
-        ],
+        "parameters": [],
         "return_type": null,
         "visibility": "public"
       },
       {
-        "description": "Main session state container model",
+        "description": "Root Pydantic model containing all session state data including version, approval settings, dynamic subagents, and additional directories",
         "interface_type": "class",
         "name": "SessionState",
-        "parameters": [
-          {
-            "description": "State format version for migration support",
-            "is_optional": false,
-            "name": "version",
-            "param_type": "int"
-          },
-          {
-            "description": "Approval state configuration",
-            "is_optional": false,
-            "name": "approval",
-            "param_type": "ApprovalStateData"
-          },
-          {
-            "description": "List of dynamic subagent specifications",
-            "is_optional": false,
-            "name": "dynamic_subagents",
-            "param_type": "list[DynamicSubagentSpec]"
-          }
-        ],
+        "parameters": [],
         "return_type": null,
         "visibility": "public"
       },
       {
-        "description": "Loads session state from JSON file with error handling and fallback to defaults",
+        "description": "Factory function returning an empty list as default value for dynamic subagents field",
+        "interface_type": "function",
+        "name": "_default_dynamic_subagents",
+        "parameters": [],
+        "return_type": "list[DynamicSubagentSpec]",
+        "visibility": "private"
+      },
+      {
+        "description": "Loads session state from disk, returning default SessionState if file is missing or corrupted",
         "interface_type": "function",
         "name": "load_session_state",
         "parameters": [
           {
-            "description": "Directory path containing the state file",
+            "description": "Directory path where the state.json file is located",
             "is_optional": false,
             "name": "session_dir",
             "param_type": "Path"
@@ -35718,18 +36023,18 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Saves session state to JSON file using atomic write operations",
+        "description": "Atomically saves session state to disk in JSON format",
         "interface_type": "function",
         "name": "save_session_state",
         "parameters": [
           {
-            "description": "Session state instance to save",
+            "description": "SessionState instance to persist",
             "is_optional": false,
             "name": "state",
             "param_type": "SessionState"
           },
           {
-            "description": "Directory path where the state file should be saved",
+            "description": "Directory path where the state.json file should be written",
             "is_optional": false,
             "name": "session_dir",
             "param_type": "Path"
@@ -35737,22 +36042,14 @@ Code analysis results from preprocessing phase, including definitions of functio
         ],
         "return_type": "None",
         "visibility": "public"
-      },
-      {
-        "description": "Returns default empty list of dynamic subagents",
-        "interface_type": "function",
-        "name": "_default_dynamic_subagents",
-        "parameters": [],
-        "return_type": "list[DynamicSubagentSpec]",
-        "visibility": "private"
       }
     ],
     "responsibilities": [
-      "Session state persistence management - loading and saving state to JSON files with atomic operations",
-      "Data model definition and validation - providing Pydantic models for approval state and dynamic subagent configurations",
-      "Error handling and recovery - gracefully handling corrupted state files with fallback to defaults",
-      "Atomic file operations - ensuring data integrity during state persistence",
-      "Configuration centralization - maintaining a single source of truth for session-related settings"
+      "Define structured data models for session state including approval settings, dynamic subagent configurations, and additional directories using Pydantic BaseModel",
+      "Persist session state to disk in JSON format with atomic write operations to prevent data corruption",
+      "Load and deserialize session state from disk with robust error handling for corrupted, invalid, or missing state files",
+      "Provide default values and factory functions for complex nested data structures to ensure consistent initialization",
+      "Maintain version tracking for state schema evolution and potential future migrations"
     ]
   },
   {
@@ -40959,145 +41256,157 @@ Code analysis results from preprocessing phase, including definitions of functio
   {
     "code_dossier": {
       "code_purpose": "entry",
-      "description": "Kimi Code CLI Web UI application - FastAPI-based web server with authentication, CORS, and security features",
+      "description": "FastAPI-based web server entry point for Kimi CLI Web UI, providing HTTP interface for CLI operations with authentication, CORS, and session management",
       "file_path": "src/kimi_cli/web/app.py",
       "functions": [
-        "create_app",
-        "find_available_port",
-        "run_web_server",
         "_is_local_host",
         "_get_address_family",
         "_get_private_addresses",
         "_load_env_flag",
-        "_get_network_addresses"
+        "_get_network_addresses",
+        "create_app",
+        "find_available_port",
+        "run_web_server",
+        "print_banner"
       ],
       "importance_score": 0.8,
       "interfaces": [
         "create_app",
         "find_available_port",
-        "run_web_server",
-        "_is_local_host",
-        "_get_address_family",
-        "_get_private_addresses",
-        "_load_env_flag",
-        "_get_network_addresses",
-        "scalar_html",
-        "health_probe",
-        "lifespan",
-        "_get_network_addresses",
-        "make_url",
-        "open_browser_after_delay",
-        "print_banner",
-        "strip_tags"
+        "run_web_server"
       ],
       "name": "app.py",
-      "source_summary": "\"\"\"Kimi Code CLI Web UI application.\"\"\"\n\nimport os\nimport secrets\nimport socket\nimport sys\nimport webbrowser\nfrom collections.abc import Callable\nfrom contextlib import asynccontextmanager\nfrom pathlib import Path\nfrom typing import Any, cast\nfrom urllib.parse import quote\n\nimport scalar_fastapi\nfrom fastapi import FastAPI\nfrom fastapi.middleware.cors import CORSMiddleware\nfrom fastapi.middleware.gzip import GZipMiddleware\nfrom fastapi.staticfiles import StaticFiles\nfrom loguru import logger\nfrom starlette.responses import HTMLResponse\n\nfrom kimi_cli.web.api import (\n    config_router,\n    open_in_router,\n    sessions_router,\n    work_dirs_router,\n)\nfrom kimi_cli.web.auth import (\n    DEFAULT_ALLOWED_ORIGIN_REGEX,\n    AuthMiddleware,\n    is_private_ip,\n    normalize_allowed_origins,\n)\nfrom kimi_cli.web.runner.process import KimiCLIRunner\n\n# Configure logging based on LOG_LEVEL environment variable\n_log_level = os.environ.get(\"LOG_LEVEL\", \"WARNING\").upper()\nlogger.remove()\nlogger.enable(\"kimi_cli\")\nlogger.add(sys.stderr, level=_log_level)\n\n# scalar-fastapi does not ship typing stubs.\nget_scalar_api_reference = cast(  # pyright: ignore[reportUnknownMemberType]\n    Callable[..., HTMLResponse],\n    scalar_fastapi.get_scalar_api_reference,  # pyright: ignore[reportUnknownMemberType]\n)\n\n# Constants\nSTATIC_DIR = Path(__file__).parent / \"static\"\nGZIP_MINIMUM_SIZE = 1024\nGZIP_COMPRESSION_LEVEL = 6\nDEFAULT_PORT = 5494\nMAX_PORT_ATTEMPTS = 10\nENV_SESSION_TOKEN = \"KIMI_WEB_SESSION_TOKEN\"\nENV_ALLOWED_ORIGINS = \"KIMI_WEB_ALLOWED_ORIGINS\"\nENV_ENFORCE_ORIGIN = \"KIMI_WEB_ENFORCE_ORIGIN\"\nENV_RESTRICT_SENSITIVE_APIS = \"KIMI_WEB_RESTRICT_SENSITIVE_APIS\"\nENV_MAX_PUBLIC_PATH_DEPTH = \"KIMI_WEB_MAX_PUBLIC_PATH_DEPTH\"\n\n\ndef _is_local_host(host: str) -> bool:\n    return host in {\"127.0.0.1\", \"localhost\", \"::1\"}\n\n\ndef _get_address_family(host: str) -> socket.AddressFamily:\n    \"\"\"Determine the socket address family for a given host.\n\n    Returns AF_INET6 for IPv6 addresses, AF_INET for IPv4 and hostnames.\n    \"\"\"\n    # Check for IPv6 address patterns\n    if \":\" in host:\n        return socket.AF_INET6\n    return socket.AF_INET\n\n\ndef _get_private_addresses(addresses: list[str]) -> list[str]:\n    \"\"\"Filter addresses to only include private IPs.\"\"\"\n    return [ip for ip in addresses if is_private_ip(ip)]\n\n\ndef _load_env_flag(key: str) -> bool:\n    return os.environ.get(key, \"\").strip().lower() in {\"1\", \"true\", \"yes\", \"on\"}\n\n\ndef _get_network_addresses() -> list[str]:\n    \"\"\"Get all non-loopback IPv4 addresses for this machine.\n\n    Uses multiple methods to ensure we get all addresses across platforms.\n    \"\"\"\n    addresses: list[str] = []\n\n    # Method 1: Try using socket.getaddrinfo with the hostname\n    try:\n        hostname = socket.gethostname()\n        addr_infos = socket.getaddrinfo(hostname, None, socket.AF_INET)\n        for info in addr_infos:\n            ip = info[4][0]\n            if isinstance(ip, str) and not ip.startswith(\"127.\") and ip not in addresses:\n                addresses.append(ip)\n    except OSError:\n        pass\n\n    # Method 2: Try connecting to external address to get local interface\n    try:\n        # This doesn't actually send any data, just determines routing\n        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)\n        s.connect((\"8.8.8.8\", 80))\n        ip = s.getsockname()[0]\n        s.close()\n        if ip and not ip.startswith(\"127.\") and ip not in addresses:\n            addresses.append(ip)\n    except OSError:\n        pass\n\n    # Method 3: Try netifaces if available (most comprehensive)\n    try:\n        import netifaces\n\n        for interface in netifaces.interfaces():\n            addrs = netifaces.ifaddresses(interface)\n            if netifaces.AF_INET in addrs:\n                for addr_info in addrs[netifaces.AF_INET]:\n                    addr = addr_info.get(\"addr\")\n                    if addr and not addr.startswith(\"127.\") and addr not in addresses:\n                        addresses.append(addr)\n    except ImportError:\n        pass\n    except Exception:\n        pass\n\n    return addresses\n\n\nENV_LAN_ONLY = \"KIMI_WEB_LAN_ONLY\"\n\n\ndef create_app(\n    session_token: str | None = None,\n    allowed_origins: list[str] | None = None,\n    enforce_origin: bool | None = None,\n    restrict_sensitive_apis: bool | None = None,\n    max_public_path_depth: int | None = None,\n    lan_only: bool | None = None,\n) -> FastAPI:\n    \"\"\"Create the FastAPI application for Kimi CLI web UI.\"\"\"\n\n    env_token = os.environ.get(ENV_SESSION_TOKEN) or None\n    env_origins = normalize_allowed_origins(os.environ.get(ENV_ALLOWED_ORIGINS))\n    env_enforce_origin = _load_env_flag(ENV_ENFORCE_ORIGIN)\n    env_restrict_sensitive = _load_env_flag(ENV_RESTRICT_SENSITIVE_APIS)\n    env_max_depth_str = os.environ.get(ENV_MAX_PUBLIC_PATH_DEPTH)\n    env_max_depth = (\n        int(env_max_depth_str) if env_max_depth_str and env_max_depth_str.isdigit() else None\n    )\n    env_lan_only = _load_env_flag(ENV_LAN_ONLY)\n\n    session_token = session_token if session_token is not None else env_token\n    allowed_origins = allowed_origins if allowed_origins is not None else env_origins\n    enforce_origin = enforce_origin if enforce_origin is not None else env_enforce_origin\n    restrict_sensitive_apis = (\n        restrict_sensitive_apis if restrict_sensitive_apis is not None else env_restrict_sensitive\n    )\n    max_public_path_depth = (\n        max_public_path_depth if max_public_path_depth is not None else env_max_depth\n    )\n    lan_only = lan_only if lan_only is not None else env_lan_only\n\n    @asynccontextmanager\n    async def lifespan(app: FastAPI):\n        app.state.startup_dir = os.getcwd()\n        app.state.session_token = session_token\n        app.state.allowed_origins = allowed_origins\n        app.state.enforce_origin = enforce_origin\n        app.state.restrict_sensitive_apis = restrict_sensitive_apis\n        app.state.max_public_path_depth = max_public_path_depth\n        app.state.lan_only = lan_only\n\n        # Start KimiCLI runner\n        runner = KimiCLIRunner()\n        app.state.runner = runner\n        runner.start()\n\n        try:\n            yield\n        finally:\n            await runner.stop()\n\n    application = FastAPI(\n        title=\"Kimi Code CLI Web Interface\",\n        docs_url=None,\n        lifespan=lifespan,\n        separate_input_output_schemas=False,\n    )\n\n    application.add_middleware(\n        cast(Any, GZipMiddleware),\n        minimum_size=GZIP_MINIMUM_SIZE,\n        compresslevel=GZIP_COMPRESSION_LEVEL,\n    )\n\n    application.add_middleware(\n        cast(Any, AuthMiddleware),\n        session_token=session_token,\n        allowed_origins=allowed_origins,\n        enforce_origin=enforce_origin,\n        lan_only=lan_only,\n    )\n\n    cors_kwargs: dict[str, Any] = {\n        \"allow_credentials\": True,\n        \"allow_methods\": [\"*\"],\n        \"allow_headers\": [\"*\"],\n    }\n    if allowed_origins:\n        cors_kwargs[\"allow_origins\"] = allowed_origins\n    else:\n        cors_kwargs[\"allow_origin_regex\"] = DEFAULT_ALLOWED_ORIGIN_REGEX.pattern\n\n    # CORS middleware for local development\n    application.add_middleware(cast(Any, CORSMiddleware), **cors_kwargs)\n\n    application.include_router(config_router)\n    application.include_router(sessions_router)\n    application.include_router(work_dirs_router)\n    if not restrict_sensitive_apis:\n        application.include_router(open_in_router)\n\n    @application.get(\"/scalar\", include_in_schema=False)\n    @application.get(\"/docs\", include_in_schema=False)\n    async def scalar_html() -> HTMLResponse:  # pyright: ignore[reportUnusedFunction]\n        return get_scalar_api_reference(\n            openapi_url=application.openapi_url or \"\",\n            title=application.title,\n        )\n\n    @application.get(\"/healthz\")\n    async def health_probe() -> dict[str, Any]:  # pyright: ignore[reportUnusedFunction]\n        \"\"\"Health check endpoint.\"\"\"\n        return {\"status\": \"ok\"}\n\n    # Mount static files as fallback (must be last)\n    if STATIC_DIR.exists():\n        application.mount(\"/\", StaticFiles(directory=STATIC_DIR, html=True), name=\"static\")\n\n    return application\n\n\ndef find_available_port(host: str, start_port: int, max_attempts: int = MAX_PORT_ATTEMPTS) -> int:\n    \"\"\"Find an available port starting from start_port.\n\n    Args:\n        host: Host address to bind to\n        start_port: Starting port number (1-65535)\n        max_attempts: Maximum number of ports to try (must be positive)\n\n    Returns:\n        An available port number\n\n    Raises:\n        ValueError: If parameters are invalid\n        RuntimeError: If no available port is found within the range\n    \"\"\"\n    if max_attempts <= 0:\n        raise ValueError(\"max_attempts must be positive\")\n    if start_port < 1 or start_port > 65535:\n        raise ValueError(\"start_port must be between 1 and 65535\")\n\n    family = _get_address_family(host)\n    for offset in range(max_attempts):\n        port = start_port + offset\n        with socket.socket(family, socket.SOCK_STREAM) as s:\n            # Set SO_REUSEADDR to allow reusing ports in TIME_WAIT state.\n            # This matches uvicorn's behavior and prevents false positives\n            # when checking port availability after a recent shutdown.\n            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)\n            try:\n                s.bind((host, port))\n                return port\n            except OSError:\n                continue\n    raise RuntimeError(\n        f\"Cannot find available port in range {start_port}-{start_port + max_attempts - 1}\"\n    )\n\n\ndef run_web_server(\n    host: str = \"127.0.0.1\",\n    port: int = DEFAULT_PORT,\n    reload: bool = False,\n    open_browser: bool = True,\n    auth_token: str | None = None,\n    allowed_origins: str | None = None,\n    dangerously_omit_auth: bool = False,\n    restrict_sensitive_apis: bool | None = None,\n    lan_only: bool = True,\n) -> None:\n    \"\"\"Run the web server.\"\"\"\n    import sys\n    import textwrap\n    import threading\n\n    import uvicorn\n\n    def print_banner(lines: list[str]) -> None:\n        # Process lines, respecting special tags\n        processed: list[str] = []\n        for line in lines:\n            if line == \"<hr>\":\n                processed.append(line)\n            elif not line:\n                processed.append(\"\")\n            elif line.startswith(\"<center>\") or line.startswith(\"<nowrap>\"):\n                # Don't wrap these lines\n                processed.append(line)\n            else:\n                processed.extend(textwrap.wrap(line, width=78))\n\n        # Calculate width based on content (strip tags for measurement)\n        def strip_tags(s: str) -> str:\n            return s.removeprefix(\"<center>\").removeprefix(\"<nowrap>\")\n\n        content_lines = [strip_tags(line) for line in processed if line != \"<hr>\"]\n        width = max(60, *(len(line) for line in content_lines))\n        top = \"+\" + \"=\" * (width + 2) + \"+\"\n\n        print(top)\n        for line in processed:\n            if line == \"<hr>\":\n                print(\"|\" + \"-\" * (width + 2) + \"|\")\n            elif line.startswith(\"<center>\"):\n                content = line.removeprefix(\"<center>\")\n                print(f\"| {content.center(width)} |\")\n            elif line.startswith(\"<nowrap>\"):\n                content = line.removeprefix(\"<nowrap>\")\n                print(f\"| {content.ljust(width)} |\")\n            else:\n                print(f\"| {line.ljust(width)} |\")\n        print(top)\n\n    public_mode = not _is_local_host(host)\n    parsed_allowed_origins = normalize_allowed_origins(allowed_origins)\n    auto_populate_origins = public_mode and not parsed_allowed_origins\n\n    if restrict_sensitive_apis is None:\n        # Only restrict sensitive APIs in public mode (non-LAN-only)\n        restrict_sensitive_apis = public_mode and not lan_only\n\n    if public_mode and dangerously_omit_auth:\n        warning_lines = [\n            \"SECURITY WARNING\",\n            \"\",\n            \"Authentication is DISABLED while running on a public host.\",\n            \"Anyone on the network can access your sessions and files.\",\n            \"\",\n            \"Type 'I UNDERSTAND THE RISKS' to continue:\",\n        ]\n        print_banner(warning_lines)\n        if not sys.stdin.isatty():\n            raise RuntimeError(\"Refusing to start without auth in non-interactive mode.\")\n        response = input(\"> \").strip()\n        if response != \"I UNDERSTAND THE RISKS\":\n            raise RuntimeError(\"Aborted by user.\")\n\n    if dangerously_omit_auth:\n        session_token = None\n    elif auth_token:\n        session_token = auth_token\n    elif public_mode:\n        session_token = secrets.token_urlsafe(32)\n    else:\n        session_token = None\n\n    if session_token:\n        os.environ[ENV_SESSION_TOKEN] = session_token\n    else:\n        os.environ.pop(ENV_SESSION_TOKEN, None)\n\n    # Find available port first (needed for auto-populating origins)\n    actual_port = find_available_port(host, port)\n    if actual_port != port:\n        print(f\"Port {port} is in use, using port {actual_port} instead\")\n\n    # Auto-populate allowed origins with detected network addresses + port\n    if auto_populate_origins:\n        auto_origins = [\n            f\"http://localhost:{actual_port}\",\n            f\"http://127.0.0.1:{actual_port}\",\n        ]\n        if host == \"0.0.0.0\":\n            # Binding to all interfaces: add all network addresses\n            network_addrs = _get_network_addresses()\n            for addr in network_addrs:\n                auto_origins.append(f\"http://{addr}:{actual_port}\")\n        else:\n            # Explicit host specified: only add that host\n            auto_origins.append(f\"http://{host}:{actual_port}\")\n        parsed_allowed_origins = auto_origins\n\n    if parsed_allowed_origins:\n        os.environ[ENV_ALLOWED_ORIGINS] = \",\".join(parsed_allowed_origins)\n    else:\n        os.environ.pop(ENV_ALLOWED_ORIGINS, None)\n\n    os.environ[ENV_ENFORCE_ORIGIN] = \"1\" if (public_mode and not lan_only) else \"0\"\n    os.environ[ENV_RESTRICT_SENSITIVE_APIS] = \"1\" if restrict_sensitive_apis else \"0\"\n    os.environ[ENV_LAN_ONLY] = \"1\" if lan_only else \"0\"\n\n    # Determine display URLs\n    display_hosts: list[tuple[str, str]] = []\n    if host == \"0.0.0.0\":\n        # Show localhost as \"Local\" and network interfaces\n        display_hosts.append((\"Local\", \"localhost\"))\n        network_addrs = _get_network_addresses()\n\n        # In lan_only mode, only show private IPs\n        if lan_only:\n            network_addrs = _get_private_addresses(network_addrs)\n\n        for addr in network_addrs:\n            display_hosts.append((\"Network\", addr))\n    else:\n        # Show the specified host\n        label = \"Local\" if _is_local_host(host) else \"Network\"\n        display_hosts.append((label, host))\n\n    # Build URLs with token if needed\n    def make_url(host_addr: str) -> tuple[str, str]:\n        \"\"\"Returns (url, browser_url) tuple.\"\"\"\n        url = f\"http://{host_addr}:{actual_port}\"\n        browser_url = f\"{url}/?token={quote(session_token)}\" if session_token else url\n        return url, browser_url\n\n    # For browser opening, prefer localhost, then first network address\n    browser_host = \"localhost\" if host == \"0.0.0.0\" else host\n    _, browser_url = make_url(browser_host)\n\n    if open_browser:\n\n        def open_browser_after_delay():\n            import time\n\n            time.sleep(1.5)\n            webbrowser.open(browser_url)\n\n        # Start browser opener in a daemon thread\n        thread = threading.Thread(target=open_browser_after_delay, daemon=True)\n        thread.start()\n\n    banner_lines = [\n        \"<center>█▄▀ █ █▀▄▀█ █   █▀▀ █▀█ █▀▄ █▀▀\",\n        \"<center>█ █ █ █ ▀ █ █   █▄▄ █▄█ █▄▀ ██▄\",\n        \"\",\n        \"<center>WEB UI (Technical Preview)\",\n        \"\",\n        \"<hr>\",\n        \"\",\n    ]\n\n    # Add URLs for each host (nowrap to keep URLs on single line for easy copying)\n    for label, host_addr in display_hosts:\n        url, url_with_token = make_url(host_addr)\n        if session_token:\n            banner_lines.append(f\"<nowrap>  ➜  {label:8} {url_with_token}\")\n        else:\n            banner_lines.append(f\"<nowrap>  ➜  {label:8} {url}\")\n\n    # Auth token or warnings\n    if session_token:\n        banner_lines.extend(\n            [\n                \"\",\n                f\"<nowrap>  Token:   {session_token}\",\n            ]\n        )\n    elif public_mode:\n        banner_lines.extend(\n            [\n                \"\",\n                \"<nowrap>  ⚠ AUTH DISABLED - Anyone on the network can access\",\n            ]\n        )\n\n    if restrict_sensitive_apis:\n        banner_lines.append(\"<nowrap>  ⚠ Sensitive APIs are restricted\")\n\n    # Show network access mode and tips\n    banner_lines.append(\"\")\n    banner_lines.append(\"<hr>\")\n    banner_lines.append(\"\")\n\n    if not public_mode:\n        # Local-only mode (127.0.0.1)\n        banner_lines.extend(\n            [\n                \"<nowrap>  Tips:\",\n                \"<nowrap>    • Use -n / --network to share on LAN\",\n                \"<nowrap>    • Use --network --public for public access\",\n            ]\n        )\n    elif lan_only:\n        # LAN mode (0.0.0.0 with lan_only)\n        banner_lines.extend(\n            [\n                \"<nowrap>  Mode: LAN only (private IPs)\",\n                \"\",\n                \"<nowrap>  Tips:\",\n                \"<nowrap>    • Use --public to allow public access\",\n                \"<nowrap>    • ⚠ Public mode allows access from any IP\",\n            ]\n        )\n    else:\n        # Public mode (0.0.0.0 without lan_only)\n        banner_lines.extend(\n            [\n                \"<nowrap>  ⚠ Mode: PUBLIC (all networks)\",\n                \"<nowrap>    Anyone with the URL can access this instance\",\n                \"\",\n                \"<nowrap>  Security tips:\",\n                \"<nowrap>    • Keep your auth token secure\",\n                \"<nowrap>    • Consider using firewall or VPN\",\n            ]\n        )\n\n    banner_lines.append(\"\")\n\n    print_banner(banner_lines)\n    # print(f\"API docs available at {url}/docs\")\n\n    uvicorn.run(\n        \"kimi_cli.web.app:create_app\",\n        factory=True,\n        host=host,\n        port=actual_port,\n        reload=reload,\n        log_level=\"info\",\n        timeout_graceful_shutdown=3,\n    )\n\n\n__all__ = [\"create_app\", \"find_available_port\", \"run_web_server\"]\n"
+      "source_summary": "\"\"\"Kimi Code CLI Web UI application.\"\"\"\n\nimport os\nimport secrets\nimport socket\nimport sys\nimport webbrowser\nfrom collections.abc import Callable\nfrom contextlib import asynccontextmanager\nfrom pathlib import Path\nfrom typing import Any, cast\nfrom urllib.parse import quote\n\nimport scalar_fastapi\nfrom fastapi import FastAPI\nfrom fastapi.middleware.cors import CORSMiddleware\nfrom fastapi.middleware.gzip import GZipMiddleware\nfrom fastapi.staticfiles import StaticFiles\nfrom loguru import logger\nfrom starlette.responses import HTMLResponse\n\nfrom kimi_cli.web.api import (\n    config_router,\n    open_in_router,\n    sessions_router,\n    work_dirs_router,\n)\nfrom kimi_cli.web.auth import (\n    DEFAULT_ALLOWED_ORIGIN_REGEX,\n    AuthMiddleware,\n    is_private_ip,\n    normalize_allowed_origins,\n)\nfrom kimi_cli.web.runner.process import KimiCLIRunner\n\n# Configure logging based on LOG_LEVEL environment variable\n_log_level = os.environ.get(\"LOG_LEVEL\", \"WARNING\").upper()\nlogger.remove()\nlogger.enable(\"kimi_cli\")\nlogger.add(sys.stderr, level=_log_level)\n\n# scalar-fastapi does not ship typing stubs.\nget_scalar_api_reference = cast(  # pyright: ignore[reportUnknownMemberType]\n    Callable[..., HTMLResponse],\n    scalar_fastapi.get_scalar_api_reference,  # pyright: ignore[reportUnknownMemberType]\n)\n\n# Constants\nSTATIC_DIR = Path(__file__).parent / \"static\"\nGZIP_MINIMUM_SIZE = 1024\nGZIP_COMPRESSION_LEVEL = 6\nDEFAULT_PORT = 5494\nMAX_PORT_ATTEMPTS = 10\nENV_SESSION_TOKEN = \"KIMI_WEB_SESSION_TOKEN\"\nENV_ALLOWED_ORIGINS = \"KIMI_WEB_ALLOWED_ORIGINS\"\nENV_ENFORCE_ORIGIN = \"KIMI_WEB_ENFORCE_ORIGIN\"\nENV_RESTRICT_SENSITIVE_APIS = \"KIMI_WEB_RESTRICT_SENSITIVE_APIS\"\nENV_MAX_PUBLIC_PATH_DEPTH = \"KIMI_WEB_MAX_PUBLIC_PATH_DEPTH\"\n\n\ndef _is_local_host(host: str) -> bool:\n    return host in {\"127.0.0.1\", \"localhost\", \"::1\"}\n\n\ndef _get_address_family(host: str) -> socket.AddressFamily:\n    \"\"\"Determine the socket address family for a given host.\n\n    Returns AF_INET6 for IPv6 addresses, AF_INET for IPv4 and hostnames.\n    \"\"\"\n    # Check for IPv6 address patterns\n    if \":\" in host:\n        return socket.AF_INET6\n    return socket.AF_INET\n\n\ndef _get_private_addresses(addresses: list[str]) -> list[str]:\n    \"\"\"Filter addresses to only include private IPs.\"\"\"\n    return [ip for ip in addresses if is_private_ip(ip)]\n\n\ndef _load_env_flag(key: str) -> bool:\n    return os.environ.get(key, \"\").strip().lower() in {\"1\", \"true\", \"yes\", \"on\"}\n\n\ndef _get_network_addresses() -> list[str]:\n    \"\"\"Get all non-loopback IPv4 addresses for this machine.\n\n    Uses multiple methods to ensure we get all addresses across platforms.\n    \"\"\"\n    addresses: list[str] = []\n\n    # Method 1: Try using socket.getaddrinfo with the hostname\n    try:\n        hostname = socket.gethostname()\n        addr_infos = socket.getaddrinfo(hostname, None, socket.AF_INET)\n        for info in addr_infos:\n            ip = info[4][0]\n            if isinstance(ip, str) and not ip.startswith(\"127.\") and ip not in addresses:\n                addresses.append(ip)\n    except OSError:\n        pass\n\n    # Method 2: Try connecting to external address to get local interface\n    try:\n        # This doesn't actually send any data, just determines routing\n        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)\n        s.connect((\"8.8.8.8\", 80))\n        ip = s.getsockname()[0]\n        s.close()\n        if ip and not ip.startswith(\"127.\") and ip not in addresses:\n            addresses.append(ip)\n    except OSError:\n        pass\n\n    # Method 3: Try netifaces if available (most comprehensive)\n    try:\n        import netifaces\n\n        for interface in netifaces.interfaces():\n            addrs = netifaces.ifaddresses(interface)\n            if netifaces.AF_INET in addrs:\n                for addr_info in addrs[netifaces.AF_INET]:\n                    addr = addr_info.get(\"addr\")\n                    if addr and not addr.startswith(\"127.\") and addr not in addresses:\n                        addresses.append(addr)\n    except ImportError:\n        pass\n    except Exception:\n        pass\n\n    return addresses\n\n\nENV_LAN_ONLY = \"KIMI_WEB_LAN_ONLY\"\n\n\ndef create_app(\n    session_token: str | None = None,\n    allowed_origins: list[str] | None = None,\n    enforce_origin: bool | None = None,\n    restrict_sensitive_apis: bool | None = None,\n    max_public_path_depth: int | None = None,\n    lan_only: bool | None = None,\n) -> FastAPI:\n    \"\"\"Create the FastAPI application for Kimi CLI web UI.\"\"\"\n\n    env_token = os.environ.get(ENV_SESSION_TOKEN) or None\n    env_origins = normalize_allowed_origins(os.environ.get(ENV_ALLOWED_ORIGINS))\n    env_enforce_origin = _load_env_flag(ENV_ENFORCE_ORIGIN)\n    env_restrict_sensitive = _load_env_flag(ENV_RESTRICT_SENSITIVE_APIS)\n    env_max_depth_str = os.environ.get(ENV_MAX_PUBLIC_PATH_DEPTH)\n    env_max_depth = (\n        int(env_max_depth_str) if env_max_depth_str and env_max_depth_str.isdigit() else None\n    )\n    env_lan_only = _load_env_flag(ENV_LAN_ONLY)\n\n    session_token = session_token if session_token is not None else env_token\n    allowed_origins = allowed_origins if allowed_origins is not None else env_origins\n    enforce_origin = enforce_origin if enforce_origin is not None else env_enforce_origin\n    restrict_sensitive_apis = (\n        restrict_sensitive_apis if restrict_sensitive_apis is not None else env_restrict_sensitive\n    )\n    max_public_path_depth = (\n        max_public_path_depth if max_public_path_depth is not None else env_max_depth\n    )\n    lan_only = lan_only if lan_only is not None else env_lan_only\n\n    @asynccontextmanager\n    async def lifespan(app: FastAPI):\n        app.state.startup_dir = os.getcwd()\n        app.state.session_token = session_token\n        app.state.allowed_origins = allowed_origins\n        app.state.enforce_origin = enforce_origin\n        app.state.restrict_sensitive_apis = restrict_sensitive_apis\n        app.state.max_public_path_depth = max_public_path_depth\n        app.state.lan_only = lan_only\n\n        # Start KimiCLI runner\n        runner = KimiCLIRunner()\n        app.state.runner = runner\n        runner.start()\n\n        try:\n            yield\n        finally:\n            await runner.stop()\n\n    application = FastAPI(\n        title=\"Kimi Code CLI Web Interface\",\n        docs_url=None,\n        lifespan=lifespan,\n        separate_input_output_schemas=False,\n    )\n\n    application.add_middleware(\n        cast(Any, GZipMiddleware),\n        minimum_size=GZIP_MINIMUM_SIZE,\n        compresslevel=GZIP_COMPRESSION_LEVEL,\n    )\n\n    application.add_middleware(\n        cast(Any, AuthMiddleware),\n        session_token=session_token,\n        allowed_origins=allowed_origins,\n        enforce_origin=enforce_origin,\n        lan_only=lan_only,\n    )\n\n    cors_kwargs: dict[str, Any] = {\n        \"allow_credentials\": True,\n        \"allow_methods\": [\"*\"],\n        \"allow_headers\": [\"*\"],\n    }\n    if allowed_origins:\n        cors_kwargs[\"allow_origins\"] = allowed_origins\n    else:\n        cors_kwargs[\"allow_origin_regex\"] = DEFAULT_ALLOWED_ORIGIN_REGEX.pattern\n\n    # CORS middleware for local development\n    application.add_middleware(cast(Any, CORSMiddleware), **cors_kwargs)\n\n    application.include_router(config_router)\n    application.include_router(sessions_router)\n    application.include_router(work_dirs_router)\n    if not restrict_sensitive_apis:\n        application.include_router(open_in_router)\n\n    @application.get(\"/scalar\", include_in_schema=False)\n    @application.get(\"/docs\", include_in_schema=False)\n    async def scalar_html() -> HTMLResponse:  # pyright: ignore[reportUnusedFunction]\n        return get_scalar_api_reference(\n            openapi_url=application.openapi_url or \"\",\n            title=application.title,\n        )\n\n    @application.get(\"/healthz\")\n    async def health_probe() -> dict[str, Any]:  # pyright: ignore[reportUnusedFunction]\n        \"\"\"Health check endpoint.\"\"\"\n        return {\"status\": \"ok\"}\n\n    # Mount static files as fallback (must be last)\n    if STATIC_DIR.exists():\n        application.mount(\"/\", StaticFiles(directory=STATIC_DIR, html=True), name=\"static\")\n\n    return application\n\n\ndef find_available_port(host: str, start_port: int, max_attempts: int = MAX_PORT_ATTEMPTS) -> int:\n    \"\"\"Find an available port starting from start_port.\n\n    Args:\n        host: Host address to bind to\n        start_port: Starting port number (1-65535)\n        max_attempts: Maximum number of ports to try (must be positive)\n\n    Returns:\n        An available port number\n\n    Raises:\n        ValueError: If parameters are invalid\n        RuntimeError: If no available port is found within the range\n    \"\"\"\n    if max_attempts <= 0:\n        raise ValueError(\"max_attempts must be positive\")\n    if start_port < 1 or start_port > 65535:\n        raise ValueError(\"start_port must be between 1 and 65535\")\n\n    family = _get_address_family(host)\n    for offset in range(max_attempts):\n        port = start_port + offset\n        with socket.socket(family, socket.SOCK_STREAM) as s:\n            # Set SO_REUSEADDR to allow reusing ports in TIME_WAIT state.\n            # This matches uvicorn's behavior and prevents false positives\n            # when checking port availability after a recent shutdown.\n            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)\n            try:\n                s.bind((host, port))\n                return port\n            except OSError:\n                continue\n    raise RuntimeError(\n        f\"Cannot find available port in range {start_port}-{start_port + max_attempts - 1}\"\n    )\n\n\ndef run_web_server(\n    host: str = \"127.0.0.1\",\n    port: int = DEFAULT_PORT,\n    reload: bool = False,\n    open_browser: bool = True,\n    auth_token: str | None = None,\n    allowed_origins: str | None = None,\n    dangerously_omit_auth: bool = False,\n    restrict_sensitive_apis: bool | None = None,\n    lan_only: bool = True,\n) -> None:\n    \"\"\"Run the web server.\"\"\"\n    import sys\n    import textwrap\n    import threading\n\n    import uvicorn\n\n    def print_banner(lines: list[str]) -> None:\n        # Process lines, respecting special tags\n        processed: list[str] = []\n        for line in lines:\n            if line == \"<hr>\":\n                processed.append(line)\n            elif not line:\n                processed.append(\"\")\n            elif line.startswith(\"<center>\") or line.startswith(\"<nowrap>\"):\n                # Don't wrap these lines\n                processed.append(line)\n            else:\n                processed.extend(textwrap.wrap(line, width=78))\n\n        # Calculate width based on content (strip tags for measurement)\n        def strip_tags(s: str) -> str:\n            return s.removeprefix(\"<center>\").removeprefix(\"<nowrap>\")\n\n        content_lines = [strip_tags(line) for line in processed if line != \"<hr>\"]\n        width = max(60, *(len(line) for line in content_lines))\n        top = \"+\" + \"=\" * (width + 2) + \"+\"\n\n        print(top)\n        for line in processed:\n            if line == \"<hr>\":\n                print(\"|\" + \"-\" * (width + 2) + \"|\")\n            elif line.startswith(\"<center>\"):\n                content = line.removeprefix(\"<center>\")\n                print(f\"| {content.center(width)} |\")\n            elif line.startswith(\"<nowrap>\"):\n                content = line.removeprefix(\"<nowrap>\")\n                print(f\"| {content.ljust(width)} |\")\n            else:\n                print(f\"| {line.ljust(width)} |\")\n        print(top)\n\n    public_mode = not _is_local_host(host)\n    parsed_allowed_origins = normalize_allowed_origins(allowed_origins)\n    auto_populate_origins = public_mode and not parsed_allowed_origins\n\n    if restrict_sensitive_apis is None:\n        # Only restrict sensitive APIs in public mode (non-LAN-only)\n        restrict_sensitive_apis = public_mode and not lan_only\n\n    if public_mode and dangerously_omit_auth:\n        warning_lines = [\n            \"SECURITY WARNING\",\n            \"\",\n            \"Authentication is DISABLED while running on a public host.\",\n            \"Anyone on the network can access your sessions and files.\",\n            \"\",\n            \"Type 'I UNDERSTAND THE RISKS' to continue:\",\n        ]\n        print_banner(warning_lines)\n        if not sys.stdin.isatty():\n            raise RuntimeError(\"Refusing to start without auth in non-interactive mode.\")\n        response = input(\"> \").strip()\n        if response != \"I UNDERSTAND THE RISKS\":\n            raise RuntimeError(\"Aborted by user.\")\n\n    if dangerously_omit_auth:\n        session_token = None\n    elif auth_token:\n        session_token = auth_token\n    elif public_mode:\n        session_token = secrets.token_urlsafe(32)\n    else:\n        session_token = None\n\n    if session_token:\n        os.environ[ENV_SESSION_TOKEN] = session_token\n    else:\n        os.environ.pop(ENV_SESSION_TOKEN, None)\n\n    # Find available port first (needed for auto-populating origins)\n    actual_port = find_available_port(host, port)\n    if actual_port != port:\n        print(f\"Port {port} is in use, using port {actual_port} instead\")\n\n    # Auto-populate allowed origins with detected network addresses + port\n    if auto_populate_origins:\n        auto_origins = [\n            f\"http://localhost:{actual_port}\",\n            f\"http://127.0.0.1:{actual_port}\",\n        ]\n        if host == \"0.0.0.0\":\n            # Binding to all interfaces: add all network addresses\n            network_addrs = _get_network_addresses()\n            for addr in network_addrs:\n                auto_origins.append(f\"http://{addr}:{actual_port}\")\n        else:\n            # Explicit host specified: only add that host\n            auto_origins.append(f\"http://{host}:{actual_port}\")\n        parsed_allowed_origins = auto_origins\n\n    if parsed_allowed_origins:\n        os.environ[ENV_ALLOWED_ORIGINS] = \",\".join(parsed_allowed_origins)\n    else:\n        os.environ.pop(ENV_ALLOWED_ORIGINS, None)\n\n    os.environ[ENV_ENFORCE_ORIGIN] = \"1\" if (public_mode and not lan_only) else \"0\"\n    os.environ[ENV_RESTRICT_SENSITIVE_APIS] = \"1\" if restrict_sensitive_apis else \"0\"\n    os.environ[ENV_LAN_ONLY] = \"1\" if lan_only else \"0\"\n\n    # Determine display URLs\n    display_hosts: list[tuple[str, str]] = []\n    if host == \"0.0.0.0\":\n        # Show localhost as \"Local\" and network interfaces\n        display_hosts.append((\"Local\", \"localhost\"))\n        network_addrs = _get_network_addresses()\n\n        # In lan_only mode, only show private IPs\n        if lan_only:\n            network_addrs = _get_private_addresses(network_addrs)\n\n        for addr in network_addrs:\n            display_hosts.append((\"Network\", addr))\n    else:\n        # Show the specified host\n        label = \"Local\" if _is_local_host(host) else \"Network\"\n        display_hosts.append((label, host))\n\n    # Build URLs with token if needed\n    def make_url(host_addr: str) -> tuple[str, str]:\n        \"\"\"Returns (url, browser_url) tuple.\"\"\"\n        url = f\"http://{host_addr}:{actual_port}\"\n        browser_url = f\"{url}/?token={quote(session_token)}\" if session_token else url\n        return url, browser_url\n\n    # For browser opening, prefer localhost, then first network address\n    browser_host = \"localhost\" if host == \"0.0.0.0\" else host\n    _, browser_url = make_url(browser_host)\n\n    if open_browser:\n\n        def open_browser_after_delay():\n            import time\n\n            time.sleep(1.5)\n            webbrowser.open(browser_url)\n\n        # Start browser opener in a daemon thread\n        thread = threading.Thread(target=open_browser_after_delay, daemon=True)\n        thread.start()\n\n    banner_lines = [\n        \"<center>██╗  ██╗██╗███╗   ███╗██╗     ██████╗ ██████╗ ██████╗ ███████╗\",\n        \"<center>██║ ██╔╝██║████╗ ████║██║    ██╔════╝██╔═══██╗██╔══██╗██╔════╝\",\n        \"<center>█████╔╝ ██║██╔████╔██║██║    ██║     ██║   ██║██║  ██║█████╗  \",\n        \"<center>██╔═██╗ ██║██║╚██╔╝██║██║    ██║     ██║   ██║██║  ██║██╔══╝  \",\n        \"<center>██║  ██╗██║██║ ╚═╝ ██║██║    ╚██████╗╚██████╔╝██████╔╝███████╗\",\n        \"<center>╚═╝  ╚═╝╚═╝╚═╝     ╚═╝╚═╝     ╚═════╝ ╚═════╝ ╚═════╝ ╚══════╝\",\n        \"\",\n        \"<center>WEB UI (Technical Preview)\",\n        \"\",\n        \"<hr>\",\n        \"\",\n    ]\n\n    # Add URLs for each host (nowrap to keep URLs on single line for easy copying)\n    for label, host_addr in display_hosts:\n        url, url_with_token = make_url(host_addr)\n        if session_token:\n            banner_lines.append(f\"<nowrap>  ➜  {label:8} {url_with_token}\")\n        else:\n            banner_lines.append(f\"<nowrap>  ➜  {label:8} {url}\")\n\n    # Auth token or warnings\n    if session_token:\n        banner_lines.extend(\n            [\n                \"\",\n                f\"<nowrap>  Token:   {session_token}\",\n            ]\n        )\n    elif public_mode:\n        banner_lines.extend(\n            [\n                \"\",\n                \"<nowrap>  ⚠ AUTH DISABLED - Anyone on the network can access\",\n            ]\n        )\n\n    if restrict_sensitive_apis:\n        banner_lines.append(\"<nowrap>  ⚠ Sensitive APIs are restricted\")\n\n    # Show network access mode and tips\n    banner_lines.append(\"\")\n    banner_lines.append(\"<hr>\")\n    banner_lines.append(\"\")\n\n    if not public_mode:\n        # Local-only mode (127.0.0.1)\n        banner_lines.extend(\n            [\n                \"<nowrap>  Tips:\",\n                \"<nowrap>    • Use -n / --network to share on LAN\",\n                \"<nowrap>    • Use --network --public for public access\",\n            ]\n        )\n    elif lan_only:\n        # LAN mode (0.0.0.0 with lan_only)\n        banner_lines.extend(\n            [\n                \"<nowrap>  Mode: LAN only (private IPs)\",\n                \"\",\n                \"<nowrap>  Tips:\",\n                \"<nowrap>    • Use --public to allow public access\",\n                \"<nowrap>    • ⚠ Public mode allows access from any IP\",\n            ]\n        )\n    else:\n        # Public mode (0.0.0.0 without lan_only)\n        banner_lines.extend(\n            [\n                \"<nowrap>  ⚠ Mode: PUBLIC (all networks)\",\n                \"<nowrap>    Anyone with the URL can access this instance\",\n                \"\",\n                \"<nowrap>  Security tips:\",\n                \"<nowrap>    • Keep your auth token secure\",\n                \"<nowrap>    • Consider using firewall or VPN\",\n            ]\n        )\n\n    banner_lines.append(\"\")\n\n    print_banner(banner_lines)\n    # print(f\"API docs available at {url}/docs\")\n\n    uvicorn.run(\n        \"kimi_cli.web.app:create_app\",\n        factory=True,\n        host=host,\n        port=actual_port,\n        reload=reload,\n        log_level=\"info\",\n        timeout_graceful_shutdown=3,\n    )\n\n\n__all__ = [\"create_app\", \"find_available_port\", \"run_web_server\"]\n"
     },
     "complexity_metrics": {
       "cyclomatic_complexity": 80.0,
-      "lines_of_code": 540,
+      "lines_of_code": 544,
       "number_of_classes": 0,
-      "number_of_functions": 17
+      "number_of_functions": 9
     },
     "dependencies": [
       {
-        "dependency_type": "standard_library",
+        "dependency_type": "import",
         "is_external": true,
-        "line_number": 2,
+        "line_number": 3,
         "name": "os",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "standard_library",
+        "dependency_type": "import",
         "is_external": true,
-        "line_number": 3,
+        "line_number": 4,
         "name": "secrets",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "standard_library",
+        "dependency_type": "import",
         "is_external": true,
-        "line_number": 4,
+        "line_number": 5,
         "name": "socket",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "standard_library",
+        "dependency_type": "import",
         "is_external": true,
-        "line_number": 5,
+        "line_number": 6,
         "name": "sys",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "standard_library",
+        "dependency_type": "import",
         "is_external": true,
-        "line_number": 6,
+        "line_number": 7,
         "name": "webbrowser",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "standard_library",
+        "dependency_type": "import",
         "is_external": true,
-        "line_number": 7,
+        "line_number": 8,
         "name": "collections.abc",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "standard_library",
+        "dependency_type": "import",
         "is_external": true,
-        "line_number": 8,
+        "line_number": 9,
         "name": "contextlib",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "standard_library",
+        "dependency_type": "import",
         "is_external": true,
-        "line_number": 9,
+        "line_number": 10,
         "name": "pathlib",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "standard_library",
+        "dependency_type": "import",
         "is_external": true,
-        "line_number": 10,
+        "line_number": 11,
         "name": "typing",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "standard_library",
+        "dependency_type": "import",
         "is_external": true,
-        "line_number": 11,
+        "line_number": 12,
         "name": "urllib.parse",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "third_party",
+        "dependency_type": "import",
         "is_external": true,
-        "line_number": 13,
+        "line_number": 14,
         "name": "scalar_fastapi",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "third_party",
+        "dependency_type": "import",
         "is_external": true,
-        "line_number": 14,
+        "line_number": 15,
         "name": "fastapi",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "third_party",
+        "dependency_type": "import",
+        "is_external": true,
+        "line_number": 16,
+        "name": "fastapi.middleware.cors",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": true,
+        "line_number": 17,
+        "name": "fastapi.middleware.gzip",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": true,
+        "line_number": 18,
+        "name": "fastapi.staticfiles",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "import",
         "is_external": true,
         "line_number": 19,
         "name": "loguru",
@@ -41105,7 +41414,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "third_party",
+        "dependency_type": "import",
         "is_external": true,
         "line_number": 20,
         "name": "starlette.responses",
@@ -41113,109 +41422,109 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 22,
         "name": "kimi_cli.web.api",
-        "path": null,
+        "path": "src/kimi_cli/web/api",
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "import",
         "is_external": false,
-        "line_number": 29,
+        "line_number": 28,
         "name": "kimi_cli.web.auth",
-        "path": null,
+        "path": "src/kimi_cli/web/auth",
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "import",
         "is_external": false,
-        "line_number": 39,
+        "line_number": 35,
         "name": "kimi_cli.web.runner.process",
-        "path": null,
+        "path": "src/kimi_cli/web/runner/process",
         "version": null
       },
       {
-        "dependency_type": "third_party",
+        "dependency_type": "runtime_import",
         "is_external": true,
-        "line_number": 144,
-        "name": "netifaces",
-        "path": null,
-        "version": null
-      },
-      {
-        "dependency_type": "standard_library",
-        "is_external": true,
-        "line_number": 307,
-        "name": "textwrap",
-        "path": null,
-        "version": null
-      },
-      {
-        "dependency_type": "standard_library",
-        "is_external": true,
-        "line_number": 308,
-        "name": "threading",
-        "path": null,
-        "version": null
-      },
-      {
-        "dependency_type": "third_party",
-        "is_external": true,
-        "line_number": 310,
+        "line_number": 344,
         "name": "uvicorn",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "standard_library",
+        "dependency_type": "optional_import",
         "is_external": true,
-        "line_number": 402,
+        "line_number": 127,
+        "name": "netifaces",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "runtime_import",
+        "is_external": true,
+        "line_number": 346,
+        "name": "threading",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "runtime_import",
+        "is_external": true,
+        "line_number": 347,
+        "name": "textwrap",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "runtime_import",
+        "is_external": true,
+        "line_number": 424,
         "name": "time",
         "path": null,
         "version": null
       }
     ],
-    "detailed_description": "This component serves as the main entry point for the Kimi Code CLI web interface. It provides a comprehensive FastAPI web server with features including: authentication middleware, CORS configuration, static file serving, API documentation (Scalar), health checks, and security controls. The application supports both local development and public deployment modes with configurable security settings including session tokens, origin validation, LAN-only restrictions, and sensitive API access controls. It includes intelligent network address detection, port management, and browser auto-opening capabilities.",
+    "detailed_description": "This module serves as the main entry point for the Kimi CLI Web UI application. It implements a FastAPI-based web server that exposes CLI functionality through HTTP endpoints. The application provides comprehensive security features including session token authentication, CORS configuration, origin validation, and LAN-only mode restrictions.\n\nThe module handles the complete lifecycle of the web server from initialization to shutdown, including:\n- Dynamic port allocation when the default port is unavailable\n- Network interface discovery for multi-host binding scenarios\n- Automatic browser launching with authentication tokens\n- Security warnings for public deployments without authentication\n- Graceful shutdown of background CLI runner processes\n\nThe application architecture uses FastAPI's lifespan context manager to initialize and cleanup resources, particularly the KimiCLIRunner process that executes actual CLI commands. Multiple middleware layers provide compression (GZip), authentication (AuthMiddleware), and CORS handling.\n\nConfiguration is highly flexible, supporting both programmatic parameters and environment variables (with programmatic taking precedence). The security model adapts based on deployment context: local-only mode (127.0.0.1) has minimal restrictions, LAN mode filters to private IPs only, and public mode enforces strict origin validation and can restrict sensitive APIs.\n\nThe banner printing system provides rich user feedback about access URLs, security status, and operational mode, with intelligent formatting that adapts to content width and supports special layout directives.",
     "interfaces": [
       {
-        "description": "Creates and configures the FastAPI application instance",
+        "description": "Factory function that creates and configures the FastAPI application instance with all middleware and routers",
         "interface_type": "function",
         "name": "create_app",
         "parameters": [
           {
-            "description": "Authentication session token",
+            "description": "Authentication token for session validation, auto-generated if None in public mode",
             "is_optional": true,
             "name": "session_token",
             "param_type": "str | None"
           },
           {
-            "description": "List of allowed CORS origins",
+            "description": "List of allowed CORS origins, uses regex pattern if None",
             "is_optional": true,
             "name": "allowed_origins",
             "param_type": "list[str] | None"
           },
           {
-            "description": "Whether to enforce origin validation",
+            "description": "Whether to strictly enforce origin validation",
             "is_optional": true,
             "name": "enforce_origin",
             "param_type": "bool | None"
           },
           {
-            "description": "Whether to restrict sensitive API endpoints",
+            "description": "Whether to disable sensitive API endpoints like open_in",
             "is_optional": true,
             "name": "restrict_sensitive_apis",
             "param_type": "bool | None"
           },
           {
-            "description": "Maximum depth for public file paths",
+            "description": "Maximum path depth for public file access",
             "is_optional": true,
             "name": "max_public_path_depth",
             "param_type": "int | None"
           },
           {
-            "description": "Whether to restrict to LAN access only",
+            "description": "Whether to restrict access to LAN/private IPs only",
             "is_optional": true,
             "name": "lan_only",
             "param_type": "bool | None"
@@ -41225,24 +41534,24 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Finds an available port starting from the specified port",
+        "description": "Finds an available port by attempting to bind sequentially starting from start_port, with SO_REUSEADDR to match uvicorn behavior",
         "interface_type": "function",
         "name": "find_available_port",
         "parameters": [
           {
-            "description": "Host address to bind to",
+            "description": "Host address to bind to for port checking",
             "is_optional": false,
             "name": "host",
             "param_type": "str"
           },
           {
-            "description": "Starting port number to search from",
+            "description": "Starting port number to check (1-65535)",
             "is_optional": false,
             "name": "start_port",
             "param_type": "int"
           },
           {
-            "description": "Maximum number of ports to try",
+            "description": "Maximum number of sequential ports to try",
             "is_optional": true,
             "name": "max_attempts",
             "param_type": "int"
@@ -41252,60 +41561,60 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Main entry point to run the web server with full configuration",
+        "description": "Main entry point that orchestrates server startup including security checks, port allocation, banner display, and uvicorn server launch",
         "interface_type": "function",
         "name": "run_web_server",
         "parameters": [
           {
-            "description": "Host address to bind to",
+            "description": "Host address to bind server to, defaults to 127.0.0.1",
             "is_optional": true,
             "name": "host",
             "param_type": "str"
           },
           {
-            "description": "Port number to use",
+            "description": "Port number to bind to, defaults to 5494",
             "is_optional": true,
             "name": "port",
             "param_type": "int"
           },
           {
-            "description": "Whether to enable auto-reload",
+            "description": "Enable auto-reload for development",
             "is_optional": true,
             "name": "reload",
             "param_type": "bool"
           },
           {
-            "description": "Whether to automatically open browser",
+            "description": "Automatically open browser on startup",
             "is_optional": true,
             "name": "open_browser",
             "param_type": "bool"
           },
           {
-            "description": "Authentication token",
+            "description": "Custom authentication token",
             "is_optional": true,
             "name": "auth_token",
             "param_type": "str | None"
           },
           {
-            "description": "Comma-separated list of allowed origins",
+            "description": "Comma-separated list of allowed CORS origins",
             "is_optional": true,
             "name": "allowed_origins",
             "param_type": "str | None"
           },
           {
-            "description": "Whether to disable authentication (dangerous)",
+            "description": "Disable authentication (requires confirmation in public mode)",
             "is_optional": true,
             "name": "dangerously_omit_auth",
             "param_type": "bool"
           },
           {
-            "description": "Whether to restrict sensitive APIs",
+            "description": "Whether to restrict sensitive API endpoints",
             "is_optional": true,
             "name": "restrict_sensitive_apis",
             "param_type": "bool | None"
           },
           {
-            "description": "Whether to restrict to LAN only",
+            "description": "Restrict to LAN/private IPs only, defaults to True",
             "is_optional": true,
             "name": "lan_only",
             "param_type": "bool"
@@ -41315,15 +41624,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "API documentation endpoint serving Scalar UI",
-        "interface_type": "endpoint",
-        "name": "scalar_html",
-        "parameters": [],
-        "return_type": "HTMLResponse",
-        "visibility": "public"
-      },
-      {
-        "description": "Health check endpoint for monitoring",
+        "description": "Health check endpoint at /healthz returning status ok",
         "interface_type": "endpoint",
         "name": "health_probe",
         "parameters": [],
@@ -41331,80 +41632,20 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Checks if host is localhost",
-        "interface_type": "function",
-        "name": "_is_local_host",
-        "parameters": [
-          {
-            "description": "Host address to check",
-            "is_optional": false,
-            "name": "host",
-            "param_type": "str"
-          }
-        ],
-        "return_type": "bool",
-        "visibility": "private"
-      },
-      {
-        "description": "Determines socket address family for host",
-        "interface_type": "function",
-        "name": "_get_address_family",
-        "parameters": [
-          {
-            "description": "Host address to determine family for",
-            "is_optional": false,
-            "name": "host",
-            "param_type": "str"
-          }
-        ],
-        "return_type": "socket.AddressFamily",
-        "visibility": "private"
-      },
-      {
-        "description": "Filters addresses to only include private IPs",
-        "interface_type": "function",
-        "name": "_get_private_addresses",
-        "parameters": [
-          {
-            "description": "List of addresses to filter",
-            "is_optional": false,
-            "name": "addresses",
-            "param_type": "list[str]"
-          }
-        ],
-        "return_type": "list[str]",
-        "visibility": "private"
-      },
-      {
-        "description": "Loads boolean flag from environment variable",
-        "interface_type": "function",
-        "name": "_load_env_flag",
-        "parameters": [
-          {
-            "description": "Environment variable key",
-            "is_optional": false,
-            "name": "key",
-            "param_type": "str"
-          }
-        ],
-        "return_type": "bool",
-        "visibility": "private"
-      },
-      {
-        "description": "Gets all non-loopback IPv4 addresses for this machine",
-        "interface_type": "function",
-        "name": "_get_network_addresses",
+        "description": "API documentation endpoint at /docs and /scalar using Scalar UI",
+        "interface_type": "endpoint",
+        "name": "scalar_html",
         "parameters": [],
-        "return_type": "list[str]",
-        "visibility": "private"
+        "return_type": "HTMLResponse",
+        "visibility": "public"
       }
     ],
     "responsibilities": [
-      "Web server lifecycle management and application setup",
-      "Authentication and security configuration management",
-      "Network interface detection and port availability management",
-      "User interface presentation and browser integration",
-      "Environment configuration and security policy enforcement"
+      "Initialize and configure FastAPI application with appropriate middleware stack (GZip, Auth, CORS) based on deployment context",
+      "Manage web server lifecycle including port allocation, network interface discovery, and graceful shutdown of CLI runner processes",
+      "Implement security controls including session token generation, origin validation, LAN-only filtering, and sensitive API restrictions",
+      "Provide user-facing server startup experience with formatted banners, access URLs, security warnings, and automatic browser launching",
+      "Bridge web HTTP requests to CLI operations through the KimiCLIRunner process manager"
     ]
   },
   {
@@ -45989,6 +46230,158 @@ Code analysis results from preprocessing phase, including definitions of functio
   {
     "code_dossier": {
       "code_purpose": "util",
+      "description": "External editor integration utility that enables users to edit text content using their preferred system editor (VISUAL/EDITOR environment variables or auto-detected editors)",
+      "file_path": "src/kimi_cli/utils/editor.py",
+      "functions": [
+        "get_editor_command",
+        "edit_text_in_editor"
+      ],
+      "importance_score": 0.8,
+      "interfaces": [
+        "get_editor_command",
+        "edit_text_in_editor"
+      ],
+      "name": "editor.py",
+      "source_summary": "\"\"\"External editor utilities for editing text in $VISUAL/$EDITOR.\"\"\"\n\nfrom __future__ import annotations\n\nimport contextlib\nimport os\nimport shlex\nimport shutil\nimport subprocess\nimport tempfile\nfrom pathlib import Path\n\nfrom kimi_cli.utils.logging import logger\nfrom kimi_cli.utils.subprocess_env import get_clean_env\n\n# VSCode needs --wait to block until the file is closed.\n_EDITOR_CANDIDATES = [\n    ([\"code\", \"--wait\"], \"code\"),\n    ([\"vim\"], \"vim\"),\n    ([\"vi\"], \"vi\"),\n    ([\"nano\"], \"nano\"),\n]\n\n\ndef get_editor_command(configured: str = \"\") -> list[str] | None:\n    \"\"\"Determine the editor command to use.\n\n    Priority: *configured* (from config) -> $VISUAL -> $EDITOR -> auto-detect.\n    Auto-detect order: code --wait -> vim -> vi -> nano.\n    \"\"\"\n    if configured:\n        try:\n            return shlex.split(configured)\n        except ValueError:\n            logger.warning(\"Invalid configured editor value: {}\", configured)\n\n    for var in (\"VISUAL\", \"EDITOR\"):\n        value = os.environ.get(var)\n        if value:\n            try:\n                return shlex.split(value)\n            except ValueError:\n                logger.warning(\"Invalid {} value: {}\", var, value)\n                continue\n\n    for cmd, binary in _EDITOR_CANDIDATES:\n        if shutil.which(binary):\n            return cmd\n\n    return None\n\n\ndef edit_text_in_editor(text: str, configured: str = \"\") -> str | None:\n    \"\"\"Open *text* in an external editor and return the edited result.\n\n    Returns ``None`` if the editor failed or the user quit without saving.\n    \"\"\"\n    editor_cmd = get_editor_command(configured)\n    if editor_cmd is None:\n        logger.warning(\"No editor found. Set $VISUAL or $EDITOR.\")\n        return None\n\n    fd, tmpfile = tempfile.mkstemp(suffix=\".md\", prefix=\"kimi-edit-\")\n    try:\n        with os.fdopen(fd, \"w\", encoding=\"utf-8\") as f:\n            f.write(text)\n\n        mtime_before = os.path.getmtime(tmpfile)\n\n        try:\n            returncode = subprocess.call(editor_cmd + [tmpfile], env=get_clean_env())\n        except OSError as exc:\n            logger.warning(\"Failed to launch editor {}: {}\", editor_cmd, exc)\n            return None\n\n        if returncode != 0:\n            logger.warning(\"Editor exited with non-zero return code: {}\", returncode)\n            return None\n\n        mtime_after = os.path.getmtime(tmpfile)\n        if mtime_after == mtime_before:\n            return None\n\n        edited = Path(tmpfile).read_text(encoding=\"utf-8\")\n        if edited.endswith(\"\\n\"):\n            edited = edited[:-1]\n\n        return edited\n    finally:\n        with contextlib.suppress(OSError):\n            os.unlink(tmpfile)\n"
+    },
+    "complexity_metrics": {
+      "cyclomatic_complexity": 12.0,
+      "lines_of_code": 91,
+      "number_of_classes": 0,
+      "number_of_functions": 2
+    },
+    "dependencies": [
+      {
+        "dependency_type": "standard_library",
+        "is_external": true,
+        "line_number": 5,
+        "name": "contextlib",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "standard_library",
+        "is_external": true,
+        "line_number": 6,
+        "name": "os",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "standard_library",
+        "is_external": true,
+        "line_number": 7,
+        "name": "shlex",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "standard_library",
+        "is_external": true,
+        "line_number": 8,
+        "name": "shutil",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "standard_library",
+        "is_external": true,
+        "line_number": 9,
+        "name": "subprocess",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "standard_library",
+        "is_external": true,
+        "line_number": 10,
+        "name": "tempfile",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "standard_library",
+        "is_external": true,
+        "line_number": 11,
+        "name": "pathlib.Path",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "internal_module",
+        "is_external": false,
+        "line_number": 13,
+        "name": "kimi_cli.utils.logging.logger",
+        "path": "src/kimi_cli/utils/logging.py",
+        "version": null
+      },
+      {
+        "dependency_type": "internal_module",
+        "is_external": false,
+        "line_number": 14,
+        "name": "kimi_cli.utils.subprocess_env.get_clean_env",
+        "path": "src/kimi_cli/utils/subprocess_env.py",
+        "version": null
+      },
+      {
+        "dependency_type": "standard_library",
+        "is_external": true,
+        "line_number": 3,
+        "name": "__future__.annotations",
+        "path": null,
+        "version": null
+      }
+    ],
+    "detailed_description": "This utility module provides external editor integration for the Kimi CLI application. It implements a robust editor detection and invocation system that follows Unix conventions by respecting VISUAL and EDITOR environment variables, with fallback to common editors (VSCode, vim, vi, nano).\n\nThe module's core workflow:\n1. **Editor Detection**: Implements a priority-based resolution system - configured value → $VISUAL → $EDITOR → auto-detection of available editors\n2. **Safe Command Parsing**: Uses shlex.split() to properly handle shell-quoted editor commands with arguments\n3. **Temporary File Management**: Creates temporary .md files for editing with proper cleanup using context managers\n4. **Change Detection**: Compares file modification times before/after editing to determine if user made changes\n5. **Error Handling**: Comprehensive error handling for missing editors, launch failures, and non-zero exit codes\n\nThe implementation is particularly well-suited for CLI applications that need interactive text editing capabilities, such as commit message editors, configuration file editors, or any scenario requiring multi-line text input beyond simple terminal prompts.",
+    "interfaces": [
+      {
+        "description": "Determines the editor command to use following priority: configured value → $VISUAL → $EDITOR → auto-detect (code/vim/vi/nano). Returns command as list of strings or None if no editor found.",
+        "interface_type": "function",
+        "name": "get_editor_command",
+        "parameters": [
+          {
+            "description": "Explicitly configured editor command string from application config",
+            "is_optional": true,
+            "name": "configured",
+            "param_type": "str"
+          }
+        ],
+        "return_type": "list[str] | None",
+        "visibility": "public"
+      },
+      {
+        "description": "Opens text in external editor and returns edited result. Returns None if editor failed, user quit without saving, or no changes were made (detected via mtime comparison).",
+        "interface_type": "function",
+        "name": "edit_text_in_editor",
+        "parameters": [
+          {
+            "description": "Initial text content to populate in the editor",
+            "is_optional": false,
+            "name": "text",
+            "param_type": "str"
+          },
+          {
+            "description": "Explicitly configured editor command string from application config",
+            "is_optional": true,
+            "name": "configured",
+            "param_type": "str"
+          }
+        ],
+        "return_type": "str | None",
+        "visibility": "public"
+      }
+    ],
+    "responsibilities": [
+      "Detect and resolve the appropriate text editor command based on user configuration, environment variables, or system availability",
+      "Manage temporary file lifecycle for editor sessions including creation, writing initial content, and cleanup after editing",
+      "Invoke external editor processes with proper environment configuration and wait for user completion",
+      "Detect whether users made changes to content by comparing file modification timestamps before and after editing",
+      "Provide graceful error handling and logging for editor-related failures including missing editors, launch errors, and abnormal exits"
+    ]
+  },
+  {
+    "code_dossier": {
+      "code_purpose": "util",
       "description": "Cross-platform clipboard utility for text and image operations, with specialized macOS file path handling",
       "file_path": "src/kimi_cli/utils/clipboard.py",
       "functions": [
@@ -46355,107 +46748,110 @@ Code analysis results from preprocessing phase, including definitions of functio
   {
     "code_dossier": {
       "code_purpose": "util",
-      "description": "Utility module providing filesystem path operations including file rotation, directory listing, and path manipulation helpers for the Kimi CLI application",
+      "description": "Path manipulation and file rotation utility functions providing low-level path operations for the CLI application",
       "file_path": "src/kimi_cli/utils/path.py",
       "functions": [
         "_reserve_rotation_path",
         "next_available_rotation",
         "list_directory",
         "shorten_home",
-        "is_within_directory"
+        "is_within_directory",
+        "is_within_workspace"
       ],
       "importance_score": 0.8,
-      "interfaces": [
-        "_reserve_rotation_path",
-        "next_available_rotation",
-        "list_directory",
-        "shorten_home",
-        "is_within_directory"
-      ],
+      "interfaces": [],
       "name": "path.py",
-      "source_summary": "from __future__ import annotations\n\nimport asyncio\nimport os\nimport re\nfrom pathlib import Path, PurePath\nfrom stat import S_ISDIR\n\nimport aiofiles.os\nfrom kaos.path import KaosPath\n\n_ROTATION_OPEN_FLAGS = os.O_CREAT | os.O_EXCL | os.O_WRONLY\n_ROTATION_FILE_MODE = 0o600\n\n\nasync def _reserve_rotation_path(path: Path) -> bool:\n    \"\"\"Atomically create an empty file as a reservation for *path*.\"\"\"\n\n    def _create() -> None:\n        fd = os.open(str(path), _ROTATION_OPEN_FLAGS, _ROTATION_FILE_MODE)\n        os.close(fd)\n\n    try:\n        await asyncio.to_thread(_create)\n    except FileExistsError:\n        return False\n    return True\n\n\nasync def next_available_rotation(path: Path) -> Path | None:\n    \"\"\"Return a reserved rotation path for *path* or ``None`` if parent is missing.\n\n    The caller must overwrite/reuse the returned path immediately because this helper\n    commits an empty placeholder file to guarantee uniqueness. It is therefore suited\n    for rotating *files* (like history logs) but **not** directory creation.\n    \"\"\"\n\n    if not path.parent.exists():\n        return None\n\n    base_name = path.stem\n    suffix = path.suffix\n    pattern = re.compile(rf\"^{re.escape(base_name)}_(\\d+){re.escape(suffix)}$\")\n    max_num = 0\n    for entry in await aiofiles.os.listdir(path.parent):\n        if match := pattern.match(entry):\n            max_num = max(max_num, int(match.group(1)))\n\n    next_num = max_num + 1\n    while True:\n        next_path = path.parent / f\"{base_name}_{next_num}{suffix}\"\n        if await _reserve_rotation_path(next_path):\n            return next_path\n        next_num += 1\n\n\nasync def list_directory(work_dir: KaosPath) -> str:\n    \"\"\"Return an ``ls``-like listing of *work_dir*.\n\n    This helper is used mainly to provide context to the LLM (for example\n    ``KIMI_WORK_DIR_LS``) and to show top-level directory contents in tools.\n    It should therefore be robust against per-entry filesystem issues such as\n    broken symlinks or permission errors: a single bad entry must not crash\n    the whole CLI.\n    \"\"\"\n\n    entries: list[str] = []\n    # Iterate entries; tolerate per-entry stat failures (broken symlinks, permissions, etc.).\n    async for entry in work_dir.iterdir():\n        try:\n            st = await entry.stat()\n        except OSError:\n            # Broken symlink, permission error, etc. – keep listing other entries.\n            entries.append(f\"?--------- {'?':>10} {entry.name} [stat failed]\")\n            continue\n        mode = \"d\" if S_ISDIR(st.st_mode) else \"-\"\n        mode += \"r\" if st.st_mode & 0o400 else \"-\"\n        mode += \"w\" if st.st_mode & 0o200 else \"-\"\n        mode += \"x\" if st.st_mode & 0o100 else \"-\"\n        mode += \"r\" if st.st_mode & 0o040 else \"-\"\n        mode += \"w\" if st.st_mode & 0o020 else \"-\"\n        mode += \"x\" if st.st_mode & 0o010 else \"-\"\n        mode += \"r\" if st.st_mode & 0o004 else \"-\"\n        mode += \"w\" if st.st_mode & 0o002 else \"-\"\n        mode += \"x\" if st.st_mode & 0o001 else \"-\"\n        entries.append(f\"{mode} {st.st_size:>10} {entry.name}\")\n    return \"\\n\".join(entries)\n\n\ndef shorten_home(path: KaosPath) -> KaosPath:\n    \"\"\"\n    Convert absolute path to use `~` for home directory.\n    \"\"\"\n    try:\n        home = KaosPath.home()\n        p = path.relative_to(home)\n        return KaosPath(\"~\") / p\n    except Exception:\n        return path\n\n\ndef is_within_directory(path: KaosPath, directory: KaosPath) -> bool:\n    \"\"\"\n    Check whether *path* is contained within *directory* using pure path semantics.\n    Both arguments should already be canonicalized (e.g. via KaosPath.canonical()).\n    \"\"\"\n    candidate = PurePath(str(path))\n    base = PurePath(str(directory))\n    try:\n        candidate.relative_to(base)\n        return True\n    except ValueError:\n        return False\n"
+      "source_summary": "from __future__ import annotations\n\nimport asyncio\nimport os\nimport re\nfrom collections.abc import Sequence\nfrom pathlib import Path, PurePath\nfrom stat import S_ISDIR\n\nimport aiofiles.os\nfrom kaos.path import KaosPath\n\n_ROTATION_OPEN_FLAGS = os.O_CREAT | os.O_EXCL | os.O_WRONLY\n_ROTATION_FILE_MODE = 0o600\n\n\nasync def _reserve_rotation_path(path: Path) -> bool:\n    \"\"\"Atomically create an empty file as a reservation for *path*.\"\"\"\n\n    def _create() -> None:\n        fd = os.open(str(path), _ROTATION_OPEN_FLAGS, _ROTATION_FILE_MODE)\n        os.close(fd)\n\n    try:\n        await asyncio.to_thread(_create)\n    except FileExistsError:\n        return False\n    return True\n\n\nasync def next_available_rotation(path: Path) -> Path | None:\n    \"\"\"Return a reserved rotation path for *path* or ``None`` if parent is missing.\n\n    The caller must overwrite/reuse the returned path immediately because this helper\n    commits an empty placeholder file to guarantee uniqueness. It is therefore suited\n    for rotating *files* (like history logs) but **not** directory creation.\n    \"\"\"\n\n    if not path.parent.exists():\n        return None\n\n    base_name = path.stem\n    suffix = path.suffix\n    pattern = re.compile(rf\"^{re.escape(base_name)}_(\\d+){re.escape(suffix)}$\")\n    max_num = 0\n    for entry in await aiofiles.os.listdir(path.parent):\n        if match := pattern.match(entry):\n            max_num = max(max_num, int(match.group(1)))\n\n    next_num = max_num + 1\n    while True:\n        next_path = path.parent / f\"{base_name}_{next_num}{suffix}\"\n        if await _reserve_rotation_path(next_path):\n            return next_path\n        next_num += 1\n\n\nasync def list_directory(work_dir: KaosPath) -> str:\n    \"\"\"Return an ``ls``-like listing of *work_dir*.\n\n    This helper is used mainly to provide context to the LLM (for example\n    ``KIMI_WORK_DIR_LS``) and to show top-level directory contents in tools.\n    It should therefore be robust against per-entry filesystem issues such as\n    broken symlinks or permission errors: a single bad entry must not crash\n    the whole CLI.\n    \"\"\"\n\n    entries: list[str] = []\n    # Iterate entries; tolerate per-entry stat failures (broken symlinks, permissions, etc.).\n    async for entry in work_dir.iterdir():\n        try:\n            st = await entry.stat()\n        except OSError:\n            # Broken symlink, permission error, etc. – keep listing other entries.\n            entries.append(f\"?--------- {'?':>10} {entry.name} [stat failed]\")\n            continue\n        mode = \"d\" if S_ISDIR(st.st_mode) else \"-\"\n        mode += \"r\" if st.st_mode & 0o400 else \"-\"\n        mode += \"w\" if st.st_mode & 0o200 else \"-\"\n        mode += \"x\" if st.st_mode & 0o100 else \"-\"\n        mode += \"r\" if st.st_mode & 0o040 else \"-\"\n        mode += \"w\" if st.st_mode & 0o020 else \"-\"\n        mode += \"x\" if st.st_mode & 0o010 else \"-\"\n        mode += \"r\" if st.st_mode & 0o004 else \"-\"\n        mode += \"w\" if st.st_mode & 0o002 else \"-\"\n        mode += \"x\" if st.st_mode & 0o001 else \"-\"\n        entries.append(f\"{mode} {st.st_size:>10} {entry.name}\")\n    return \"\\n\".join(entries)\n\n\ndef shorten_home(path: KaosPath) -> KaosPath:\n    \"\"\"\n    Convert absolute path to use `~` for home directory.\n    \"\"\"\n    try:\n        home = KaosPath.home()\n        p = path.relative_to(home)\n        return KaosPath(\"~\") / p\n    except Exception:\n        return path\n\n\ndef is_within_directory(path: KaosPath, directory: KaosPath) -> bool:\n    \"\"\"\n    Check whether *path* is contained within *directory* using pure path semantics.\n    Both arguments should already be canonicalized (e.g. via KaosPath.canonical()).\n    \"\"\"\n    candidate = PurePath(str(path))\n    base = PurePath(str(directory))\n    try:\n        candidate.relative_to(base)\n        return True\n    except ValueError:\n        return False\n\n\ndef is_within_workspace(\n    path: KaosPath,\n    work_dir: KaosPath,\n    additional_dirs: Sequence[KaosPath] = (),\n) -> bool:\n    \"\"\"\n    Check whether *path* is within the workspace (work_dir or any additional directory).\n    \"\"\"\n    if is_within_directory(path, work_dir):\n        return True\n    return any(is_within_directory(path, d) for d in additional_dirs)\n"
     },
     "complexity_metrics": {
-      "cyclomatic_complexity": 24.0,
-      "lines_of_code": 113,
+      "cyclomatic_complexity": 26.0,
+      "lines_of_code": 127,
       "number_of_classes": 0,
-      "number_of_functions": 5
+      "number_of_functions": 6
     },
     "dependencies": [
       {
-        "dependency_type": "import",
-        "is_external": true,
-        "line_number": 1,
-        "name": "__future__",
-        "path": null,
-        "version": null
-      },
-      {
-        "dependency_type": "import",
-        "is_external": true,
-        "line_number": 3,
+        "dependency_type": "standard_library",
+        "is_external": false,
+        "line_number": null,
         "name": "asyncio",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "import",
-        "is_external": true,
-        "line_number": 4,
+        "dependency_type": "standard_library",
+        "is_external": false,
+        "line_number": null,
         "name": "os",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "import",
-        "is_external": true,
-        "line_number": 5,
+        "dependency_type": "standard_library",
+        "is_external": false,
+        "line_number": null,
         "name": "re",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "import",
-        "is_external": true,
-        "line_number": 6,
+        "dependency_type": "standard_library",
+        "is_external": false,
+        "line_number": null,
         "name": "pathlib",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "import",
-        "is_external": true,
-        "line_number": 7,
+        "dependency_type": "standard_library",
+        "is_external": false,
+        "line_number": null,
         "name": "stat",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "import",
-        "is_external": true,
-        "line_number": 9,
-        "name": "aiofiles.os",
+        "dependency_type": "standard_library",
+        "is_external": false,
+        "line_number": null,
+        "name": "collections.abc",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "import",
+        "dependency_type": "third_party_library",
+        "is_external": true,
+        "line_number": null,
+        "name": "aiofiles",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "project_module",
+        "is_external": true,
+        "line_number": null,
+        "name": "kaos.path",
+        "path": null,
+        "version": null
+      },
+      {
+        "dependency_type": "standard_library",
         "is_external": false,
-        "line_number": 10,
-        "name": "kaos.path.KaosPath",
-        "path": "kaos.path",
+        "line_number": null,
+        "name": "__future__",
+        "path": null,
         "version": null
       }
     ],
-    "detailed_description": "This utility module provides low-level filesystem path operations for the Kimi CLI application. It implements async file rotation logic with atomic reservation mechanisms to prevent race conditions when creating numbered backup files (e.g., log_1.txt, log_2.txt). The module includes a robust directory listing function that mimics Unix 'ls' command output with permission bits and file sizes, designed to provide context to LLM systems while gracefully handling filesystem errors like broken symlinks or permission issues. Additional helpers include path shortening with home directory tilde expansion and path containment validation using pure path semantics. All operations are designed to be async-first and error-tolerant, making them suitable for CLI tools that need reliable filesystem interactions.",
+    "detailed_description": "This utility module provides essential path manipulation and file system operations for the Kimi CLI application. It contains five public functions and one private helper function focused on three main areas: (1) File rotation management with atomic file creation for history/log rotation, using exclusive creation flags to prevent race conditions; (2) Directory listing with robust error handling for LLM context provisioning, featuring detailed permission mode display and graceful handling of broken symlinks/permission errors; (3) Workspace boundary validation ensuring paths remain within allowed directories using pure path semantics. The module uses async/await patterns for file I/O operations, leverages the KaosPath library for path abstractions, and implements defensive programming practices to ensure reliability across different filesystem conditions.",
     "interfaces": [
       {
-        "description": "Atomically creates an empty file as a reservation for the given path using O_EXCL flag to prevent race conditions",
-        "interface_type": "async function",
+        "description": "Atomically creates an empty file as a reservation for the given path using exclusive creation flags to prevent race conditions",
+        "interface_type": "function",
         "name": "_reserve_rotation_path",
         "parameters": [
           {
-            "description": "Target path to atomically reserve by creating an empty file",
+            "description": "Path object to create reservation file for",
             "is_optional": false,
             "name": "path",
             "param_type": "Path"
@@ -46465,12 +46861,12 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "private"
       },
       {
-        "description": "Returns a reserved rotation path with sequential numbering (e.g., file_1.txt, file_2.txt) or None if parent directory is missing",
-        "interface_type": "async function",
+        "description": "Finds and reserves the next available rotation path by scanning existing numbered files and atomically creating a placeholder file",
+        "interface_type": "function",
         "name": "next_available_rotation",
         "parameters": [
           {
-            "description": "Base path for which to find the next available rotation filename",
+            "description": "Base path to find next rotation file for",
             "is_optional": false,
             "name": "path",
             "param_type": "Path"
@@ -46480,12 +46876,12 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Generates Unix-style directory listing with permission bits, file sizes, and names, tolerating per-entry stat failures",
-        "interface_type": "async function",
+        "description": "Returns ls-like directory listing with permission modes, sizes, and names; handles broken symlinks and permission errors gracefully",
+        "interface_type": "function",
         "name": "list_directory",
         "parameters": [
           {
-            "description": "Directory to list in Unix ls-like format",
+            "description": "Directory to list contents of",
             "is_optional": false,
             "name": "work_dir",
             "param_type": "KaosPath"
@@ -46495,12 +46891,12 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Converts absolute paths to use ~ for home directory, returning original path if conversion fails",
+        "description": "Converts absolute paths to use tilde notation for home directory for user-friendly display",
         "interface_type": "function",
         "name": "shorten_home",
         "parameters": [
           {
-            "description": "Absolute path to convert to tilde-prefixed format",
+            "description": "Path to convert to home-relative format",
             "is_optional": false,
             "name": "path",
             "param_type": "KaosPath"
@@ -46510,18 +46906,18 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Validates whether a path is contained within a directory using pure path semantics, expecting canonicalized inputs",
+        "description": "Checks if a path is contained within a directory using pure path semantics for security validation",
         "interface_type": "function",
         "name": "is_within_directory",
         "parameters": [
           {
-            "description": "Path to check for containment",
+            "description": "Path to check",
             "is_optional": false,
             "name": "path",
             "param_type": "KaosPath"
           },
           {
-            "description": "Base directory to check against",
+            "description": "Directory to check containment against",
             "is_optional": false,
             "name": "directory",
             "param_type": "KaosPath"
@@ -46529,13 +46925,41 @@ Code analysis results from preprocessing phase, including definitions of functio
         ],
         "return_type": "bool",
         "visibility": "public"
+      },
+      {
+        "description": "Validates that a path is within the workspace by checking against primary work directory and additional allowed directories",
+        "interface_type": "function",
+        "name": "is_within_workspace",
+        "parameters": [
+          {
+            "description": "Path to validate",
+            "is_optional": false,
+            "name": "path",
+            "param_type": "KaosPath"
+          },
+          {
+            "description": "Primary workspace directory",
+            "is_optional": false,
+            "name": "work_dir",
+            "param_type": "KaosPath"
+          },
+          {
+            "description": "Additional allowed directories",
+            "is_optional": true,
+            "name": "additional_dirs",
+            "param_type": "Sequence[KaosPath]"
+          }
+        ],
+        "return_type": "bool",
+        "visibility": "public"
       }
     ],
     "responsibilities": [
-      "Provide atomic file rotation mechanism with sequential numbering to prevent conflicts during concurrent file creation",
-      "Generate Unix-style directory listings with permission bits and file sizes while gracefully handling per-entry filesystem errors",
-      "Offer path manipulation utilities including home directory shortening and directory containment validation",
-      "Ensure async-first filesystem operations using asyncio and aiofiles for non-blocking I/O in CLI context"
+      "Manage atomic file rotation operations for log/history file management with race condition prevention",
+      "Provide robust directory listing functionality with detailed permission display for LLM context",
+      "Validate workspace boundaries to ensure paths remain within allowed directories",
+      "Convert absolute paths to home-relative format for user-friendly display",
+      "Handle filesystem errors gracefully without crashing CLI operations"
     ]
   },
   {
@@ -46672,11 +47096,15 @@ Code analysis results from preprocessing phase, including definitions of functio
   {
     "code_dossier": {
       "code_purpose": "entry",
-      "description": "Typer-based CLI entrypoint for Kimi Code agent. Parses CLI options, resolves configuration/session, launches appropriate UI mode (shell/print/ACP/Wire), manages reload/switch-to-web control flow, and exposes subcommands (info, mcp, web, login/logout, term, acp, internal web worker).",
+      "description": "Main CLI entry point for Kimi Code, providing command-line interface with multiple UI modes (shell, print, ACP, wire), session management, configuration handling, and authentication flows.",
       "file_path": "src/kimi_cli/cli/__init__.py",
       "functions": [
         "_version_callback",
         "kimi",
+        "_emit_fatal_error",
+        "_run",
+        "_post_run",
+        "_reload_loop",
         "login",
         "logout",
         "term",
@@ -46685,62 +47113,23 @@ Code analysis results from preprocessing phase, including definitions of functio
       ],
       "importance_score": 0.8,
       "interfaces": [
-        "Reload",
-        "SwitchToWeb",
-        "_version_callback",
         "kimi",
         "login",
         "logout",
         "term",
         "acp",
-        "web_worker",
-        "_emit_fatal_error",
-        "_run",
-        "_post_run",
-        "_reload_loop"
+        "web_worker"
       ],
       "name": "__init__.py",
-      "source_summary": "from __future__ import annotations\n\nimport asyncio\nimport json\nimport sys\nfrom pathlib import Path\nfrom typing import Annotated, Literal\n\nimport typer\n\nfrom kimi_cli.constant import VERSION\n\nfrom .info import cli as info_cli\nfrom .mcp import cli as mcp_cli\nfrom .web import cli as web_cli\n\n\nclass Reload(Exception):\n    \"\"\"Reload configuration.\"\"\"\n\n    def __init__(self, session_id: str | None = None):\n        super().__init__(\"reload\")\n        self.session_id = session_id\n\n\nclass SwitchToWeb(Exception):\n    \"\"\"Switch to web interface.\"\"\"\n\n    def __init__(self, session_id: str | None = None):\n        super().__init__(\"switch_to_web\")\n        self.session_id = session_id\n\n\ncli = typer.Typer(\n    epilog=\"\"\"\\b\\\nDocumentation:        https://moonshotai.github.io/kimi-cli/\\n\nLLM friendly version: https://moonshotai.github.io/kimi-cli/llms.txt\"\"\",\n    add_completion=False,\n    context_settings={\"help_option_names\": [\"-h\", \"--help\"]},\n    help=\"Kimi, your next CLI agent.\",\n)\n\nUIMode = Literal[\"shell\", \"print\", \"acp\", \"wire\"]\nInputFormat = Literal[\"text\", \"stream-json\"]\nOutputFormat = Literal[\"text\", \"stream-json\"]\n\n\ndef _version_callback(value: bool) -> None:\n    if value:\n        typer.echo(f\"kimi, version {VERSION}\")\n        raise typer.Exit()\n\n\n@cli.callback(invoke_without_command=True)\ndef kimi(\n    ctx: typer.Context,\n    # Meta\n    version: Annotated[\n        bool,\n        typer.Option(\n            \"--version\",\n            \"-V\",\n            help=\"Show version and exit.\",\n            callback=_version_callback,\n            is_eager=True,\n        ),\n    ] = False,\n    verbose: Annotated[\n        bool,\n        typer.Option(\n            \"--verbose\",\n            help=\"Print verbose information. Default: no.\",\n        ),\n    ] = False,\n    debug: Annotated[\n        bool,\n        typer.Option(\n            \"--debug\",\n            help=\"Log debug information. Default: no.\",\n        ),\n    ] = False,\n    # Basic configuration\n    local_work_dir: Annotated[\n        Path | None,\n        typer.Option(\n            \"--work-dir\",\n            \"-w\",\n            exists=True,\n            file_okay=False,\n            dir_okay=True,\n            readable=True,\n            writable=True,\n            help=\"Working directory for the agent. Default: current directory.\",\n        ),\n    ] = None,\n    session_id: Annotated[\n        str | None,\n        typer.Option(\n            \"--session\",\n            \"-S\",\n            help=\"Session ID to resume for the working directory. Default: new session.\",\n        ),\n    ] = None,\n    continue_: Annotated[\n        bool,\n        typer.Option(\n            \"--continue\",\n            \"-C\",\n            help=\"Continue the previous session for the working directory. Default: no.\",\n        ),\n    ] = False,\n    config_string: Annotated[\n        str | None,\n        typer.Option(\n            \"--config\",\n            help=\"Config TOML/JSON string to load. Default: none.\",\n        ),\n    ] = None,\n    config_file: Annotated[\n        Path | None,\n        typer.Option(\n            \"--config-file\",\n            exists=True,\n            file_okay=True,\n            dir_okay=False,\n            readable=True,\n            help=\"Config TOML/JSON file to load. Default: ~/.kimi/config.toml.\",\n        ),\n    ] = None,\n    model_name: Annotated[\n        str | None,\n        typer.Option(\n            \"--model\",\n            \"-m\",\n            help=\"LLM model to use. Default: default model set in config file.\",\n        ),\n    ] = None,\n    thinking: Annotated[\n        bool | None,\n        typer.Option(\n            \"--thinking/--no-thinking\",\n            help=\"Enable thinking mode. Default: default thinking mode set in config file.\",\n        ),\n    ] = None,\n    # Run mode\n    yolo: Annotated[\n        bool,\n        typer.Option(\n            \"--yolo\",\n            \"--yes\",\n            \"-y\",\n            \"--auto-approve\",\n            help=\"Automatically approve all actions. Default: no.\",\n        ),\n    ] = False,\n    prompt: Annotated[\n        str | None,\n        typer.Option(\n            \"--prompt\",\n            \"-p\",\n            \"--command\",\n            \"-c\",\n            help=\"User prompt to the agent. Default: prompt interactively.\",\n        ),\n    ] = None,\n    print_mode: Annotated[\n        bool,\n        typer.Option(\n            \"--print\",\n            help=(\n                \"Run in print mode (non-interactive). Note: print mode implicitly adds `--yolo`.\"\n            ),\n        ),\n    ] = False,\n    acp_mode: Annotated[\n        bool,\n        typer.Option(\n            \"--acp\",\n            help=\"(Deprecated, use `kimi acp` instead) Run as ACP server.\",\n        ),\n    ] = False,\n    wire_mode: Annotated[\n        bool,\n        typer.Option(\n            \"--wire\",\n            help=\"Run as Wire server (experimental).\",\n        ),\n    ] = False,\n    input_format: Annotated[\n        InputFormat | None,\n        typer.Option(\n            \"--input-format\",\n            help=(\n                \"Input format to use. Must be used with `--print` \"\n                \"and the input must be piped in via stdin. \"\n                \"Default: text.\"\n            ),\n        ),\n    ] = None,\n    output_format: Annotated[\n        OutputFormat | None,\n        typer.Option(\n            \"--output-format\",\n            help=\"Output format to use. Must be used with `--print`. Default: text.\",\n        ),\n    ] = None,\n    final_message_only: Annotated[\n        bool,\n        typer.Option(\n            \"--final-message-only\",\n            help=\"Only print the final assistant message (print UI).\",\n        ),\n    ] = False,\n    quiet: Annotated[\n        bool,\n        typer.Option(\n            \"--quiet\",\n            help=\"Alias for `--print --output-format text --final-message-only`.\",\n        ),\n    ] = False,\n    # Customization\n    agent: Annotated[\n        Literal[\"default\", \"okabe\"] | None,\n        typer.Option(\n            \"--agent\",\n            help=\"Builtin agent specification to use. Default: builtin default agent.\",\n        ),\n    ] = None,\n    agent_file: Annotated[\n        Path | None,\n        typer.Option(\n            \"--agent-file\",\n            exists=True,\n            file_okay=True,\n            dir_okay=False,\n            readable=True,\n            help=\"Custom agent specification file. Default: builtin default agent.\",\n        ),\n    ] = None,\n    mcp_config_file: Annotated[\n        list[Path] | None,\n        typer.Option(\n            \"--mcp-config-file\",\n            exists=True,\n            file_okay=True,\n            dir_okay=False,\n            readable=True,\n            help=(\n                \"MCP config file to load. Add this option multiple times to specify multiple MCP \"\n                \"configs. Default: none.\"\n            ),\n        ),\n    ] = None,\n    mcp_config: Annotated[\n        list[str] | None,\n        typer.Option(\n            \"--mcp-config\",\n            help=(\n                \"MCP config JSON to load. Add this option multiple times to specify multiple MCP \"\n                \"configs. Default: none.\"\n            ),\n        ),\n    ] = None,\n    local_skills_dir: Annotated[\n        Path | None,\n        typer.Option(\n            \"--skills-dir\",\n            exists=True,\n            file_okay=False,\n            dir_okay=True,\n            readable=True,\n            help=\"Path to the skills directory. Overrides discovery.\",\n        ),\n    ] = None,\n    # Loop control\n    max_steps_per_turn: Annotated[\n        int | None,\n        typer.Option(\n            \"--max-steps-per-turn\",\n            min=1,\n            help=\"Maximum number of steps in one turn. Default: from config.\",\n        ),\n    ] = None,\n    max_retries_per_step: Annotated[\n        int | None,\n        typer.Option(\n            \"--max-retries-per-step\",\n            min=1,\n            help=\"Maximum number of retries in one step. Default: from config.\",\n        ),\n    ] = None,\n    max_ralph_iterations: Annotated[\n        int | None,\n        typer.Option(\n            \"--max-ralph-iterations\",\n            min=-1,\n            help=(\n                \"Extra iterations after the first turn in Ralph mode. Use -1 for unlimited. \"\n                \"Default: from config.\"\n            ),\n        ),\n    ] = None,\n):\n    \"\"\"Kimi, your next CLI agent.\"\"\"\n    from kimi_cli.utils.proctitle import init_process_name\n\n    init_process_name(\"Kimi Code\")\n\n    if ctx.invoked_subcommand is not None:\n        return  # skip rest if a subcommand is invoked\n\n    del version  # handled in the callback\n\n    from kaos.path import KaosPath\n\n    from kimi_cli.agentspec import DEFAULT_AGENT_FILE, OKABE_AGENT_FILE\n    from kimi_cli.app import KimiCLI, enable_logging\n    from kimi_cli.config import Config, load_config_from_string\n    from kimi_cli.exception import ConfigError\n    from kimi_cli.metadata import load_metadata, save_metadata\n    from kimi_cli.session import Session\n    from kimi_cli.utils.logging import logger, open_original_stderr, redirect_stderr_to_logger\n\n    from .mcp import get_global_mcp_config_file\n\n    # Don't redirect stderr yet. Our stderr redirector replaces fd=2 with a pipe, which\n    # would swallow Click/Typer startup errors (e.g. config parsing / BadParameter).\n    # We re-enable stderr redirection after KimiCLI.create() succeeds.\n    enable_logging(debug, redirect_stderr=False)\n\n    def _emit_fatal_error(message: str) -> None:\n        # Prefer writing to the original stderr fd even if we later redirect fd=2.\n        # This ensures fatal errors are visible to the user.\n        with open_original_stderr() as stream:\n            if stream is not None:\n                stream.write((message.rstrip() + \"\\n\").encode(\"utf-8\", errors=\"replace\"))\n                stream.flush()\n                return\n        typer.echo(message, err=True)\n\n    if session_id is not None:\n        session_id = session_id.strip()\n        if not session_id:\n            raise typer.BadParameter(\"Session ID cannot be empty\", param_hint=\"--session\")\n\n    if quiet:\n        if acp_mode or wire_mode:\n            raise typer.BadParameter(\n                \"Quiet mode cannot be combined with ACP or Wire UI\",\n                param_hint=\"--quiet\",\n            )\n        if output_format not in (None, \"text\"):\n            raise typer.BadParameter(\n                \"Quiet mode implies `--output-format text`\",\n                param_hint=\"--quiet\",\n            )\n        print_mode = True\n        output_format = \"text\"\n        final_message_only = True\n\n    conflict_option_sets = [\n        {\n            \"--print\": print_mode,\n            \"--acp\": acp_mode,\n            \"--wire\": wire_mode,\n        },\n        {\n            \"--agent\": agent is not None,\n            \"--agent-file\": agent_file is not None,\n        },\n        {\n            \"--continue\": continue_,\n            \"--session\": session_id is not None,\n        },\n        {\n            \"--config\": config_string is not None,\n            \"--config-file\": config_file is not None,\n        },\n    ]\n    for option_set in conflict_option_sets:\n        active_options = [flag for flag, active in option_set.items() if active]\n        if len(active_options) > 1:\n            raise typer.BadParameter(\n                f\"Cannot combine {', '.join(active_options)}.\",\n                param_hint=active_options[0],\n            )\n\n    if agent is not None:\n        match agent:\n            case \"default\":\n                agent_file = DEFAULT_AGENT_FILE\n            case \"okabe\":\n                agent_file = OKABE_AGENT_FILE\n\n    ui: UIMode = \"shell\"\n    if print_mode:\n        ui = \"print\"\n    elif acp_mode:\n        ui = \"acp\"\n    elif wire_mode:\n        ui = \"wire\"\n\n    if prompt is not None:\n        prompt = prompt.strip()\n        if not prompt:\n            raise typer.BadParameter(\"Prompt cannot be empty\", param_hint=\"--prompt\")\n\n    if input_format is not None and ui != \"print\":\n        raise typer.BadParameter(\n            \"Input format is only supported for print UI\",\n            param_hint=\"--input-format\",\n        )\n    if output_format is not None and ui != \"print\":\n        raise typer.BadParameter(\n            \"Output format is only supported for print UI\",\n            param_hint=\"--output-format\",\n        )\n    if final_message_only and ui != \"print\":\n        raise typer.BadParameter(\n            \"Final-message-only output is only supported for print UI\",\n            param_hint=\"--final-message-only\",\n        )\n\n    config: Config | Path | None = None\n    if config_string is not None:\n        config_string = config_string.strip()\n        if not config_string:\n            raise typer.BadParameter(\"Config cannot be empty\", param_hint=\"--config\")\n        try:\n            config = load_config_from_string(config_string)\n        except ConfigError as e:\n            raise typer.BadParameter(str(e), param_hint=\"--config\") from e\n    elif config_file is not None:\n        config = config_file\n\n    file_configs = list(mcp_config_file or [])\n    raw_mcp_config = list(mcp_config or [])\n\n    # Use default MCP config file if no MCP config is provided\n    if not file_configs:\n        default_mcp_file = get_global_mcp_config_file()\n        if default_mcp_file.exists():\n            file_configs.append(default_mcp_file)\n\n    try:\n        mcp_configs = [json.loads(conf.read_text(encoding=\"utf-8\")) for conf in file_configs]\n    except json.JSONDecodeError as e:\n        raise typer.BadParameter(f\"Invalid JSON: {e}\", param_hint=\"--mcp-config-file\") from e\n\n    try:\n        mcp_configs += [json.loads(conf) for conf in raw_mcp_config]\n    except json.JSONDecodeError as e:\n        raise typer.BadParameter(f\"Invalid JSON: {e}\", param_hint=\"--mcp-config\") from e\n\n    skills_dir: KaosPath | None = None\n    if local_skills_dir is not None:\n        skills_dir = KaosPath.unsafe_from_local_path(local_skills_dir)\n\n    work_dir = KaosPath.unsafe_from_local_path(local_work_dir) if local_work_dir else KaosPath.cwd()\n\n    async def _run(session_id: str | None) -> tuple[Session, bool]:\n        \"\"\"\n        Create/load session and run the CLI instance.\n\n        Returns:\n            The session and whether the run succeeded.\n        \"\"\"\n        if session_id is not None:\n            session = await Session.find(work_dir, session_id)\n            if session is None:\n                logger.info(\n                    \"Session {session_id} not found, creating new session\", session_id=session_id\n                )\n                session = await Session.create(work_dir, session_id)\n            logger.info(\"Switching to session: {session_id}\", session_id=session.id)\n        elif continue_:\n            session = await Session.continue_(work_dir)\n            if session is None:\n                raise typer.BadParameter(\n                    \"No previous session found for the working directory\",\n                    param_hint=\"--continue\",\n                )\n            logger.info(\"Continuing previous session: {session_id}\", session_id=session.id)\n        else:\n            session = await Session.create(work_dir)\n            logger.info(\"Created new session: {session_id}\", session_id=session.id)\n\n        instance = await KimiCLI.create(\n            session,\n            config=config,\n            model_name=model_name,\n            thinking=thinking,\n            yolo=yolo or (ui == \"print\"),  # print mode implies yolo\n            agent_file=agent_file,\n            mcp_configs=mcp_configs,\n            skills_dir=skills_dir,\n            max_steps_per_turn=max_steps_per_turn,\n            max_retries_per_step=max_retries_per_step,\n            max_ralph_iterations=max_ralph_iterations,\n        )\n        # Install stderr redirection only after initialization succeeded, so runtime\n        # stderr noise is captured into logs without hiding startup failures.\n        redirect_stderr_to_logger()\n        try:\n            match ui:\n                case \"shell\":\n                    succeeded = await instance.run_shell(prompt)\n                case \"print\":\n                    succeeded = await instance.run_print(\n                        input_format or \"text\",\n                        output_format or \"text\",\n                        prompt,\n                        final_only=final_message_only,\n                    )\n                case \"acp\":\n                    if prompt is not None:\n                        logger.warning(\"ACP server ignores prompt argument\")\n                    await instance.run_acp()\n                    succeeded = True\n                case \"wire\":\n                    if prompt is not None:\n                        logger.warning(\"Wire server ignores prompt argument\")\n                    await instance.run_wire_stdio()\n                    succeeded = True\n        except Reload as e:\n            if e.session_id is None:\n                raise Reload(session_id=session.id) from e\n            raise\n\n        return session, succeeded\n\n    async def _post_run(last_session: Session, succeeded: bool) -> None:\n        if not succeeded:\n            return\n\n        metadata = load_metadata()\n\n        # Update work_dir metadata with last session\n        work_dir_meta = metadata.get_work_dir_meta(last_session.work_dir)\n\n        if work_dir_meta is None:\n            logger.warning(\n                \"Work dir metadata missing when marking last session, recreating: {work_dir}\",\n                work_dir=last_session.work_dir,\n            )\n            work_dir_meta = metadata.new_work_dir_meta(last_session.work_dir)\n\n        if last_session.is_empty():\n            logger.info(\n                \"Session {session_id} has empty context, removing it\",\n                session_id=last_session.id,\n            )\n            await last_session.delete()\n            if work_dir_meta.last_session_id == last_session.id:\n                work_dir_meta.last_session_id = None\n        else:\n            work_dir_meta.last_session_id = last_session.id\n\n        save_metadata(metadata)\n\n    async def _reload_loop(session_id: str | None) -> bool:\n        \"\"\"\n        Returns:\n            True if should switch to web interface, False otherwise.\n        \"\"\"\n        while True:\n            try:\n                last_session, succeeded = await _run(session_id)\n                break\n            except Reload as e:\n                session_id = e.session_id\n                continue\n            except SwitchToWeb as e:\n                if e.session_id is not None:\n                    session = await Session.find(work_dir, e.session_id)\n                    if session is not None:\n                        await _post_run(session, True)\n                return True\n        await _post_run(last_session, succeeded)\n        return False\n\n    try:\n        switch_to_web = asyncio.run(_reload_loop(session_id))\n    except (typer.BadParameter, typer.Exit):\n        # Let Typer/Click format these errors (rich panel + correct exit code).\n        raise\n    except Exception as exc:\n        import click\n\n        if isinstance(exc, click.ClickException):\n            # ClickException includes the errors Typer knows how to render; don't\n            # wrap them, or we'd lose the standard error UI and exit codes.\n            raise\n        logger.exception(\"Fatal error when running CLI\")\n        if debug:\n            import traceback\n\n            # In debug mode, show full traceback for quick diagnosis.\n            _emit_fatal_error(traceback.format_exc())\n        else:\n            from kimi_cli.share import get_share_dir\n\n            log_path = get_share_dir() / \"logs\" / \"kimi.log\"\n            # In non-debug mode, print a concise error and point users to logs.\n            _emit_fatal_error(f\"{exc}\\nSee logs: {log_path}\")\n        raise typer.Exit(code=1) from exc\n    if switch_to_web:\n        from kimi_cli.utils.logging import restore_stderr\n\n        restore_stderr()\n\n        # Restore default SIGINT handler and terminal state after the shell's\n        # asyncio.run() to ensure Ctrl+C works in the uvicorn web server.\n        import signal\n\n        signal.signal(signal.SIGINT, signal.default_int_handler)\n\n        from kimi_cli.utils.term import ensure_tty_sane\n\n        ensure_tty_sane()\n\n        from kimi_cli.web.app import run_web_server\n\n        run_web_server(open_browser=True)\n\n\ncli.add_typer(info_cli, name=\"info\")\n\n\n@cli.command()\ndef login(\n    json: bool = typer.Option(\n        False,\n        \"--json\",\n        help=\"Emit OAuth events as JSON lines.\",\n    ),\n) -> None:\n    \"\"\"Login to your Kimi account.\"\"\"\n    from rich.console import Console\n    from rich.status import Status\n\n    from kimi_cli.auth.oauth import login_kimi_code\n    from kimi_cli.config import load_config\n\n    async def _run() -> bool:\n        if json:\n            ok = True\n            async for event in login_kimi_code(load_config()):\n                typer.echo(event.json)\n                if event.type == \"error\":\n                    ok = False\n            return ok\n\n        console = Console()\n        ok = True\n        status: Status | None = None\n        try:\n            async for event in login_kimi_code(load_config()):\n                if event.type == \"waiting\":\n                    if status is None:\n                        status = console.status(\"Waiting for user authorization...\")\n                        status.start()\n                    continue\n                if status is not None:\n                    status.stop()\n                    status = None\n                match event.type:\n                    case \"error\":\n                        style = \"red\"\n                    case \"success\":\n                        style = \"green\"\n                    case _:\n                        style = None\n                console.print(event.message, markup=False, style=style)\n                if event.type == \"error\":\n                    ok = False\n        finally:\n            if status is not None:\n                status.stop()\n        return ok\n\n    ok = asyncio.run(_run())\n    if not ok:\n        raise typer.Exit(code=1)\n\n\n@cli.command()\ndef logout(\n    json: bool = typer.Option(\n        False,\n        \"--json\",\n        help=\"Emit OAuth events as JSON lines.\",\n    ),\n) -> None:\n    \"\"\"Logout from your Kimi account.\"\"\"\n    from rich.console import Console\n\n    from kimi_cli.auth.oauth import logout_kimi_code\n    from kimi_cli.config import load_config\n\n    async def _run() -> bool:\n        ok = True\n        if json:\n            async for event in logout_kimi_code(load_config()):\n                typer.echo(event.json)\n                if event.type == \"error\":\n                    ok = False\n            return ok\n\n        console = Console()\n        async for event in logout_kimi_code(load_config()):\n            match event.type:\n                case \"error\":\n                    style = \"red\"\n                case \"success\":\n                    style = \"green\"\n                case _:\n                    style = None\n            console.print(event.message, markup=False, style=style)\n            if event.type == \"error\":\n                ok = False\n        return ok\n\n    ok = asyncio.run(_run())\n    if not ok:\n        raise typer.Exit(code=1)\n\n\n@cli.command(context_settings={\"allow_extra_args\": True, \"ignore_unknown_options\": True})\ndef term(\n    ctx: typer.Context,\n) -> None:\n    \"\"\"Run Toad TUI backed by Kimi Code CLI ACP server.\"\"\"\n    from .toad import run_term\n\n    run_term(ctx)\n\n\n@cli.command()\ndef acp():\n    \"\"\"Run Kimi Code CLI ACP server.\"\"\"\n    from kimi_cli.acp import acp_main\n\n    acp_main()\n\n\n@cli.command(name=\"__web-worker\", hidden=True)\ndef web_worker(session_id: str) -> None:\n    \"\"\"Run web worker subprocess (internal).\"\"\"\n    from uuid import UUID\n\n    from kimi_cli.utils.proctitle import set_process_title\n\n    set_process_title(\"kimi-code-worker\")\n\n    from kimi_cli.app import enable_logging\n    from kimi_cli.web.runner.worker import run_worker\n\n    try:\n        parsed_session_id = UUID(session_id)\n    except ValueError as exc:\n        raise typer.BadParameter(f\"Invalid session ID: {session_id}\") from exc\n\n    enable_logging(debug=False)\n    asyncio.run(run_worker(parsed_session_id))\n\n\ncli.add_typer(mcp_cli, name=\"mcp\")\ncli.add_typer(web_cli, name=\"web\")\n\n\nif __name__ == \"__main__\":\n    if \"kimi_cli.cli\" not in sys.modules:\n        sys.modules[\"kimi_cli.cli\"] = sys.modules[__name__]\n\n    sys.exit(cli())\n"
+      "source_summary": "from __future__ import annotations\n\nimport asyncio\nimport json\nimport sys\nfrom pathlib import Path\nfrom typing import Annotated, Literal\n\nimport typer\n\nfrom kimi_cli.constant import VERSION\n\nfrom .info import cli as info_cli\nfrom .mcp import cli as mcp_cli\nfrom .web import cli as web_cli\n\n\nclass Reload(Exception):\n    \"\"\"Reload configuration.\"\"\"\n\n    def __init__(self, session_id: str | None = None):\n        super().__init__(\"reload\")\n        self.session_id = session_id\n\n\nclass SwitchToWeb(Exception):\n    \"\"\"Switch to web interface.\"\"\"\n\n    def __init__(self, session_id: str | None = None):\n        super().__init__(\"switch_to_web\")\n        self.session_id = session_id\n\n\ncli = typer.Typer(\n    epilog=\"\"\"\\b\\\nDocumentation:        https://moonshotai.github.io/kimi-cli/\\n\nLLM friendly version: https://moonshotai.github.io/kimi-cli/llms.txt\"\"\",\n    add_completion=False,\n    context_settings={\"help_option_names\": [\"-h\", \"--help\"]},\n    help=\"Kimi, your next CLI agent.\",\n)\n\nUIMode = Literal[\"shell\", \"print\", \"acp\", \"wire\"]\nInputFormat = Literal[\"text\", \"stream-json\"]\nOutputFormat = Literal[\"text\", \"stream-json\"]\n\n\ndef _version_callback(value: bool) -> None:\n    if value:\n        typer.echo(f\"kimi, version {VERSION}\")\n        raise typer.Exit()\n\n\n@cli.callback(invoke_without_command=True)\ndef kimi(\n    ctx: typer.Context,\n    # Meta\n    version: Annotated[\n        bool,\n        typer.Option(\n            \"--version\",\n            \"-V\",\n            help=\"Show version and exit.\",\n            callback=_version_callback,\n            is_eager=True,\n        ),\n    ] = False,\n    verbose: Annotated[\n        bool,\n        typer.Option(\n            \"--verbose\",\n            help=\"Print verbose information. Default: no.\",\n        ),\n    ] = False,\n    debug: Annotated[\n        bool,\n        typer.Option(\n            \"--debug\",\n            help=\"Log debug information. Default: no.\",\n        ),\n    ] = False,\n    # Basic configuration\n    local_work_dir: Annotated[\n        Path | None,\n        typer.Option(\n            \"--work-dir\",\n            \"-w\",\n            exists=True,\n            file_okay=False,\n            dir_okay=True,\n            readable=True,\n            writable=True,\n            help=\"Working directory for the agent. Default: current directory.\",\n        ),\n    ] = None,\n    local_add_dirs: Annotated[\n        list[Path] | None,\n        typer.Option(\n            \"--add-dir\",\n            exists=True,\n            file_okay=False,\n            dir_okay=True,\n            readable=True,\n            help=(\n                \"Add an additional directory to the workspace scope. \"\n                \"Can be specified multiple times.\"\n            ),\n        ),\n    ] = None,\n    session_id: Annotated[\n        str | None,\n        typer.Option(\n            \"--session\",\n            \"-S\",\n            help=\"Session ID to resume for the working directory. Default: new session.\",\n        ),\n    ] = None,\n    continue_: Annotated[\n        bool,\n        typer.Option(\n            \"--continue\",\n            \"-C\",\n            help=\"Continue the previous session for the working directory. Default: no.\",\n        ),\n    ] = False,\n    config_string: Annotated[\n        str | None,\n        typer.Option(\n            \"--config\",\n            help=\"Config TOML/JSON string to load. Default: none.\",\n        ),\n    ] = None,\n    config_file: Annotated[\n        Path | None,\n        typer.Option(\n            \"--config-file\",\n            exists=True,\n            file_okay=True,\n            dir_okay=False,\n            readable=True,\n            help=\"Config TOML/JSON file to load. Default: ~/.kimi/config.toml.\",\n        ),\n    ] = None,\n    model_name: Annotated[\n        str | None,\n        typer.Option(\n            \"--model\",\n            \"-m\",\n            help=\"LLM model to use. Default: default model set in config file.\",\n        ),\n    ] = None,\n    thinking: Annotated[\n        bool | None,\n        typer.Option(\n            \"--thinking/--no-thinking\",\n            help=\"Enable thinking mode. Default: default thinking mode set in config file.\",\n        ),\n    ] = None,\n    # Run mode\n    yolo: Annotated[\n        bool,\n        typer.Option(\n            \"--yolo\",\n            \"--yes\",\n            \"-y\",\n            \"--auto-approve\",\n            help=\"Automatically approve all actions. Default: no.\",\n        ),\n    ] = False,\n    prompt: Annotated[\n        str | None,\n        typer.Option(\n            \"--prompt\",\n            \"-p\",\n            \"--command\",\n            \"-c\",\n            help=\"User prompt to the agent. Default: prompt interactively.\",\n        ),\n    ] = None,\n    print_mode: Annotated[\n        bool,\n        typer.Option(\n            \"--print\",\n            help=(\n                \"Run in print mode (non-interactive). Note: print mode implicitly adds `--yolo`.\"\n            ),\n        ),\n    ] = False,\n    acp_mode: Annotated[\n        bool,\n        typer.Option(\n            \"--acp\",\n            help=\"(Deprecated, use `kimi acp` instead) Run as ACP server.\",\n        ),\n    ] = False,\n    wire_mode: Annotated[\n        bool,\n        typer.Option(\n            \"--wire\",\n            help=\"Run as Wire server (experimental).\",\n        ),\n    ] = False,\n    input_format: Annotated[\n        InputFormat | None,\n        typer.Option(\n            \"--input-format\",\n            help=(\n                \"Input format to use. Must be used with `--print` \"\n                \"and the input must be piped in via stdin. \"\n                \"Default: text.\"\n            ),\n        ),\n    ] = None,\n    output_format: Annotated[\n        OutputFormat | None,\n        typer.Option(\n            \"--output-format\",\n            help=\"Output format to use. Must be used with `--print`. Default: text.\",\n        ),\n    ] = None,\n    final_message_only: Annotated[\n        bool,\n        typer.Option(\n            \"--final-message-only\",\n            help=\"Only print the final assistant message (print UI).\",\n        ),\n    ] = False,\n    quiet: Annotated[\n        bool,\n        typer.Option(\n            \"--quiet\",\n            help=\"Alias for `--print --output-format text --final-message-only`.\",\n        ),\n    ] = False,\n    # Customization\n    agent: Annotated[\n        Literal[\"default\", \"okabe\"] | None,\n        typer.Option(\n            \"--agent\",\n            help=\"Builtin agent specification to use. Default: builtin default agent.\",\n        ),\n    ] = None,\n    agent_file: Annotated[\n        Path | None,\n        typer.Option(\n            \"--agent-file\",\n            exists=True,\n            file_okay=True,\n            dir_okay=False,\n            readable=True,\n            help=\"Custom agent specification file. Default: builtin default agent.\",\n        ),\n    ] = None,\n    mcp_config_file: Annotated[\n        list[Path] | None,\n        typer.Option(\n            \"--mcp-config-file\",\n            exists=True,\n            file_okay=True,\n            dir_okay=False,\n            readable=True,\n            help=(\n                \"MCP config file to load. Add this option multiple times to specify multiple MCP \"\n                \"configs. Default: none.\"\n            ),\n        ),\n    ] = None,\n    mcp_config: Annotated[\n        list[str] | None,\n        typer.Option(\n            \"--mcp-config\",\n            help=(\n                \"MCP config JSON to load. Add this option multiple times to specify multiple MCP \"\n                \"configs. Default: none.\"\n            ),\n        ),\n    ] = None,\n    local_skills_dir: Annotated[\n        Path | None,\n        typer.Option(\n            \"--skills-dir\",\n            exists=True,\n            file_okay=False,\n            dir_okay=True,\n            readable=True,\n            help=\"Path to the skills directory. Overrides discovery.\",\n        ),\n    ] = None,\n    # Loop control\n    max_steps_per_turn: Annotated[\n        int | None,\n        typer.Option(\n            \"--max-steps-per-turn\",\n            min=1,\n            help=\"Maximum number of steps in one turn. Default: from config.\",\n        ),\n    ] = None,\n    max_retries_per_step: Annotated[\n        int | None,\n        typer.Option(\n            \"--max-retries-per-step\",\n            min=1,\n            help=\"Maximum number of retries in one step. Default: from config.\",\n        ),\n    ] = None,\n    max_ralph_iterations: Annotated[\n        int | None,\n        typer.Option(\n            \"--max-ralph-iterations\",\n            min=-1,\n            help=(\n                \"Extra iterations after the first turn in Ralph mode. Use -1 for unlimited. \"\n                \"Default: from config.\"\n            ),\n        ),\n    ] = None,\n):\n    \"\"\"Kimi, your next CLI agent.\"\"\"\n    from kimi_cli.utils.proctitle import init_process_name\n\n    init_process_name(\"Kimi Code\")\n\n    if ctx.invoked_subcommand is not None:\n        return  # skip rest if a subcommand is invoked\n\n    del version  # handled in the callback\n\n    from kaos.path import KaosPath\n\n    from kimi_cli.agentspec import DEFAULT_AGENT_FILE, OKABE_AGENT_FILE\n    from kimi_cli.app import KimiCLI, enable_logging\n    from kimi_cli.config import Config, load_config_from_string\n    from kimi_cli.exception import ConfigError\n    from kimi_cli.metadata import load_metadata, save_metadata\n    from kimi_cli.session import Session\n    from kimi_cli.utils.logging import logger, open_original_stderr, redirect_stderr_to_logger\n\n    from .mcp import get_global_mcp_config_file\n\n    # Don't redirect stderr yet. Our stderr redirector replaces fd=2 with a pipe, which\n    # would swallow Click/Typer startup errors (e.g. config parsing / BadParameter).\n    # We re-enable stderr redirection after KimiCLI.create() succeeds.\n    enable_logging(debug, redirect_stderr=False)\n\n    def _emit_fatal_error(message: str) -> None:\n        # Prefer writing to the original stderr fd even if we later redirect fd=2.\n        # This ensures fatal errors are visible to the user.\n        with open_original_stderr() as stream:\n            if stream is not None:\n                stream.write((message.rstrip() + \"\\n\").encode(\"utf-8\", errors=\"replace\"))\n                stream.flush()\n                return\n        typer.echo(message, err=True)\n\n    if session_id is not None:\n        session_id = session_id.strip()\n        if not session_id:\n            raise typer.BadParameter(\"Session ID cannot be empty\", param_hint=\"--session\")\n\n    if quiet:\n        if acp_mode or wire_mode:\n            raise typer.BadParameter(\n                \"Quiet mode cannot be combined with ACP or Wire UI\",\n                param_hint=\"--quiet\",\n            )\n        if output_format not in (None, \"text\"):\n            raise typer.BadParameter(\n                \"Quiet mode implies `--output-format text`\",\n                param_hint=\"--quiet\",\n            )\n        print_mode = True\n        output_format = \"text\"\n        final_message_only = True\n\n    conflict_option_sets = [\n        {\n            \"--print\": print_mode,\n            \"--acp\": acp_mode,\n            \"--wire\": wire_mode,\n        },\n        {\n            \"--agent\": agent is not None,\n            \"--agent-file\": agent_file is not None,\n        },\n        {\n            \"--continue\": continue_,\n            \"--session\": session_id is not None,\n        },\n        {\n            \"--config\": config_string is not None,\n            \"--config-file\": config_file is not None,\n        },\n    ]\n    for option_set in conflict_option_sets:\n        active_options = [flag for flag, active in option_set.items() if active]\n        if len(active_options) > 1:\n            raise typer.BadParameter(\n                f\"Cannot combine {', '.join(active_options)}.\",\n                param_hint=active_options[0],\n            )\n\n    if agent is not None:\n        match agent:\n            case \"default\":\n                agent_file = DEFAULT_AGENT_FILE\n            case \"okabe\":\n                agent_file = OKABE_AGENT_FILE\n\n    ui: UIMode = \"shell\"\n    if print_mode:\n        ui = \"print\"\n    elif acp_mode:\n        ui = \"acp\"\n    elif wire_mode:\n        ui = \"wire\"\n\n    if prompt is not None:\n        prompt = prompt.strip()\n        if not prompt:\n            raise typer.BadParameter(\"Prompt cannot be empty\", param_hint=\"--prompt\")\n\n    if input_format is not None and ui != \"print\":\n        raise typer.BadParameter(\n            \"Input format is only supported for print UI\",\n            param_hint=\"--input-format\",\n        )\n    if output_format is not None and ui != \"print\":\n        raise typer.BadParameter(\n            \"Output format is only supported for print UI\",\n            param_hint=\"--output-format\",\n        )\n    if final_message_only and ui != \"print\":\n        raise typer.BadParameter(\n            \"Final-message-only output is only supported for print UI\",\n            param_hint=\"--final-message-only\",\n        )\n\n    config: Config | Path | None = None\n    if config_string is not None:\n        config_string = config_string.strip()\n        if not config_string:\n            raise typer.BadParameter(\"Config cannot be empty\", param_hint=\"--config\")\n        try:\n            config = load_config_from_string(config_string)\n        except ConfigError as e:\n            raise typer.BadParameter(str(e), param_hint=\"--config\") from e\n    elif config_file is not None:\n        config = config_file\n\n    file_configs = list(mcp_config_file or [])\n    raw_mcp_config = list(mcp_config or [])\n\n    # Use default MCP config file if no MCP config is provided\n    if not file_configs:\n        default_mcp_file = get_global_mcp_config_file()\n        if default_mcp_file.exists():\n            file_configs.append(default_mcp_file)\n\n    try:\n        mcp_configs = [json.loads(conf.read_text(encoding=\"utf-8\")) for conf in file_configs]\n    except json.JSONDecodeError as e:\n        raise typer.BadParameter(f\"Invalid JSON: {e}\", param_hint=\"--mcp-config-file\") from e\n\n    try:\n        mcp_configs += [json.loads(conf) for conf in raw_mcp_config]\n    except json.JSONDecodeError as e:\n        raise typer.BadParameter(f\"Invalid JSON: {e}\", param_hint=\"--mcp-config\") from e\n\n    skills_dir: KaosPath | None = None\n    if local_skills_dir is not None:\n        skills_dir = KaosPath.unsafe_from_local_path(local_skills_dir)\n\n    work_dir = KaosPath.unsafe_from_local_path(local_work_dir) if local_work_dir else KaosPath.cwd()\n\n    async def _run(session_id: str | None) -> tuple[Session, bool]:\n        \"\"\"\n        Create/load session and run the CLI instance.\n\n        Returns:\n            The session and whether the run succeeded.\n        \"\"\"\n        if session_id is not None:\n            session = await Session.find(work_dir, session_id)\n            if session is None:\n                logger.info(\n                    \"Session {session_id} not found, creating new session\", session_id=session_id\n                )\n                session = await Session.create(work_dir, session_id)\n            logger.info(\"Switching to session: {session_id}\", session_id=session.id)\n        elif continue_:\n            session = await Session.continue_(work_dir)\n            if session is None:\n                raise typer.BadParameter(\n                    \"No previous session found for the working directory\",\n                    param_hint=\"--continue\",\n                )\n            logger.info(\"Continuing previous session: {session_id}\", session_id=session.id)\n        else:\n            session = await Session.create(work_dir)\n            logger.info(\"Created new session: {session_id}\", session_id=session.id)\n\n        # Add CLI-provided additional directories to session state\n        if local_add_dirs:\n            from kimi_cli.utils.path import is_within_directory\n\n            canonical_work_dir = work_dir.canonical()\n            changed = False\n            for d in local_add_dirs:\n                dir_path = KaosPath.unsafe_from_local_path(d).canonical()\n                dir_str = str(dir_path)\n                # Skip dirs within work_dir (already accessible)\n                if is_within_directory(dir_path, canonical_work_dir):\n                    logger.info(\n                        \"Skipping --add-dir {dir}: already within working directory\",\n                        dir=dir_str,\n                    )\n                    continue\n                if dir_str not in session.state.additional_dirs:\n                    session.state.additional_dirs.append(dir_str)\n                    changed = True\n            if changed:\n                session.save_state()\n\n        instance = await KimiCLI.create(\n            session,\n            config=config,\n            model_name=model_name,\n            thinking=thinking,\n            yolo=yolo or (ui == \"print\"),  # print mode implies yolo\n            agent_file=agent_file,\n            mcp_configs=mcp_configs,\n            skills_dir=skills_dir,\n            max_steps_per_turn=max_steps_per_turn,\n            max_retries_per_step=max_retries_per_step,\n            max_ralph_iterations=max_ralph_iterations,\n        )\n        # Install stderr redirection only after initialization succeeded, so runtime\n        # stderr noise is captured into logs without hiding startup failures.\n        redirect_stderr_to_logger()\n        try:\n            match ui:\n                case \"shell\":\n                    succeeded = await instance.run_shell(prompt)\n                case \"print\":\n                    succeeded = await instance.run_print(\n                        input_format or \"text\",\n                        output_format or \"text\",\n                        prompt,\n                        final_only=final_message_only,\n                    )\n                case \"acp\":\n                    if prompt is not None:\n                        logger.warning(\"ACP server ignores prompt argument\")\n                    await instance.run_acp()\n                    succeeded = True\n                case \"wire\":\n                    if prompt is not None:\n                        logger.warning(\"Wire server ignores prompt argument\")\n                    await instance.run_wire_stdio()\n                    succeeded = True\n        except Reload as e:\n            if e.session_id is None:\n                raise Reload(session_id=session.id) from e\n            raise\n\n        return session, succeeded\n\n    async def _post_run(last_session: Session, succeeded: bool) -> None:\n        if not succeeded:\n            return\n\n        metadata = load_metadata()\n\n        # Update work_dir metadata with last session\n        work_dir_meta = metadata.get_work_dir_meta(last_session.work_dir)\n\n        if work_dir_meta is None:\n            logger.warning(\n                \"Work dir metadata missing when marking last session, recreating: {work_dir}\",\n                work_dir=last_session.work_dir,\n            )\n            work_dir_meta = metadata.new_work_dir_meta(last_session.work_dir)\n\n        if last_session.is_empty():\n            logger.info(\n                \"Session {session_id} has empty context, removing it\",\n                session_id=last_session.id,\n            )\n            await last_session.delete()\n            if work_dir_meta.last_session_id == last_session.id:\n                work_dir_meta.last_session_id = None\n        else:\n            work_dir_meta.last_session_id = last_session.id\n\n        save_metadata(metadata)\n\n    async def _reload_loop(session_id: str | None) -> bool:\n        \"\"\"\n        Returns:\n            True if should switch to web interface, False otherwise.\n        \"\"\"\n        while True:\n            try:\n                last_session, succeeded = await _run(session_id)\n                break\n            except Reload as e:\n                session_id = e.session_id\n                continue\n            except SwitchToWeb as e:\n                if e.session_id is not None:\n                    session = await Session.find(work_dir, e.session_id)\n                    if session is not None:\n                        await _post_run(session, True)\n                return True\n        await _post_run(last_session, succeeded)\n        return False\n\n    try:\n        switch_to_web = asyncio.run(_reload_loop(session_id))\n    except (typer.BadParameter, typer.Exit):\n        # Let Typer/Click format these errors (rich panel + correct exit code).\n        raise\n    except Exception as exc:\n        import click\n\n        if isinstance(exc, click.ClickException):\n            # ClickException includes the errors Typer knows how to render; don't\n            # wrap them, or we'd lose the standard error UI and exit codes.\n            raise\n        logger.exception(\"Fatal error when running CLI\")\n        if debug:\n            import traceback\n\n            # In debug mode, show full traceback for quick diagnosis.\n            _emit_fatal_error(traceback.format_exc())\n        else:\n            from kimi_cli.share import get_share_dir\n\n            log_path = get_share_dir() / \"logs\" / \"kimi.log\"\n            # In non-debug mode, print a concise error and point users to logs.\n            _emit_fatal_error(f\"{exc}\\nSee logs: {log_path}\")\n        raise typer.Exit(code=1) from exc\n    if switch_to_web:\n        from kimi_cli.utils.logging import restore_stderr\n\n        restore_stderr()\n\n        # Restore default SIGINT handler and terminal state after the shell's\n        # asyncio.run() to ensure Ctrl+C works in the uvicorn web server.\n        import signal\n\n        signal.signal(signal.SIGINT, signal.default_int_handler)\n\n        from kimi_cli.utils.term import ensure_tty_sane\n\n        ensure_tty_sane()\n\n        from kimi_cli.web.app import run_web_server\n\n        run_web_server(open_browser=True)\n\n\ncli.add_typer(info_cli, name=\"info\")\n\n\n@cli.command()\ndef login(\n    json: bool = typer.Option(\n        False,\n        \"--json\",\n        help=\"Emit OAuth events as JSON lines.\",\n    ),\n) -> None:\n    \"\"\"Login to your Kimi account.\"\"\"\n    from rich.console import Console\n    from rich.status import Status\n\n    from kimi_cli.auth.oauth import login_kimi_code\n    from kimi_cli.config import load_config\n\n    async def _run() -> bool:\n        if json:\n            ok = True\n            async for event in login_kimi_code(load_config()):\n                typer.echo(event.json)\n                if event.type == \"error\":\n                    ok = False\n            return ok\n\n        console = Console()\n        ok = True\n        status: Status | None = None\n        try:\n            async for event in login_kimi_code(load_config()):\n                if event.type == \"waiting\":\n                    if status is None:\n                        status = console.status(\"Waiting for user authorization...\")\n                        status.start()\n                    continue\n                if status is not None:\n                    status.stop()\n                    status = None\n                match event.type:\n                    case \"error\":\n                        style = \"red\"\n                    case \"success\":\n                        style = \"green\"\n                    case _:\n                        style = None\n                console.print(event.message, markup=False, style=style)\n                if event.type == \"error\":\n                    ok = False\n        finally:\n            if status is not None:\n                status.stop()\n        return ok\n\n    ok = asyncio.run(_run())\n    if not ok:\n        raise typer.Exit(code=1)\n\n\n@cli.command()\ndef logout(\n    json: bool = typer.Option(\n        False,\n        \"--json\",\n        help=\"Emit OAuth events as JSON lines.\",\n    ),\n) -> None:\n    \"\"\"Logout from your Kimi account.\"\"\"\n    from rich.console import Console\n\n    from kimi_cli.auth.oauth import logout_kimi_code\n    from kimi_cli.config import load_config\n\n    async def _run() -> bool:\n        ok = True\n        if json:\n            async for event in logout_kimi_code(load_config()):\n                typer.echo(event.json)\n                if event.type == \"error\":\n                    ok = False\n            return ok\n\n        console = Console()\n        async for event in logout_kimi_code(load_config()):\n            match event.type:\n                case \"error\":\n                    style = \"red\"\n                case \"success\":\n                    style = \"green\"\n                case _:\n                    style = None\n            console.print(event.message, markup=False, style=style)\n            if event.type == \"error\":\n                ok = False\n        return ok\n\n    ok = asyncio.run(_run())\n    if not ok:\n        raise typer.Exit(code=1)\n\n\n@cli.command(context_settings={\"allow_extra_args\": True, \"ignore_unknown_options\": True})\ndef term(\n    ctx: typer.Context,\n) -> None:\n    \"\"\"Run Toad TUI backed by Kimi Code CLI ACP server.\"\"\"\n    from .toad import run_term\n\n    run_term(ctx)\n\n\n@cli.command()\ndef acp():\n    \"\"\"Run Kimi Code CLI ACP server.\"\"\"\n    from kimi_cli.acp import acp_main\n\n    acp_main()\n\n\n@cli.command(name=\"__web-worker\", hidden=True)\ndef web_worker(session_id: str) -> None:\n    \"\"\"Run web worker subprocess (internal).\"\"\"\n    from uuid import UUID\n\n    from kimi_cli.utils.proctitle import set_process_title\n\n    set_process_title(\"kimi-code-worker\")\n\n    from kimi_cli.app import enable_logging\n    from kimi_cli.web.runner.worker import run_worker\n\n    try:\n        parsed_session_id = UUID(session_id)\n    except ValueError as exc:\n        raise typer.BadParameter(f\"Invalid session ID: {session_id}\") from exc\n\n    enable_logging(debug=False)\n    asyncio.run(run_worker(parsed_session_id))\n\n\ncli.add_typer(mcp_cli, name=\"mcp\")\ncli.add_typer(web_cli, name=\"web\")\n\n\nif __name__ == \"__main__\":\n    if \"kimi_cli.cli\" not in sys.modules:\n        sys.modules[\"kimi_cli.cli\"] = sys.modules[__name__]\n\n    sys.exit(cli())\n"
     },
     "complexity_metrics": {
-      "cyclomatic_complexity": 98.0,
-      "lines_of_code": 776,
+      "cyclomatic_complexity": 103.0,
+      "lines_of_code": 812,
       "number_of_classes": 2,
-      "number_of_functions": 16
+      "number_of_functions": 10
     },
     "dependencies": [
-      {
-        "dependency_type": "import",
-        "is_external": false,
-        "line_number": 11,
-        "name": "kimi_cli.constant",
-        "path": "kimi_cli/constant.py",
-        "version": null
-      },
-      {
-        "dependency_type": "import",
-        "is_external": false,
-        "line_number": 13,
-        "name": "kimi_cli.cli.info",
-        "path": "src/kimi_cli/cli/info.py",
-        "version": null
-      },
-      {
-        "dependency_type": "import",
-        "is_external": false,
-        "line_number": 14,
-        "name": "kimi_cli.cli.mcp",
-        "path": "src/kimi_cli/cli/mcp.py",
-        "version": null
-      },
-      {
-        "dependency_type": "import",
-        "is_external": false,
-        "line_number": 15,
-        "name": "kimi_cli.cli.web",
-        "path": "src/kimi_cli/cli/web.py",
-        "version": null
-      },
       {
         "dependency_type": "import",
         "is_external": true,
@@ -46770,7 +47159,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "is_external": true,
         "line_number": 6,
         "name": "pathlib.Path",
-        "path": null,
+        "path": "pathlib",
         "version": null
       },
       {
@@ -46778,7 +47167,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "is_external": true,
         "line_number": 7,
         "name": "typing.Annotated",
-        "path": null,
+        "path": "typing",
         "version": null
       },
       {
@@ -46786,7 +47175,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "is_external": true,
         "line_number": 7,
         "name": "typing.Literal",
-        "path": null,
+        "path": "typing",
         "version": null
       },
       {
@@ -46800,17 +47189,41 @@ Code analysis results from preprocessing phase, including definitions of functio
       {
         "dependency_type": "import",
         "is_external": false,
-        "line_number": null,
-        "name": "kimi_cli.utils.proctitle",
-        "path": "kimi_cli/utils/proctitle.py",
+        "line_number": 11,
+        "name": "kimi_cli.constant.VERSION",
+        "path": "kimi_cli.constant",
         "version": null
       },
       {
         "dependency_type": "import",
-        "is_external": true,
+        "is_external": false,
+        "line_number": 13,
+        "name": "kimi_cli.cli.info",
+        "path": "kimi_cli.cli.info",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": false,
+        "line_number": 14,
+        "name": "kimi_cli.cli.mcp",
+        "path": "kimi_cli.cli.mcp",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": false,
+        "line_number": 15,
+        "name": "kimi_cli.cli.web",
+        "path": "kimi_cli.cli.web",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": false,
         "line_number": null,
         "name": "kaos.path.KaosPath",
-        "path": null,
+        "path": "kaos.path",
         "version": null
       },
       {
@@ -46818,31 +47231,55 @@ Code analysis results from preprocessing phase, including definitions of functio
         "is_external": false,
         "line_number": null,
         "name": "kimi_cli.agentspec",
-        "path": "kimi_cli/agentspec.py",
+        "path": "kimi_cli.agentspec",
         "version": null
       },
       {
         "dependency_type": "import",
         "is_external": false,
         "line_number": null,
-        "name": "kimi_cli.app",
-        "path": "kimi_cli/app.py",
+        "name": "kimi_cli.app.KimiCLI",
+        "path": "kimi_cli.app",
         "version": null
       },
       {
         "dependency_type": "import",
         "is_external": false,
         "line_number": null,
-        "name": "kimi_cli.config",
-        "path": "kimi_cli/config.py",
+        "name": "kimi_cli.app.enable_logging",
+        "path": "kimi_cli.app",
         "version": null
       },
       {
         "dependency_type": "import",
         "is_external": false,
         "line_number": null,
-        "name": "kimi_cli.exception",
-        "path": "kimi_cli/exception.py",
+        "name": "kimi_cli.config.Config",
+        "path": "kimi_cli.config",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": false,
+        "line_number": null,
+        "name": "kimi_cli.config.load_config",
+        "path": "kimi_cli.config",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": false,
+        "line_number": null,
+        "name": "kimi_cli.config.load_config_from_string",
+        "path": "kimi_cli.config",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": false,
+        "line_number": null,
+        "name": "kimi_cli.exception.ConfigError",
+        "path": "kimi_cli.exception",
         "version": null
       },
       {
@@ -46850,15 +47287,15 @@ Code analysis results from preprocessing phase, including definitions of functio
         "is_external": false,
         "line_number": null,
         "name": "kimi_cli.metadata",
-        "path": "kimi_cli/metadata.py",
+        "path": "kimi_cli.metadata",
         "version": null
       },
       {
         "dependency_type": "import",
         "is_external": false,
         "line_number": null,
-        "name": "kimi_cli.session",
-        "path": "kimi_cli/session.py",
+        "name": "kimi_cli.session.Session",
+        "path": "kimi_cli.session",
         "version": null
       },
       {
@@ -46866,15 +47303,111 @@ Code analysis results from preprocessing phase, including definitions of functio
         "is_external": false,
         "line_number": null,
         "name": "kimi_cli.utils.logging",
-        "path": "kimi_cli/utils/logging.py",
+        "path": "kimi_cli.utils.logging",
         "version": null
       },
       {
         "dependency_type": "import",
         "is_external": false,
         "line_number": null,
-        "name": "kimi_cli.cli.mcp.get_global_mcp_config_file",
-        "path": "src/kimi_cli/cli/mcp.py",
+        "name": "kimi_cli.utils.proctitle",
+        "path": "kimi_cli.utils.proctitle",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": false,
+        "line_number": null,
+        "name": "kimi_cli.utils.path",
+        "path": "kimi_cli.utils.path",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": false,
+        "line_number": null,
+        "name": "kimi_cli.utils.term",
+        "path": "kimi_cli.utils.term",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": false,
+        "line_number": null,
+        "name": "kimi_cli.auth.oauth",
+        "path": "kimi_cli.auth.oauth",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": false,
+        "line_number": null,
+        "name": "kimi_cli.acp",
+        "path": "kimi_cli.acp",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": false,
+        "line_number": null,
+        "name": "kimi_cli.web.app",
+        "path": "kimi_cli.web.app",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": false,
+        "line_number": null,
+        "name": "kimi_cli.web.runner.worker",
+        "path": "kimi_cli.web.runner.worker",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": false,
+        "line_number": null,
+        "name": "kimi_cli.share",
+        "path": "kimi_cli.share",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": false,
+        "line_number": null,
+        "name": "kimi_cli.cli.toad",
+        "path": "kimi_cli.cli.toad",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": true,
+        "line_number": null,
+        "name": "rich.console.Console",
+        "path": "rich.console",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": true,
+        "line_number": null,
+        "name": "rich.status.Status",
+        "path": "rich.status",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": true,
+        "line_number": null,
+        "name": "uuid.UUID",
+        "path": "uuid",
+        "version": null
+      },
+      {
+        "dependency_type": "import",
+        "is_external": true,
+        "line_number": null,
+        "name": "signal",
+        "path": null,
         "version": null
       },
       {
@@ -46892,175 +47425,268 @@ Code analysis results from preprocessing phase, including definitions of functio
         "name": "traceback",
         "path": null,
         "version": null
-      },
-      {
-        "dependency_type": "import",
-        "is_external": false,
-        "line_number": null,
-        "name": "kimi_cli.share",
-        "path": "kimi_cli/share.py",
-        "version": null
-      },
-      {
-        "dependency_type": "import",
-        "is_external": true,
-        "line_number": null,
-        "name": "signal",
-        "path": null,
-        "version": null
-      },
-      {
-        "dependency_type": "import",
-        "is_external": false,
-        "line_number": null,
-        "name": "kimi_cli.utils.term",
-        "path": "kimi_cli/utils/term.py",
-        "version": null
-      },
-      {
-        "dependency_type": "import",
-        "is_external": false,
-        "line_number": null,
-        "name": "kimi_cli.web.app",
-        "path": "kimi_cli/web/app.py",
-        "version": null
-      },
-      {
-        "dependency_type": "import",
-        "is_external": true,
-        "line_number": null,
-        "name": "rich.console",
-        "path": null,
-        "version": null
-      },
-      {
-        "dependency_type": "import",
-        "is_external": true,
-        "line_number": null,
-        "name": "rich.status",
-        "path": null,
-        "version": null
-      },
-      {
-        "dependency_type": "import",
-        "is_external": false,
-        "line_number": null,
-        "name": "kimi_cli.auth.oauth",
-        "path": "kimi_cli/auth/oauth.py",
-        "version": null
-      },
-      {
-        "dependency_type": "import",
-        "is_external": false,
-        "line_number": null,
-        "name": "kimi_cli.cli.toad",
-        "path": "src/kimi_cli/cli/toad.py",
-        "version": null
-      },
-      {
-        "dependency_type": "import",
-        "is_external": false,
-        "line_number": null,
-        "name": "kimi_cli.acp",
-        "path": "kimi_cli/acp.py",
-        "version": null
-      },
-      {
-        "dependency_type": "import",
-        "is_external": true,
-        "line_number": null,
-        "name": "uuid.UUID",
-        "path": null,
-        "version": null
-      },
-      {
-        "dependency_type": "import",
-        "is_external": false,
-        "line_number": null,
-        "name": "kimi_cli.web.runner.worker",
-        "path": "kimi_cli/web/runner/worker.py",
-        "version": null
-      },
-      {
-        "dependency_type": "import",
-        "is_external": false,
-        "line_number": null,
-        "name": "kimi_cli.cli.mcp.cli",
-        "path": "src/kimi_cli/cli/mcp.py",
-        "version": null
-      },
-      {
-        "dependency_type": "import",
-        "is_external": false,
-        "line_number": null,
-        "name": "kimi_cli.cli.web.cli",
-        "path": "src/kimi_cli/cli/web.py",
-        "version": null
-      },
-      {
-        "dependency_type": "import",
-        "is_external": false,
-        "line_number": null,
-        "name": "kimi_cli.cli.info.cli",
-        "path": "src/kimi_cli/cli/info.py",
-        "version": null
       }
     ],
-    "detailed_description": "This module is the primary executable entrypoint for the `kimi` command implemented using Typer (Click). It defines a top-level Typer application `cli` with extensive options for configuring and running the Kimi agent.\n\nKey behaviors:\n- Global CLI: Provides `--version`, `--verbose`, `--debug`, working directory/session selection, configuration sources (string/file), model selection, thinking mode, approval mode (`--yolo`), prompt input, and UI selection among interactive shell, print mode (non-interactive), deprecated ACP mode, and experimental Wire mode.\n- Validation and conflict resolution: Enforces mutually exclusive option groups such as `--print/--acp/--wire`, `--agent/--agent-file`, `--continue/--session`, and `--config/--config-file`. Validates non-empty prompt/session/config values and restricts certain options to print mode.\n- MCP configuration loading: Accepts multiple MCP config files and/or JSON strings, loads them via `json.loads`, and auto-discovers a default global MCP config file if none is provided.\n- Session lifecycle: Resolves `work_dir` and creates/loads a `Session` depending on `--session`, `--continue`, or default new session. Tracks last session in per-workdir metadata, and deletes empty sessions after successful runs.\n- CLI runtime orchestration: Creates a `KimiCLI` instance with resolved configuration (config object or file path), model/thinking/yolo, agent file, MCP configs, skills dir override, and loop control parameters. It then runs the instance based on the chosen UI mode.\n- Error handling and logging: Enables logging early without redirecting stderr to avoid swallowing Typer startup errors; redirects stderr only after successful initialization. On unexpected fatal errors, emits either a full traceback (debug) or a concise message with log path. Preserves Click/Typer rendering behavior for known ClickExceptions.\n- Reload and UI switching control flow: Uses two custom exceptions (`Reload`, `SwitchToWeb`) to implement a reload loop and optionally switch from CLI UI to a web server, performing terminal/signal cleanup before starting the web server.\n- Subcommands: Registers nested sub-apps (`info`, `mcp`, `web`) and defines commands `login`, `logout` (OAuth flows with optional JSON event streaming), `term` (Toad TUI backed by ACP server), `acp` (server), and an internal hidden `__web-worker` command for web worker subprocess execution.\n- Module execution: Supports `python -m` execution by ensuring `sys.modules['kimi_cli.cli']` points to this module and then calling `cli()` to run the Typer app.",
+    "detailed_description": "This is the primary entry point for the Kimi CLI application, implementing a sophisticated command-line interface using the Typer framework. The component orchestrates the entire CLI experience with multiple operational modes:\n\n**Core Functionality:**\n\n1. **Multi-Mode UI System**: Supports four distinct UI modes:\n   - Shell mode: Interactive REPL-style interface for conversational agent interaction\n   - Print mode: Non-interactive batch processing with configurable input/output formats (text, stream-json)\n   - ACP mode: Agent Communication Protocol server for external integrations\n   - Wire mode: Experimental wire protocol server for alternative communication\n\n2. **Session Management**: Implements comprehensive session lifecycle management including:\n   - Creating new sessions with auto-generated or user-specified IDs\n   - Resuming existing sessions by ID or continuing the last session for a working directory\n   - Session state persistence with additional directory tracking\n   - Automatic cleanup of empty sessions post-execution\n   - Metadata tracking for work directories and their associated sessions\n\n3. **Configuration System**: Multi-layered configuration with precedence:\n   - Default configuration from ~/.kimi/config.toml\n   - Custom config files via --config-file\n   - Inline config strings via --config\n   - CLI argument overrides for model, thinking mode, and loop control parameters\n   - MCP (Model Context Protocol) configuration loading from multiple sources\n\n4. **Authentication Flow**: OAuth-based login/logout commands with dual output modes:\n   - Rich console output with status indicators for interactive use\n   - JSON line output for programmatic integration\n\n5. **Error Handling & Logging**: Sophisticated error management:\n   - Deferred stderr redirection to preserve startup error visibility\n   - Debug mode with full tracebacks\n   - Production mode with concise errors and log file references\n   - Fatal error emission to original stderr file descriptor\n\n6. **Reload & Mode Switching**: Custom exception-based control flow for:\n   - Configuration reloading without process restart\n   - Seamless switching from CLI to web interface with state preservation\n\n7. **Advanced Features**:\n   - YOLO mode for automatic action approval\n   - Quiet mode for minimal output (final message only)\n   - Custom agent specifications (default, okabe, or custom files)\n   - Skills directory customization\n   - Loop control parameters (max steps, retries, Ralph iterations)\n   - Multiple additional workspace directories\n\n**Business Logic Flow:**\n\nThe main `kimi` function implements a complex initialization sequence:\n1. Process title initialization for system monitoring\n2. Extensive CLI argument validation with conflict detection\n3. Configuration loading and merging from multiple sources\n4. Session resolution (new/resume/continue)\n5. KimiCLI instance creation with all configuration\n6. Stderr redirection after successful initialization\n7. UI mode dispatch to appropriate runner\n8. Post-run metadata updates and session cleanup\n9. Optional web interface launch on mode switch\n\nThe `_reload_loop` enables configuration hot-reloading by catching Reload exceptions and re-running the entire initialization sequence with preserved session state.",
     "interfaces": [
       {
-        "description": "Exception used as a control-flow signal to restart the CLI with reloaded configuration (optionally tied to a session id).",
-        "interface_type": "class",
-        "name": "Reload",
-        "parameters": [],
-        "return_type": null,
-        "visibility": "public"
-      },
-      {
-        "description": "Constructor; stores optional session_id for reload continuation.",
-        "interface_type": "method",
-        "name": "Reload.__init__",
+        "description": "Main CLI entry point callback with comprehensive configuration options",
+        "interface_type": "function",
+        "name": "kimi",
         "parameters": [
           {
-            "description": null,
+            "description": "Typer context for command invocation",
+            "is_optional": false,
+            "name": "ctx",
+            "param_type": "typer.Context"
+          },
+          {
+            "description": "Show version and exit flag",
+            "is_optional": true,
+            "name": "version",
+            "param_type": "bool"
+          },
+          {
+            "description": "Enable verbose output",
+            "is_optional": true,
+            "name": "verbose",
+            "param_type": "bool"
+          },
+          {
+            "description": "Enable debug logging",
+            "is_optional": true,
+            "name": "debug",
+            "param_type": "bool"
+          },
+          {
+            "description": "Working directory for the agent",
+            "is_optional": true,
+            "name": "local_work_dir",
+            "param_type": "Path | None"
+          },
+          {
+            "description": "Additional directories to add to workspace scope",
+            "is_optional": true,
+            "name": "local_add_dirs",
+            "param_type": "list[Path] | None"
+          },
+          {
+            "description": "Session ID to resume",
             "is_optional": true,
             "name": "session_id",
             "param_type": "str | None"
+          },
+          {
+            "description": "Continue previous session flag",
+            "is_optional": true,
+            "name": "continue_",
+            "param_type": "bool"
+          },
+          {
+            "description": "Config TOML/JSON string",
+            "is_optional": true,
+            "name": "config_string",
+            "param_type": "str | None"
+          },
+          {
+            "description": "Config file path",
+            "is_optional": true,
+            "name": "config_file",
+            "param_type": "Path | None"
+          },
+          {
+            "description": "LLM model to use",
+            "is_optional": true,
+            "name": "model_name",
+            "param_type": "str | None"
+          },
+          {
+            "description": "Enable thinking mode",
+            "is_optional": true,
+            "name": "thinking",
+            "param_type": "bool | None"
+          },
+          {
+            "description": "Auto-approve all actions",
+            "is_optional": true,
+            "name": "yolo",
+            "param_type": "bool"
+          },
+          {
+            "description": "User prompt to agent",
+            "is_optional": true,
+            "name": "prompt",
+            "param_type": "str | None"
+          },
+          {
+            "description": "Run in print mode",
+            "is_optional": true,
+            "name": "print_mode",
+            "param_type": "bool"
+          },
+          {
+            "description": "Run as ACP server",
+            "is_optional": true,
+            "name": "acp_mode",
+            "param_type": "bool"
+          },
+          {
+            "description": "Run as Wire server",
+            "is_optional": true,
+            "name": "wire_mode",
+            "param_type": "bool"
+          },
+          {
+            "description": "Input format (text or stream-json)",
+            "is_optional": true,
+            "name": "input_format",
+            "param_type": "InputFormat | None"
+          },
+          {
+            "description": "Output format (text or stream-json)",
+            "is_optional": true,
+            "name": "output_format",
+            "param_type": "OutputFormat | None"
+          },
+          {
+            "description": "Only print final assistant message",
+            "is_optional": true,
+            "name": "final_message_only",
+            "param_type": "bool"
+          },
+          {
+            "description": "Quiet mode alias",
+            "is_optional": true,
+            "name": "quiet",
+            "param_type": "bool"
+          },
+          {
+            "description": "Builtin agent specification",
+            "is_optional": true,
+            "name": "agent",
+            "param_type": "Literal['default', 'okabe'] | None"
+          },
+          {
+            "description": "Custom agent specification file",
+            "is_optional": true,
+            "name": "agent_file",
+            "param_type": "Path | None"
+          },
+          {
+            "description": "MCP config files",
+            "is_optional": true,
+            "name": "mcp_config_file",
+            "param_type": "list[Path] | None"
+          },
+          {
+            "description": "MCP config JSON strings",
+            "is_optional": true,
+            "name": "mcp_config",
+            "param_type": "list[str] | None"
+          },
+          {
+            "description": "Skills directory path",
+            "is_optional": true,
+            "name": "local_skills_dir",
+            "param_type": "Path | None"
+          },
+          {
+            "description": "Maximum steps per turn",
+            "is_optional": true,
+            "name": "max_steps_per_turn",
+            "param_type": "int | None"
+          },
+          {
+            "description": "Maximum retries per step",
+            "is_optional": true,
+            "name": "max_retries_per_step",
+            "param_type": "int | None"
+          },
+          {
+            "description": "Maximum Ralph iterations",
+            "is_optional": true,
+            "name": "max_ralph_iterations",
+            "param_type": "int | None"
           }
         ],
         "return_type": "None",
         "visibility": "public"
       },
       {
-        "description": "Exception used as a control-flow signal to switch from CLI UI to the web UI (optionally tied to a session id).",
-        "interface_type": "class",
-        "name": "SwitchToWeb",
-        "parameters": [],
-        "return_type": null,
-        "visibility": "public"
-      },
-      {
-        "description": "Constructor; stores optional session_id for web switching continuation.",
-        "interface_type": "method",
-        "name": "SwitchToWeb.__init__",
+        "description": "OAuth login command for Kimi account authentication",
+        "interface_type": "function",
+        "name": "login",
         "parameters": [
           {
-            "description": null,
+            "description": "Emit OAuth events as JSON lines",
             "is_optional": true,
-            "name": "session_id",
-            "param_type": "str | None"
+            "name": "json",
+            "param_type": "bool"
           }
         ],
         "return_type": "None",
         "visibility": "public"
       },
       {
-        "description": "Typer eager callback that prints version and exits.",
+        "description": "OAuth logout command for Kimi account",
+        "interface_type": "function",
+        "name": "logout",
+        "parameters": [
+          {
+            "description": "Emit OAuth events as JSON lines",
+            "is_optional": true,
+            "name": "json",
+            "param_type": "bool"
+          }
+        ],
+        "return_type": "None",
+        "visibility": "public"
+      },
+      {
+        "description": "Launch Toad TUI backed by Kimi Code CLI ACP server",
+        "interface_type": "function",
+        "name": "term",
+        "parameters": [
+          {
+            "description": "Typer context with extra args",
+            "is_optional": false,
+            "name": "ctx",
+            "param_type": "typer.Context"
+          }
+        ],
+        "return_type": "None",
+        "visibility": "public"
+      },
+      {
+        "description": "Run Kimi Code CLI ACP server directly",
+        "interface_type": "function",
+        "name": "acp",
+        "parameters": [],
+        "return_type": "None",
+        "visibility": "public"
+      },
+      {
+        "description": "Internal command to run web worker subprocess for session execution",
+        "interface_type": "function",
+        "name": "web_worker",
+        "parameters": [
+          {
+            "description": "UUID of session to run in worker subprocess",
+            "is_optional": false,
+            "name": "session_id",
+            "param_type": "str"
+          }
+        ],
+        "return_type": "None",
+        "visibility": "public"
+      },
+      {
+        "description": "Callback to display version and exit",
         "interface_type": "function",
         "name": "_version_callback",
         "parameters": [
           {
-            "description": null,
+            "description": "Version flag value",
             "is_optional": false,
             "name": "value",
             "param_type": "bool"
@@ -47070,189 +47696,12 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "private"
       },
       {
-        "description": "Top-level Typer callback that acts as the default command; parses options, validates conflicts, loads config, initializes session and KimiCLI, runs selected UI mode, handles reload/switch-to-web, and post-run metadata updates.",
-        "interface_type": "function",
-        "name": "kimi",
-        "parameters": [
-          {
-            "description": null,
-            "is_optional": false,
-            "name": "ctx",
-            "param_type": "typer.Context"
-          },
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "version",
-            "param_type": "bool"
-          },
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "verbose",
-            "param_type": "bool"
-          },
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "debug",
-            "param_type": "bool"
-          },
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "local_work_dir",
-            "param_type": "Path | None"
-          },
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "session_id",
-            "param_type": "str | None"
-          },
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "continue_",
-            "param_type": "bool"
-          },
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "config_string",
-            "param_type": "str | None"
-          },
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "config_file",
-            "param_type": "Path | None"
-          },
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "model_name",
-            "param_type": "str | None"
-          },
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "thinking",
-            "param_type": "bool | None"
-          },
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "yolo",
-            "param_type": "bool"
-          },
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "prompt",
-            "param_type": "str | None"
-          },
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "print_mode",
-            "param_type": "bool"
-          },
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "acp_mode",
-            "param_type": "bool"
-          },
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "wire_mode",
-            "param_type": "bool"
-          },
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "input_format",
-            "param_type": "InputFormat | None"
-          },
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "output_format",
-            "param_type": "OutputFormat | None"
-          },
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "final_message_only",
-            "param_type": "bool"
-          },
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "quiet",
-            "param_type": "bool"
-          },
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "agent",
-            "param_type": "Literal['default','okabe'] | None"
-          },
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "agent_file",
-            "param_type": "Path | None"
-          },
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "mcp_config_file",
-            "param_type": "list[Path] | None"
-          },
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "mcp_config",
-            "param_type": "list[str] | None"
-          },
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "local_skills_dir",
-            "param_type": "Path | None"
-          },
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "max_steps_per_turn",
-            "param_type": "int | None"
-          },
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "max_retries_per_step",
-            "param_type": "int | None"
-          },
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "max_ralph_iterations",
-            "param_type": "int | None"
-          }
-        ],
-        "return_type": null,
-        "visibility": "public"
-      },
-      {
-        "description": "Emit a fatal error message to original stderr even if stderr is redirected to logs later.",
+        "description": "Emit fatal error to original stderr or fallback",
         "interface_type": "function",
         "name": "_emit_fatal_error",
         "parameters": [
           {
-            "description": null,
+            "description": "Fatal error message to emit",
             "is_optional": false,
             "name": "message",
             "param_type": "str"
@@ -47262,13 +47711,13 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "private"
       },
       {
-        "description": "Async helper: resolve/create session; create KimiCLI instance; run the requested UI mode; handle Reload exception propagation.",
-        "interface_type": "function",
+        "description": "Create/load session and run CLI instance, returning session and success status",
+        "interface_type": "async function",
         "name": "_run",
         "parameters": [
           {
-            "description": null,
-            "is_optional": true,
+            "description": "Session ID to create or resume",
+            "is_optional": false,
             "name": "session_id",
             "param_type": "str | None"
           }
@@ -47277,18 +47726,18 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "private"
       },
       {
-        "description": "Async helper: after a successful run, update workdir metadata with last session id and delete empty sessions.",
-        "interface_type": "function",
+        "description": "Post-run cleanup including metadata updates and empty session removal",
+        "interface_type": "async function",
         "name": "_post_run",
         "parameters": [
           {
-            "description": null,
+            "description": "Session that just completed",
             "is_optional": false,
             "name": "last_session",
             "param_type": "Session"
           },
           {
-            "description": null,
+            "description": "Whether the run succeeded",
             "is_optional": false,
             "name": "succeeded",
             "param_type": "bool"
@@ -47298,95 +47747,27 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "private"
       },
       {
-        "description": "Async helper: loop that re-runs on Reload and returns whether to switch to the web interface; ensures post-run metadata is applied.",
-        "interface_type": "function",
+        "description": "Reload loop handling configuration reloads and web interface switching",
+        "interface_type": "async function",
         "name": "_reload_loop",
         "parameters": [
           {
-            "description": null,
-            "is_optional": true,
+            "description": "Initial session ID",
+            "is_optional": false,
             "name": "session_id",
             "param_type": "str | None"
           }
         ],
         "return_type": "bool",
         "visibility": "private"
-      },
-      {
-        "description": "Login command; runs OAuth login flow and prints events either as JSON lines or Rich console output; exits non-zero on error.",
-        "interface_type": "function",
-        "name": "login",
-        "parameters": [
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "json",
-            "param_type": "bool"
-          }
-        ],
-        "return_type": "None",
-        "visibility": "public"
-      },
-      {
-        "description": "Logout command; runs OAuth logout flow and prints events either as JSON lines or Rich console output; exits non-zero on error.",
-        "interface_type": "function",
-        "name": "logout",
-        "parameters": [
-          {
-            "description": null,
-            "is_optional": true,
-            "name": "json",
-            "param_type": "bool"
-          }
-        ],
-        "return_type": "None",
-        "visibility": "public"
-      },
-      {
-        "description": "term command; forwards raw/unknown args to Toad TUI runner backed by ACP server.",
-        "interface_type": "function",
-        "name": "term",
-        "parameters": [
-          {
-            "description": null,
-            "is_optional": false,
-            "name": "ctx",
-            "param_type": "typer.Context"
-          }
-        ],
-        "return_type": "None",
-        "visibility": "public"
-      },
-      {
-        "description": "acp command; launches ACP server main function.",
-        "interface_type": "function",
-        "name": "acp",
-        "parameters": [],
-        "return_type": "None",
-        "visibility": "public"
-      },
-      {
-        "description": "Internal hidden command to run a web worker subprocess for a given session id; validates UUID and runs worker event loop.",
-        "interface_type": "function",
-        "name": "web_worker",
-        "parameters": [
-          {
-            "description": null,
-            "is_optional": false,
-            "name": "session_id",
-            "param_type": "str"
-          }
-        ],
-        "return_type": "None",
-        "visibility": "public"
       }
     ],
     "responsibilities": [
-      "Define and configure the Typer CLI application, including global help/version behavior and subcommand registration.",
-      "Parse, validate, and normalize CLI options (mutual exclusivity, mode-specific constraints, quiet/print implications).",
-      "Load and assemble runtime configuration inputs (config string/file, MCP configs, agent file selection, skills dir override).",
-      "Orchestrate session lifecycle and execution of the KimiCLI runtime across multiple UI modes with robust error handling and logging/stderr redirection strategy.",
-      "Maintain run metadata (last session per workdir) and support control-flow for reloads and switching to web UI."
+      "CLI argument parsing, validation, and conflict resolution for 30+ command-line options across multiple operational modes",
+      "Session lifecycle orchestration including creation, resumption, continuation, state persistence, and automatic cleanup of empty sessions",
+      "Multi-mode UI dispatch and coordination between shell, print, ACP, and wire interfaces with mode-specific configuration",
+      "Configuration management with multi-source loading (files, strings, defaults) and precedence resolution including MCP configs",
+      "Authentication flow management for OAuth-based login/logout with dual output modes (rich console and JSON)"
     ]
   },
   {
@@ -48847,34 +49228,35 @@ Code analysis results from preprocessing phase, including definitions of functio
   {
     "code_dossier": {
       "code_purpose": "command",
-      "description": "Slash command handlers for KimiSoul CLI interface providing context management and system control functions",
+      "description": "Implements slash command handlers for the KimiSoul AI assistant, providing interactive commands for context management, workspace configuration, and runtime behavior control",
       "file_path": "src/kimi_cli/soul/slash.py",
       "functions": [
         "init",
         "compact",
         "clear",
-        "yolo"
+        "yolo",
+        "add_dir"
       ],
       "importance_score": 0.8,
       "interfaces": [
-        "SoulSlashCmdFunc",
         "init",
         "compact",
         "clear",
-        "yolo"
+        "yolo",
+        "add_dir"
       ],
       "name": "slash.py",
-      "source_summary": "from __future__ import annotations\n\nimport tempfile\nfrom collections.abc import Awaitable, Callable\nfrom pathlib import Path\nfrom typing import TYPE_CHECKING\n\nfrom kosong.message import Message\nfrom loguru import logger\n\nimport kimi_cli.prompts as prompts\nfrom kimi_cli.soul import wire_send\nfrom kimi_cli.soul.agent import load_agents_md\nfrom kimi_cli.soul.context import Context\nfrom kimi_cli.soul.message import system\nfrom kimi_cli.utils.slashcmd import SlashCommandRegistry\nfrom kimi_cli.wire.types import StatusUpdate, TextPart\n\nif TYPE_CHECKING:\n    from kimi_cli.soul.kimisoul import KimiSoul\n\ntype SoulSlashCmdFunc = Callable[[KimiSoul, str], None | Awaitable[None]]\n\"\"\"\nA function that runs as a KimiSoul-level slash command.\n\nRaises:\n    Any exception that can be raised by `Soul.run`.\n\"\"\"\n\nregistry = SlashCommandRegistry[SoulSlashCmdFunc]()\n\n\n@registry.command\nasync def init(soul: KimiSoul, args: str):\n    \"\"\"Analyze the codebase and generate an `AGENTS.md` file\"\"\"\n    from kimi_cli.soul.kimisoul import KimiSoul\n\n    with tempfile.TemporaryDirectory() as temp_dir:\n        tmp_context = Context(file_backend=Path(temp_dir) / \"context.jsonl\")\n        tmp_soul = KimiSoul(soul.agent, context=tmp_context)\n        await tmp_soul.run(prompts.INIT)\n\n    agents_md = await load_agents_md(soul.runtime.builtin_args.KIMI_WORK_DIR)\n    system_message = system(\n        \"The user just ran `/init` slash command. \"\n        \"The system has analyzed the codebase and generated an `AGENTS.md` file. \"\n        f\"Latest AGENTS.md file content:\\n{agents_md}\"\n    )\n    await soul.context.append_message(Message(role=\"user\", content=[system_message]))\n\n\n@registry.command\nasync def compact(soul: KimiSoul, args: str):\n    \"\"\"Compact the context\"\"\"\n    if soul.context.n_checkpoints == 0:\n        wire_send(TextPart(text=\"The context is empty.\"))\n        return\n\n    logger.info(\"Running `/compact`\")\n    await soul.compact_context()\n    wire_send(TextPart(text=\"The context has been compacted.\"))\n    wire_send(StatusUpdate(context_usage=soul.status.context_usage))\n\n\n@registry.command(aliases=[\"reset\"])\nasync def clear(soul: KimiSoul, args: str):\n    \"\"\"Clear the context\"\"\"\n    logger.info(\"Running `/clear`\")\n    await soul.context.clear()\n    wire_send(TextPart(text=\"The context has been cleared.\"))\n    wire_send(StatusUpdate(context_usage=soul.status.context_usage))\n\n\n@registry.command\nasync def yolo(soul: KimiSoul, args: str):\n    \"\"\"Toggle YOLO mode (auto-approve all actions)\"\"\"\n    if soul.runtime.approval.is_yolo():\n        soul.runtime.approval.set_yolo(False)\n        wire_send(TextPart(text=\"You only die once! Actions will require approval.\"))\n    else:\n        soul.runtime.approval.set_yolo(True)\n        wire_send(TextPart(text=\"You only live once! All actions will be auto-approved.\"))\n"
+      "source_summary": "from __future__ import annotations\n\nimport tempfile\nfrom collections.abc import Awaitable, Callable\nfrom pathlib import Path\nfrom typing import TYPE_CHECKING\n\nfrom kosong.message import Message\nfrom loguru import logger\n\nimport kimi_cli.prompts as prompts\nfrom kimi_cli.soul import wire_send\nfrom kimi_cli.soul.agent import load_agents_md\nfrom kimi_cli.soul.context import Context\nfrom kimi_cli.soul.message import system\nfrom kimi_cli.utils.slashcmd import SlashCommandRegistry\nfrom kimi_cli.wire.types import StatusUpdate, TextPart\n\nif TYPE_CHECKING:\n    from kimi_cli.soul.kimisoul import KimiSoul\n\ntype SoulSlashCmdFunc = Callable[[KimiSoul, str], None | Awaitable[None]]\n\"\"\"\nA function that runs as a KimiSoul-level slash command.\n\nRaises:\n    Any exception that can be raised by `Soul.run`.\n\"\"\"\n\nregistry = SlashCommandRegistry[SoulSlashCmdFunc]()\n\n\n@registry.command\nasync def init(soul: KimiSoul, args: str):\n    \"\"\"Analyze the codebase and generate an `AGENTS.md` file\"\"\"\n    from kimi_cli.soul.kimisoul import KimiSoul\n\n    with tempfile.TemporaryDirectory() as temp_dir:\n        tmp_context = Context(file_backend=Path(temp_dir) / \"context.jsonl\")\n        tmp_soul = KimiSoul(soul.agent, context=tmp_context)\n        await tmp_soul.run(prompts.INIT)\n\n    agents_md = await load_agents_md(soul.runtime.builtin_args.KIMI_WORK_DIR)\n    system_message = system(\n        \"The user just ran `/init` slash command. \"\n        \"The system has analyzed the codebase and generated an `AGENTS.md` file. \"\n        f\"Latest AGENTS.md file content:\\n{agents_md}\"\n    )\n    await soul.context.append_message(Message(role=\"user\", content=[system_message]))\n\n\n@registry.command\nasync def compact(soul: KimiSoul, args: str):\n    \"\"\"Compact the context\"\"\"\n    if soul.context.n_checkpoints == 0:\n        wire_send(TextPart(text=\"The context is empty.\"))\n        return\n\n    logger.info(\"Running `/compact`\")\n    await soul.compact_context()\n    wire_send(TextPart(text=\"The context has been compacted.\"))\n    wire_send(StatusUpdate(context_usage=soul.status.context_usage))\n\n\n@registry.command(aliases=[\"reset\"])\nasync def clear(soul: KimiSoul, args: str):\n    \"\"\"Clear the context\"\"\"\n    logger.info(\"Running `/clear`\")\n    await soul.context.clear()\n    wire_send(TextPart(text=\"The context has been cleared.\"))\n    wire_send(StatusUpdate(context_usage=soul.status.context_usage))\n\n\n@registry.command\nasync def yolo(soul: KimiSoul, args: str):\n    \"\"\"Toggle YOLO mode (auto-approve all actions)\"\"\"\n    if soul.runtime.approval.is_yolo():\n        soul.runtime.approval.set_yolo(False)\n        wire_send(TextPart(text=\"You only die once! Actions will require approval.\"))\n    else:\n        soul.runtime.approval.set_yolo(True)\n        wire_send(TextPart(text=\"You only live once! All actions will be auto-approved.\"))\n\n\n@registry.command(name=\"add-dir\")\nasync def add_dir(soul: KimiSoul, args: str):\n    \"\"\"Add a directory to the workspace. Usage: /add-dir <path>. Run without args to list added dirs\"\"\"  # noqa: E501\n    from kaos.path import KaosPath\n\n    from kimi_cli.utils.path import is_within_directory, list_directory\n\n    args = args.strip()\n    if not args:\n        if not soul.runtime.additional_dirs:\n            wire_send(TextPart(text=\"No additional directories. Usage: /add-dir <path>\"))\n        else:\n            lines = [\"Additional directories:\"]\n            for d in soul.runtime.additional_dirs:\n                lines.append(f\"  - {d}\")\n            wire_send(TextPart(text=\"\\n\".join(lines)))\n        return\n\n    path = KaosPath(args).expanduser().canonical()\n\n    if not await path.exists():\n        wire_send(TextPart(text=f\"Directory does not exist: {path}\"))\n        return\n    if not await path.is_dir():\n        wire_send(TextPart(text=f\"Not a directory: {path}\"))\n        return\n\n    # Check if already added (exact match)\n    if path in soul.runtime.additional_dirs:\n        wire_send(TextPart(text=f\"Directory already in workspace: {path}\"))\n        return\n\n    # Check if it's within the work_dir (already accessible)\n    work_dir = soul.runtime.builtin_args.KIMI_WORK_DIR\n    if is_within_directory(path, work_dir):\n        wire_send(TextPart(text=f\"Directory is already within the working directory: {path}\"))\n        return\n\n    # Check if it's within an already-added additional directory (redundant)\n    for existing in soul.runtime.additional_dirs:\n        if is_within_directory(path, existing):\n            wire_send(\n                TextPart(\n                    text=f\"Directory is already within an added directory `{existing}`: {path}\"\n                )\n            )\n            return\n\n    # Validate readability before committing any state changes\n    try:\n        ls_output = await list_directory(path)\n    except OSError as e:\n        wire_send(TextPart(text=f\"Cannot read directory: {path} ({e})\"))\n        return\n\n    # Add the directory (only after readability is confirmed)\n    soul.runtime.additional_dirs.append(path)\n\n    # Persist to session state\n    soul.runtime.session.state.additional_dirs.append(str(path))\n    soul.runtime.session.save_state()\n\n    # Inject a system message to inform the LLM about the new directory\n    system_message = system(\n        f\"The user has added an additional directory to the workspace: `{path}`\\n\\n\"\n        f\"Directory listing:\\n```\\n{ls_output}\\n```\\n\\n\"\n        \"You can now read, write, search, and glob files in this directory \"\n        \"as if it were part of the working directory.\"\n    )\n    await soul.context.append_message(Message(role=\"user\", content=[system_message]))\n\n    wire_send(TextPart(text=f\"Added directory to workspace: {path}\"))\n    logger.info(\"Added additional directory: {path}\", path=path)\n"
     },
     "complexity_metrics": {
-      "cyclomatic_complexity": 4.0,
-      "lines_of_code": 82,
+      "cyclomatic_complexity": 17.0,
+      "lines_of_code": 157,
       "number_of_classes": 0,
-      "number_of_functions": 4
+      "number_of_functions": 5
     },
     "dependencies": [
       {
-        "dependency_type": "library",
+        "dependency_type": "import",
         "is_external": true,
         "line_number": 3,
         "name": "tempfile",
@@ -48882,7 +49264,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "library",
+        "dependency_type": "import",
         "is_external": true,
         "line_number": 4,
         "name": "collections.abc",
@@ -48890,7 +49272,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "library",
+        "dependency_type": "import",
         "is_external": true,
         "line_number": 5,
         "name": "pathlib",
@@ -48898,7 +49280,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "library",
+        "dependency_type": "import",
         "is_external": true,
         "line_number": 6,
         "name": "typing",
@@ -48906,7 +49288,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "library",
+        "dependency_type": "import",
         "is_external": true,
         "line_number": 8,
         "name": "kosong.message",
@@ -48914,7 +49296,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "library",
+        "dependency_type": "import",
         "is_external": true,
         "line_number": 9,
         "name": "loguru",
@@ -48922,7 +49304,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 11,
         "name": "kimi_cli.prompts",
@@ -48930,15 +49312,15 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 12,
         "name": "kimi_cli.soul.wire_send",
-        "path": "kimi_cli/soul/wire_send",
+        "path": "kimi_cli/soul",
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 13,
         "name": "kimi_cli.soul.agent",
@@ -48946,7 +49328,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 14,
         "name": "kimi_cli.soul.context",
@@ -48954,7 +49336,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 15,
         "name": "kimi_cli.soul.message",
@@ -48962,7 +49344,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 16,
         "name": "kimi_cli.utils.slashcmd",
@@ -48970,7 +49352,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 17,
         "name": "kimi_cli.wire.types",
@@ -48978,7 +49360,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "import",
         "is_external": false,
         "line_number": 20,
         "name": "kimi_cli.soul.kimisoul",
@@ -48986,28 +49368,44 @@ Code analysis results from preprocessing phase, including definitions of functio
         "version": null
       },
       {
-        "dependency_type": "internal",
-        "is_external": false,
-        "line_number": 24,
-        "name": "SlashCommandRegistry",
-        "path": "kimi_cli/utils/slashcmd",
+        "dependency_type": "import",
+        "is_external": true,
+        "line_number": 93,
+        "name": "kaos.path",
+        "path": null,
         "version": null
       },
       {
-        "dependency_type": "internal",
+        "dependency_type": "import",
         "is_external": false,
-        "line_number": 29,
+        "line_number": 95,
+        "name": "kimi_cli.utils.path",
+        "path": "kimi_cli/utils/path",
+        "version": null
+      },
+      {
+        "dependency_type": "type_reference",
+        "is_external": false,
+        "line_number": null,
         "name": "KimiSoul",
         "path": "kimi_cli/soul/kimisoul",
         "version": null
+      },
+      {
+        "dependency_type": "type_reference",
+        "is_external": false,
+        "line_number": 27,
+        "name": "SlashCommandRegistry",
+        "path": "kimi_cli/utils/slashcmd",
+        "version": null
       }
     ],
-    "detailed_description": "This component implements slash command handlers for the KimiSoul CLI system, providing four key commands: /init (analyzes codebase and generates AGENTS.md), /compact (compacts conversation context), /clear (resets context), and /yolo (toggles auto-approval mode). The component uses a command registry pattern to manage these commands and integrates with the KimiSoul runtime for context management, approval systems, and wire communication.",
+    "detailed_description": "This module serves as the command registry and handler implementation for slash commands in the KimiSoul AI assistant system. It defines five primary slash commands that users can invoke to control the assistant's behavior:\n\n1. `/init` - Analyzes the codebase and generates an AGENTS.md file by creating a temporary context and soul instance, then appends the result to the current context\n2. `/compact` - Compacts the conversation context to reduce memory usage while preserving important information\n3. `/clear` (alias: `/reset`) - Completely clears the conversation context\n4. `/yolo` - Toggles auto-approval mode for actions, switching between requiring user approval and automatically approving all actions\n5. `/add-dir` - Adds additional directories to the workspace, with validation for existence, readability, and redundancy checks\n\nThe module uses a SlashCommandRegistry pattern to register commands with decorators, making it extensible and maintainable. Each command is an async function that receives a KimiSoul instance and arguments string, allowing direct manipulation of the soul's state, context, and runtime configuration. Commands provide user feedback through wire_send() calls and maintain session persistence where appropriate.",
     "interfaces": [
       {
-        "description": "Type definition for slash command functions",
-        "interface_type": "type_alias",
-        "name": "SoulSlashCmdFunc",
+        "description": "Analyze the codebase and generate an AGENTS.md file",
+        "interface_type": "function",
+        "name": "init",
         "parameters": [
           {
             "description": "The KimiSoul instance to operate on",
@@ -49016,28 +49414,7 @@ Code analysis results from preprocessing phase, including definitions of functio
             "param_type": "KimiSoul"
           },
           {
-            "description": "Command arguments string",
-            "is_optional": false,
-            "name": "args",
-            "param_type": "str"
-          }
-        ],
-        "return_type": "None | Awaitable[None]",
-        "visibility": "public"
-      },
-      {
-        "description": "Analyze codebase and generate AGENTS.md file",
-        "interface_type": "async_function",
-        "name": "init",
-        "parameters": [
-          {
-            "description": "The KimiSoul instance",
-            "is_optional": false,
-            "name": "soul",
-            "param_type": "KimiSoul"
-          },
-          {
-            "description": "Command arguments",
+            "description": "Command arguments (unused in this command)",
             "is_optional": false,
             "name": "args",
             "param_type": "str"
@@ -49047,18 +49424,18 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Compact the conversation context",
-        "interface_type": "async_function",
+        "description": "Compact the context to reduce memory usage",
+        "interface_type": "function",
         "name": "compact",
         "parameters": [
           {
-            "description": "The KimiSoul instance",
+            "description": "The KimiSoul instance to operate on",
             "is_optional": false,
             "name": "soul",
             "param_type": "KimiSoul"
           },
           {
-            "description": "Command arguments",
+            "description": "Command arguments (unused in this command)",
             "is_optional": false,
             "name": "args",
             "param_type": "str"
@@ -49068,18 +49445,18 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Clear the context (aliased as reset)",
-        "interface_type": "async_function",
+        "description": "Clear the context completely (alias: reset)",
+        "interface_type": "function",
         "name": "clear",
         "parameters": [
           {
-            "description": "The KimiSoul instance",
+            "description": "The KimiSoul instance to operate on",
             "is_optional": false,
             "name": "soul",
             "param_type": "KimiSoul"
           },
           {
-            "description": "Command arguments",
+            "description": "Command arguments (unused in this command)",
             "is_optional": false,
             "name": "args",
             "param_type": "str"
@@ -49090,17 +49467,38 @@ Code analysis results from preprocessing phase, including definitions of functio
       },
       {
         "description": "Toggle YOLO mode (auto-approve all actions)",
-        "interface_type": "async_function",
+        "interface_type": "function",
         "name": "yolo",
         "parameters": [
           {
-            "description": "The KimiSoul instance",
+            "description": "The KimiSoul instance to operate on",
             "is_optional": false,
             "name": "soul",
             "param_type": "KimiSoul"
           },
           {
-            "description": "Command arguments",
+            "description": "Command arguments (unused in this command)",
+            "is_optional": false,
+            "name": "args",
+            "param_type": "str"
+          }
+        ],
+        "return_type": "None",
+        "visibility": "public"
+      },
+      {
+        "description": "Add a directory to the workspace with validation and redundancy checks",
+        "interface_type": "function",
+        "name": "add_dir",
+        "parameters": [
+          {
+            "description": "The KimiSoul instance to operate on",
+            "is_optional": false,
+            "name": "soul",
+            "param_type": "KimiSoul"
+          },
+          {
+            "description": "Directory path to add, or empty to list current directories",
             "is_optional": false,
             "name": "args",
             "param_type": "str"
@@ -49111,11 +49509,11 @@ Code analysis results from preprocessing phase, including definitions of functio
       }
     ],
     "responsibilities": [
-      "Manage slash command registration and execution for KimiSoul CLI",
-      "Handle context lifecycle operations (compact, clear, initialization)",
-      "Control system behavior modes (YOLO auto-approval toggle)",
-      "Coordinate with other soul components for context management",
-      "Provide user feedback through wire communication system"
+      "Register and dispatch slash commands for the KimiSoul assistant using a decorator-based registry pattern",
+      "Manage conversation context lifecycle including initialization, compaction, and clearing operations",
+      "Control runtime behavior modes such as YOLO (auto-approval) toggle for action execution",
+      "Extend workspace accessibility by validating and adding additional directories with proper permission and redundancy checks",
+      "Provide user feedback and status updates through wire protocol for all command operations"
     ]
   },
   {
@@ -50249,15 +50647,10 @@ Code analysis results from preprocessing phase, including definitions of functio
   {
     "code_dossier": {
       "code_purpose": "agent",
-      "description": null,
+      "description": "Core intelligent agent module that manages agent lifecycle, runtime configuration, subagent orchestration, and system prompt templating. Implements a sophisticated agent system with support for both fixed and dynamic subagents, MCP tool integration, and comprehensive runtime state management.",
       "file_path": "src/kimi_cli/soul/agent.py",
       "functions": [
         "load_agents_md",
-        "Runtime.create",
-        "Runtime.copy_for_fixed_subagent",
-        "Runtime.copy_for_dynamic_subagent",
-        "LaborMarket.add_fixed_subagent",
-        "LaborMarket.add_dynamic_subagent",
         "load_agent",
         "_load_system_prompt"
       ],
@@ -50265,23 +50658,23 @@ Code analysis results from preprocessing phase, including definitions of functio
       "interfaces": [
         "BuiltinSystemPromptArgs",
         "Runtime",
-        "LaborMarket",
-        "Agent"
+        "Agent",
+        "LaborMarket"
       ],
       "name": "agent.py",
-      "source_summary": "from __future__ import annotations\n\nimport asyncio\nfrom collections.abc import Mapping\nfrom dataclasses import asdict, dataclass\nfrom datetime import datetime\nfrom pathlib import Path\nfrom typing import TYPE_CHECKING, Any\n\nimport pydantic\nfrom jinja2 import Environment as JinjaEnvironment\nfrom jinja2 import StrictUndefined, TemplateError, UndefinedError\nfrom kaos.path import KaosPath\nfrom kosong.tooling import Toolset\n\nfrom kimi_cli.agentspec import load_agent_spec\nfrom kimi_cli.auth.oauth import OAuthManager\nfrom kimi_cli.config import Config\nfrom kimi_cli.exception import MCPConfigError, SystemPromptTemplateError\nfrom kimi_cli.llm import LLM\nfrom kimi_cli.session import Session\nfrom kimi_cli.skill import Skill, discover_skills_from_roots, index_skills, resolve_skills_roots\nfrom kimi_cli.soul.approval import Approval, ApprovalState\nfrom kimi_cli.soul.denwarenji import DenwaRenji\nfrom kimi_cli.soul.toolset import KimiToolset\nfrom kimi_cli.utils.environment import Environment\nfrom kimi_cli.utils.logging import logger\nfrom kimi_cli.utils.path import list_directory\n\nif TYPE_CHECKING:\n    from fastmcp.mcp_config import MCPConfig\n\n\n@dataclass(frozen=True, slots=True, kw_only=True)\nclass BuiltinSystemPromptArgs:\n    \"\"\"Builtin system prompt arguments.\"\"\"\n\n    KIMI_NOW: str\n    \"\"\"The current datetime.\"\"\"\n    KIMI_WORK_DIR: KaosPath\n    \"\"\"The absolute path of current working directory.\"\"\"\n    KIMI_WORK_DIR_LS: str\n    \"\"\"The directory listing of current working directory.\"\"\"\n    KIMI_AGENTS_MD: str  # TODO: move to first message from system prompt\n    \"\"\"The content of AGENTS.md.\"\"\"\n    KIMI_SKILLS: str\n    \"\"\"Formatted information about available skills.\"\"\"\n\n\nasync def load_agents_md(work_dir: KaosPath) -> str | None:\n    paths = [\n        work_dir / \"AGENTS.md\",\n        work_dir / \"agents.md\",\n    ]\n    for path in paths:\n        if await path.is_file():\n            logger.info(\"Loaded agents.md: {path}\", path=path)\n            return (await path.read_text()).strip()\n    logger.info(\"No AGENTS.md found in {work_dir}\", work_dir=work_dir)\n    return None\n\n\n@dataclass(slots=True, kw_only=True)\nclass Runtime:\n    \"\"\"Agent runtime.\"\"\"\n\n    config: Config\n    oauth: OAuthManager\n    llm: LLM | None  # we do not freeze the `Runtime` dataclass because LLM can be changed\n    session: Session\n    builtin_args: BuiltinSystemPromptArgs\n    denwa_renji: DenwaRenji\n    approval: Approval\n    labor_market: LaborMarket\n    environment: Environment\n    skills: dict[str, Skill]\n\n    @staticmethod\n    async def create(\n        config: Config,\n        oauth: OAuthManager,\n        llm: LLM | None,\n        session: Session,\n        yolo: bool,\n        skills_dir: KaosPath | None = None,\n    ) -> Runtime:\n        ls_output, agents_md, environment = await asyncio.gather(\n            list_directory(session.work_dir),\n            load_agents_md(session.work_dir),\n            Environment.detect(),\n        )\n\n        # Discover and format skills\n        skills_roots = await resolve_skills_roots(session.work_dir, skills_dir_override=skills_dir)\n        skills = await discover_skills_from_roots(skills_roots)\n        skills_by_name = index_skills(skills)\n        logger.info(\"Discovered {count} skill(s)\", count=len(skills))\n        skills_formatted = \"\\n\".join(\n            (\n                f\"- {skill.name}\\n\"\n                f\"  - Path: {skill.skill_md_file}\\n\"\n                f\"  - Description: {skill.description}\"\n            )\n            for skill in skills\n        )\n\n        # Merge CLI flag with persisted session state\n        effective_yolo = yolo or session.state.approval.yolo\n        saved_actions = set(session.state.approval.auto_approve_actions)\n\n        def _on_approval_change() -> None:\n            session.state.approval.yolo = approval_state.yolo\n            session.state.approval.auto_approve_actions = set(approval_state.auto_approve_actions)\n            session.save_state()\n\n        approval_state = ApprovalState(\n            yolo=effective_yolo,\n            auto_approve_actions=saved_actions,\n            on_change=_on_approval_change,\n        )\n\n        return Runtime(\n            config=config,\n            oauth=oauth,\n            llm=llm,\n            session=session,\n            builtin_args=BuiltinSystemPromptArgs(\n                KIMI_NOW=datetime.now().astimezone().isoformat(),\n                KIMI_WORK_DIR=session.work_dir,\n                KIMI_WORK_DIR_LS=ls_output,\n                KIMI_AGENTS_MD=agents_md or \"\",\n                KIMI_SKILLS=skills_formatted or \"No skills found.\",\n            ),\n            denwa_renji=DenwaRenji(),\n            approval=Approval(state=approval_state),\n            labor_market=LaborMarket(),\n            environment=environment,\n            skills=skills_by_name,\n        )\n\n    def copy_for_fixed_subagent(self) -> Runtime:\n        \"\"\"Clone runtime for fixed subagent.\"\"\"\n        return Runtime(\n            config=self.config,\n            oauth=self.oauth,\n            llm=self.llm,\n            session=self.session,\n            builtin_args=self.builtin_args,\n            denwa_renji=DenwaRenji(),  # subagent must have its own DenwaRenji\n            approval=self.approval.share(),\n            labor_market=LaborMarket(),  # fixed subagent has its own LaborMarket\n            environment=self.environment,\n            skills=self.skills,\n        )\n\n    def copy_for_dynamic_subagent(self) -> Runtime:\n        \"\"\"Clone runtime for dynamic subagent.\"\"\"\n        return Runtime(\n            config=self.config,\n            oauth=self.oauth,\n            llm=self.llm,\n            session=self.session,\n            builtin_args=self.builtin_args,\n            denwa_renji=DenwaRenji(),  # subagent must have its own DenwaRenji\n            approval=self.approval.share(),\n            labor_market=self.labor_market,  # dynamic subagent shares LaborMarket with main agent\n            environment=self.environment,\n            skills=self.skills,\n        )\n\n\n@dataclass(frozen=True, slots=True, kw_only=True)\nclass Agent:\n    \"\"\"The loaded agent.\"\"\"\n\n    name: str\n    system_prompt: str\n    toolset: Toolset\n    runtime: Runtime\n    \"\"\"Each agent has its own runtime, which should be derived from its main agent.\"\"\"\n\n\nclass LaborMarket:\n    def __init__(self):\n        self.fixed_subagents: dict[str, Agent] = {}\n        self.fixed_subagent_descs: dict[str, str] = {}\n        self.dynamic_subagents: dict[str, Agent] = {}\n\n    @property\n    def subagents(self) -> Mapping[str, Agent]:\n        \"\"\"Get all subagents in the labor market.\"\"\"\n        return {**self.fixed_subagents, **self.dynamic_subagents}\n\n    def add_fixed_subagent(self, name: str, agent: Agent, description: str):\n        \"\"\"Add a fixed subagent.\"\"\"\n        self.fixed_subagents[name] = agent\n        self.fixed_subagent_descs[name] = description\n\n    def add_dynamic_subagent(self, name: str, agent: Agent):\n        \"\"\"Add a dynamic subagent.\"\"\"\n        self.dynamic_subagents[name] = agent\n\n\nasync def load_agent(\n    agent_file: Path,\n    runtime: Runtime,\n    *,\n    mcp_configs: list[MCPConfig] | list[dict[str, Any]],\n    _restore_dynamic_subagents: bool = True,\n) -> Agent:\n    \"\"\"\n    Load agent from specification file.\n\n    Raises:\n        FileNotFoundError: When the agent file is not found.\n        AgentSpecError(KimiCLIException, ValueError): When the agent specification is invalid.\n        SystemPromptTemplateError(KimiCLIException, ValueError): When the system prompt template\n            is invalid.\n        InvalidToolError(KimiCLIException, ValueError): When any tool cannot be loaded.\n        MCPConfigError(KimiCLIException, ValueError): When any MCP configuration is invalid.\n        MCPRuntimeError(KimiCLIException, RuntimeError): When any MCP server cannot be connected.\n    \"\"\"\n    logger.info(\"Loading agent: {agent_file}\", agent_file=agent_file)\n    agent_spec = load_agent_spec(agent_file)\n\n    system_prompt = _load_system_prompt(\n        agent_spec.system_prompt_path,\n        agent_spec.system_prompt_args,\n        runtime.builtin_args,\n    )\n\n    # load subagents before loading tools because Task tool depends on LaborMarket on initialization\n    for subagent_name, subagent_spec in agent_spec.subagents.items():\n        logger.debug(\"Loading subagent: {subagent_name}\", subagent_name=subagent_name)\n        subagent = await load_agent(\n            subagent_spec.path,\n            runtime.copy_for_fixed_subagent(),\n            mcp_configs=mcp_configs,\n            _restore_dynamic_subagents=False,\n        )\n        runtime.labor_market.add_fixed_subagent(subagent_name, subagent, subagent_spec.description)\n\n    toolset = KimiToolset()\n    tool_deps = {\n        KimiToolset: toolset,\n        Runtime: runtime,\n        # TODO: remove all the following dependencies and use Runtime instead\n        Config: runtime.config,\n        BuiltinSystemPromptArgs: runtime.builtin_args,\n        Session: runtime.session,\n        DenwaRenji: runtime.denwa_renji,\n        Approval: runtime.approval,\n        LaborMarket: runtime.labor_market,\n        Environment: runtime.environment,\n    }\n    tools = agent_spec.tools\n    if agent_spec.exclude_tools:\n        logger.debug(\"Excluding tools: {tools}\", tools=agent_spec.exclude_tools)\n        tools = [tool for tool in tools if tool not in agent_spec.exclude_tools]\n    toolset.load_tools(tools, tool_deps)\n\n    if mcp_configs:\n        validated_mcp_configs: list[MCPConfig] = []\n        if mcp_configs:\n            from fastmcp.mcp_config import MCPConfig\n\n            for mcp_config in mcp_configs:\n                try:\n                    validated_mcp_configs.append(\n                        mcp_config\n                        if isinstance(mcp_config, MCPConfig)\n                        else MCPConfig.model_validate(mcp_config)\n                    )\n                except pydantic.ValidationError as e:\n                    raise MCPConfigError(f\"Invalid MCP config: {e}\") from e\n        await toolset.load_mcp_tools(validated_mcp_configs, runtime)\n\n    # Restore dynamic subagents from persisted session state\n    # Skip for fixed subagents — they have their own isolated LaborMarket\n    if _restore_dynamic_subagents:\n        for subagent_spec in runtime.session.state.dynamic_subagents:\n            if subagent_spec.name not in runtime.labor_market.subagents:\n                subagent = Agent(\n                    name=subagent_spec.name,\n                    system_prompt=subagent_spec.system_prompt,\n                    toolset=toolset,\n                    runtime=runtime.copy_for_dynamic_subagent(),\n                )\n                runtime.labor_market.add_dynamic_subagent(subagent_spec.name, subagent)\n\n    return Agent(\n        name=agent_spec.name,\n        system_prompt=system_prompt,\n        toolset=toolset,\n        runtime=runtime,\n    )\n\n\ndef _load_system_prompt(\n    path: Path, args: dict[str, str], builtin_args: BuiltinSystemPromptArgs\n) -> str:\n    logger.info(\"Loading system prompt: {path}\", path=path)\n    system_prompt = path.read_text(encoding=\"utf-8\").strip()\n    logger.debug(\n        \"Substituting system prompt with builtin args: {builtin_args}, spec args: {spec_args}\",\n        builtin_args=builtin_args,\n        spec_args=args,\n    )\n    env = JinjaEnvironment(\n        keep_trailing_newline=True,\n        lstrip_blocks=True,\n        trim_blocks=True,\n        variable_start_string=\"${\",\n        variable_end_string=\"}\",\n        undefined=StrictUndefined,\n    )\n    try:\n        template = env.from_string(system_prompt)\n        return template.render(asdict(builtin_args), **args)\n    except UndefinedError as exc:\n        raise SystemPromptTemplateError(f\"Missing system prompt arg in {path}: {exc}\") from exc\n    except TemplateError as exc:\n        raise SystemPromptTemplateError(f\"Invalid system prompt template: {path}: {exc}\") from exc\n"
+      "source_summary": "from __future__ import annotations\n\nimport asyncio\nfrom collections.abc import Mapping\nfrom dataclasses import asdict, dataclass\nfrom datetime import datetime\nfrom pathlib import Path\nfrom typing import TYPE_CHECKING, Any\n\nimport pydantic\nfrom jinja2 import Environment as JinjaEnvironment\nfrom jinja2 import StrictUndefined, TemplateError, UndefinedError\nfrom kaos.path import KaosPath\nfrom kosong.tooling import Toolset\n\nfrom kimi_cli.agentspec import load_agent_spec\nfrom kimi_cli.auth.oauth import OAuthManager\nfrom kimi_cli.config import Config\nfrom kimi_cli.exception import MCPConfigError, SystemPromptTemplateError\nfrom kimi_cli.llm import LLM\nfrom kimi_cli.session import Session\nfrom kimi_cli.skill import Skill, discover_skills_from_roots, index_skills, resolve_skills_roots\nfrom kimi_cli.soul.approval import Approval, ApprovalState\nfrom kimi_cli.soul.denwarenji import DenwaRenji\nfrom kimi_cli.soul.toolset import KimiToolset\nfrom kimi_cli.utils.environment import Environment\nfrom kimi_cli.utils.logging import logger\nfrom kimi_cli.utils.path import list_directory\n\nif TYPE_CHECKING:\n    from fastmcp.mcp_config import MCPConfig\n\n\n@dataclass(frozen=True, slots=True, kw_only=True)\nclass BuiltinSystemPromptArgs:\n    \"\"\"Builtin system prompt arguments.\"\"\"\n\n    KIMI_NOW: str\n    \"\"\"The current datetime.\"\"\"\n    KIMI_WORK_DIR: KaosPath\n    \"\"\"The absolute path of current working directory.\"\"\"\n    KIMI_WORK_DIR_LS: str\n    \"\"\"The directory listing of current working directory.\"\"\"\n    KIMI_AGENTS_MD: str  # TODO: move to first message from system prompt\n    \"\"\"The content of AGENTS.md.\"\"\"\n    KIMI_SKILLS: str\n    \"\"\"Formatted information about available skills.\"\"\"\n    KIMI_ADDITIONAL_DIRS_INFO: str\n    \"\"\"Formatted information about additional directories in the workspace.\"\"\"\n\n\nasync def load_agents_md(work_dir: KaosPath) -> str | None:\n    paths = [\n        work_dir / \"AGENTS.md\",\n        work_dir / \"agents.md\",\n    ]\n    for path in paths:\n        if await path.is_file():\n            logger.info(\"Loaded agents.md: {path}\", path=path)\n            return (await path.read_text()).strip()\n    logger.info(\"No AGENTS.md found in {work_dir}\", work_dir=work_dir)\n    return None\n\n\n@dataclass(slots=True, kw_only=True)\nclass Runtime:\n    \"\"\"Agent runtime.\"\"\"\n\n    config: Config\n    oauth: OAuthManager\n    llm: LLM | None  # we do not freeze the `Runtime` dataclass because LLM can be changed\n    session: Session\n    builtin_args: BuiltinSystemPromptArgs\n    denwa_renji: DenwaRenji\n    approval: Approval\n    labor_market: LaborMarket\n    environment: Environment\n    skills: dict[str, Skill]\n    additional_dirs: list[KaosPath]\n\n    @staticmethod\n    async def create(\n        config: Config,\n        oauth: OAuthManager,\n        llm: LLM | None,\n        session: Session,\n        yolo: bool,\n        skills_dir: KaosPath | None = None,\n    ) -> Runtime:\n        ls_output, agents_md, environment = await asyncio.gather(\n            list_directory(session.work_dir),\n            load_agents_md(session.work_dir),\n            Environment.detect(),\n        )\n\n        # Discover and format skills\n        skills_roots = await resolve_skills_roots(session.work_dir, skills_dir_override=skills_dir)\n        skills = await discover_skills_from_roots(skills_roots)\n        skills_by_name = index_skills(skills)\n        logger.info(\"Discovered {count} skill(s)\", count=len(skills))\n        skills_formatted = \"\\n\".join(\n            (\n                f\"- {skill.name}\\n\"\n                f\"  - Path: {skill.skill_md_file}\\n\"\n                f\"  - Description: {skill.description}\"\n            )\n            for skill in skills\n        )\n\n        # Restore additional directories from session state, pruning stale entries\n        additional_dirs: list[KaosPath] = []\n        pruned = False\n        valid_dir_strs: list[str] = []\n        for dir_str in session.state.additional_dirs:\n            d = KaosPath(dir_str).canonical()\n            if await d.is_dir():\n                additional_dirs.append(d)\n                valid_dir_strs.append(dir_str)\n            else:\n                logger.warning(\n                    \"Additional directory no longer exists, removing from state: {dir}\",\n                    dir=dir_str,\n                )\n                pruned = True\n        if pruned:\n            session.state.additional_dirs = valid_dir_strs\n            session.save_state()\n\n        # Format additional dirs info for system prompt\n        additional_dirs_info = \"\"\n        if additional_dirs:\n            parts: list[str] = []\n            for d in additional_dirs:\n                try:\n                    dir_ls = await list_directory(d)\n                except OSError:\n                    logger.warning(\n                        \"Cannot list additional directory, skipping listing: {dir}\", dir=d\n                    )\n                    dir_ls = \"[directory not readable]\"\n                parts.append(f\"### `{d}`\\n\\n```\\n{dir_ls}\\n```\")\n            additional_dirs_info = \"\\n\\n\".join(parts)\n\n        # Merge CLI flag with persisted session state\n        effective_yolo = yolo or session.state.approval.yolo\n        saved_actions = set(session.state.approval.auto_approve_actions)\n\n        def _on_approval_change() -> None:\n            session.state.approval.yolo = approval_state.yolo\n            session.state.approval.auto_approve_actions = set(approval_state.auto_approve_actions)\n            session.save_state()\n\n        approval_state = ApprovalState(\n            yolo=effective_yolo,\n            auto_approve_actions=saved_actions,\n            on_change=_on_approval_change,\n        )\n\n        return Runtime(\n            config=config,\n            oauth=oauth,\n            llm=llm,\n            session=session,\n            builtin_args=BuiltinSystemPromptArgs(\n                KIMI_NOW=datetime.now().astimezone().isoformat(),\n                KIMI_WORK_DIR=session.work_dir,\n                KIMI_WORK_DIR_LS=ls_output,\n                KIMI_AGENTS_MD=agents_md or \"\",\n                KIMI_SKILLS=skills_formatted or \"No skills found.\",\n                KIMI_ADDITIONAL_DIRS_INFO=additional_dirs_info,\n            ),\n            denwa_renji=DenwaRenji(),\n            approval=Approval(state=approval_state),\n            labor_market=LaborMarket(),\n            environment=environment,\n            skills=skills_by_name,\n            additional_dirs=additional_dirs,\n        )\n\n    def copy_for_fixed_subagent(self) -> Runtime:\n        \"\"\"Clone runtime for fixed subagent.\"\"\"\n        return Runtime(\n            config=self.config,\n            oauth=self.oauth,\n            llm=self.llm,\n            session=self.session,\n            builtin_args=self.builtin_args,\n            denwa_renji=DenwaRenji(),  # subagent must have its own DenwaRenji\n            approval=self.approval.share(),\n            labor_market=LaborMarket(),  # fixed subagent has its own LaborMarket\n            environment=self.environment,\n            skills=self.skills,\n            # Share the same list reference so /add-dir mutations propagate to all agents\n            additional_dirs=self.additional_dirs,\n        )\n\n    def copy_for_dynamic_subagent(self) -> Runtime:\n        \"\"\"Clone runtime for dynamic subagent.\"\"\"\n        return Runtime(\n            config=self.config,\n            oauth=self.oauth,\n            llm=self.llm,\n            session=self.session,\n            builtin_args=self.builtin_args,\n            denwa_renji=DenwaRenji(),  # subagent must have its own DenwaRenji\n            approval=self.approval.share(),\n            labor_market=self.labor_market,  # dynamic subagent shares LaborMarket with main agent\n            environment=self.environment,\n            skills=self.skills,\n            # Share the same list reference so /add-dir mutations propagate to all agents\n            additional_dirs=self.additional_dirs,\n        )\n\n\n@dataclass(frozen=True, slots=True, kw_only=True)\nclass Agent:\n    \"\"\"The loaded agent.\"\"\"\n\n    name: str\n    system_prompt: str\n    toolset: Toolset\n    runtime: Runtime\n    \"\"\"Each agent has its own runtime, which should be derived from its main agent.\"\"\"\n\n\nclass LaborMarket:\n    def __init__(self):\n        self.fixed_subagents: dict[str, Agent] = {}\n        self.fixed_subagent_descs: dict[str, str] = {}\n        self.dynamic_subagents: dict[str, Agent] = {}\n\n    @property\n    def subagents(self) -> Mapping[str, Agent]:\n        \"\"\"Get all subagents in the labor market.\"\"\"\n        return {**self.fixed_subagents, **self.dynamic_subagents}\n\n    def add_fixed_subagent(self, name: str, agent: Agent, description: str):\n        \"\"\"Add a fixed subagent.\"\"\"\n        self.fixed_subagents[name] = agent\n        self.fixed_subagent_descs[name] = description\n\n    def add_dynamic_subagent(self, name: str, agent: Agent):\n        \"\"\"Add a dynamic subagent.\"\"\"\n        self.dynamic_subagents[name] = agent\n\n\nasync def load_agent(\n    agent_file: Path,\n    runtime: Runtime,\n    *,\n    mcp_configs: list[MCPConfig] | list[dict[str, Any]],\n    _restore_dynamic_subagents: bool = True,\n) -> Agent:\n    \"\"\"\n    Load agent from specification file.\n\n    Raises:\n        FileNotFoundError: When the agent file is not found.\n        AgentSpecError(KimiCLIException, ValueError): When the agent specification is invalid.\n        SystemPromptTemplateError(KimiCLIException, ValueError): When the system prompt template\n            is invalid.\n        InvalidToolError(KimiCLIException, ValueError): When any tool cannot be loaded.\n        MCPConfigError(KimiCLIException, ValueError): When any MCP configuration is invalid.\n        MCPRuntimeError(KimiCLIException, RuntimeError): When any MCP server cannot be connected.\n    \"\"\"\n    logger.info(\"Loading agent: {agent_file}\", agent_file=agent_file)\n    agent_spec = load_agent_spec(agent_file)\n\n    system_prompt = _load_system_prompt(\n        agent_spec.system_prompt_path,\n        agent_spec.system_prompt_args,\n        runtime.builtin_args,\n    )\n\n    # load subagents before loading tools because Task tool depends on LaborMarket on initialization\n    for subagent_name, subagent_spec in agent_spec.subagents.items():\n        logger.debug(\"Loading subagent: {subagent_name}\", subagent_name=subagent_name)\n        subagent = await load_agent(\n            subagent_spec.path,\n            runtime.copy_for_fixed_subagent(),\n            mcp_configs=mcp_configs,\n            _restore_dynamic_subagents=False,\n        )\n        runtime.labor_market.add_fixed_subagent(subagent_name, subagent, subagent_spec.description)\n\n    toolset = KimiToolset()\n    tool_deps = {\n        KimiToolset: toolset,\n        Runtime: runtime,\n        # TODO: remove all the following dependencies and use Runtime instead\n        Config: runtime.config,\n        BuiltinSystemPromptArgs: runtime.builtin_args,\n        Session: runtime.session,\n        DenwaRenji: runtime.denwa_renji,\n        Approval: runtime.approval,\n        LaborMarket: runtime.labor_market,\n        Environment: runtime.environment,\n    }\n    tools = agent_spec.tools\n    if agent_spec.exclude_tools:\n        logger.debug(\"Excluding tools: {tools}\", tools=agent_spec.exclude_tools)\n        tools = [tool for tool in tools if tool not in agent_spec.exclude_tools]\n    toolset.load_tools(tools, tool_deps)\n\n    if mcp_configs:\n        validated_mcp_configs: list[MCPConfig] = []\n        if mcp_configs:\n            from fastmcp.mcp_config import MCPConfig\n\n            for mcp_config in mcp_configs:\n                try:\n                    validated_mcp_configs.append(\n                        mcp_config\n                        if isinstance(mcp_config, MCPConfig)\n                        else MCPConfig.model_validate(mcp_config)\n                    )\n                except pydantic.ValidationError as e:\n                    raise MCPConfigError(f\"Invalid MCP config: {e}\") from e\n        await toolset.load_mcp_tools(validated_mcp_configs, runtime)\n\n    # Restore dynamic subagents from persisted session state\n    # Skip for fixed subagents — they have their own isolated LaborMarket\n    if _restore_dynamic_subagents:\n        for subagent_spec in runtime.session.state.dynamic_subagents:\n            if subagent_spec.name not in runtime.labor_market.subagents:\n                subagent = Agent(\n                    name=subagent_spec.name,\n                    system_prompt=subagent_spec.system_prompt,\n                    toolset=toolset,\n                    runtime=runtime.copy_for_dynamic_subagent(),\n                )\n                runtime.labor_market.add_dynamic_subagent(subagent_spec.name, subagent)\n\n    return Agent(\n        name=agent_spec.name,\n        system_prompt=system_prompt,\n        toolset=toolset,\n        runtime=runtime,\n    )\n\n\ndef _load_system_prompt(\n    path: Path, args: dict[str, str], builtin_args: BuiltinSystemPromptArgs\n) -> str:\n    logger.info(\"Loading system prompt: {path}\", path=path)\n    system_prompt = path.read_text(encoding=\"utf-8\").strip()\n    logger.debug(\n        \"Substituting system prompt with builtin args: {builtin_args}, spec args: {spec_args}\",\n        builtin_args=builtin_args,\n        spec_args=args,\n    )\n    env = JinjaEnvironment(\n        keep_trailing_newline=True,\n        lstrip_blocks=True,\n        trim_blocks=True,\n        variable_start_string=\"${\",\n        variable_end_string=\"}\",\n        undefined=StrictUndefined,\n    )\n    try:\n        template = env.from_string(system_prompt)\n        return template.render(asdict(builtin_args), **args)\n    except UndefinedError as exc:\n        raise SystemPromptTemplateError(f\"Missing system prompt arg in {path}: {exc}\") from exc\n    except TemplateError as exc:\n        raise SystemPromptTemplateError(f\"Invalid system prompt template: {path}: {exc}\") from exc\n"
     },
     "complexity_metrics": {
-      "cyclomatic_complexity": 19.0,
-      "lines_of_code": 323,
+      "cyclomatic_complexity": 25.0,
+      "lines_of_code": 366,
       "number_of_classes": 4,
-      "number_of_functions": 7
+      "number_of_functions": 10
     },
     "dependencies": [
       {
         "dependency_type": "standard_library",
         "is_external": false,
-        "line_number": 3,
+        "line_number": null,
         "name": "asyncio",
         "path": null,
         "version": null
@@ -50289,7 +50682,7 @@ Code analysis results from preprocessing phase, including definitions of functio
       {
         "dependency_type": "standard_library",
         "is_external": false,
-        "line_number": 4,
+        "line_number": null,
         "name": "collections.abc",
         "path": null,
         "version": null
@@ -50297,7 +50690,7 @@ Code analysis results from preprocessing phase, including definitions of functio
       {
         "dependency_type": "standard_library",
         "is_external": false,
-        "line_number": 5,
+        "line_number": null,
         "name": "dataclasses",
         "path": null,
         "version": null
@@ -50305,7 +50698,7 @@ Code analysis results from preprocessing phase, including definitions of functio
       {
         "dependency_type": "standard_library",
         "is_external": false,
-        "line_number": 6,
+        "line_number": null,
         "name": "datetime",
         "path": null,
         "version": null
@@ -50313,7 +50706,7 @@ Code analysis results from preprocessing phase, including definitions of functio
       {
         "dependency_type": "standard_library",
         "is_external": false,
-        "line_number": 7,
+        "line_number": null,
         "name": "pathlib",
         "path": null,
         "version": null
@@ -50321,72 +50714,48 @@ Code analysis results from preprocessing phase, including definitions of functio
       {
         "dependency_type": "standard_library",
         "is_external": false,
-        "line_number": 8,
+        "line_number": null,
         "name": "typing",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "external_library",
+        "dependency_type": "third_party_library",
         "is_external": true,
-        "line_number": 10,
+        "line_number": null,
         "name": "pydantic",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "external_library",
+        "dependency_type": "third_party_library",
         "is_external": true,
-        "line_number": 11,
+        "line_number": 15,
         "name": "jinja2",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "external_library",
+        "dependency_type": "third_party_library",
         "is_external": true,
-        "line_number": 13,
+        "line_number": 17,
         "name": "kaos.path",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "external_library",
+        "dependency_type": "third_party_library",
         "is_external": true,
-        "line_number": 14,
+        "line_number": 18,
         "name": "kosong.tooling",
         "path": null,
         "version": null
       },
       {
-        "dependency_type": "internal_module",
-        "is_external": false,
-        "line_number": 16,
-        "name": "kimi_cli.agentspec",
-        "path": null,
-        "version": null
-      },
-      {
-        "dependency_type": "internal_module",
-        "is_external": false,
-        "line_number": 17,
-        "name": "kimi_cli.auth.oauth",
-        "path": null,
-        "version": null
-      },
-      {
-        "dependency_type": "internal_module",
-        "is_external": false,
-        "line_number": 18,
-        "name": "kimi_cli.config",
-        "path": null,
-        "version": null
-      },
-      {
-        "dependency_type": "internal_module",
-        "is_external": false,
-        "line_number": 19,
-        "name": "kimi_cli.exception",
+        "dependency_type": "third_party_library",
+        "is_external": true,
+        "line_number": 33,
+        "name": "fastmcp.mcp_config",
         "path": null,
         "version": null
       },
@@ -50394,281 +50763,124 @@ Code analysis results from preprocessing phase, including definitions of functio
         "dependency_type": "internal_module",
         "is_external": false,
         "line_number": 20,
-        "name": "kimi_cli.llm",
-        "path": null,
+        "name": "kimi_cli.agentspec",
+        "path": "kimi_cli/agentspec",
         "version": null
       },
       {
         "dependency_type": "internal_module",
         "is_external": false,
         "line_number": 21,
-        "name": "kimi_cli.session",
-        "path": null,
+        "name": "kimi_cli.auth.oauth",
+        "path": "kimi_cli/auth/oauth",
         "version": null
       },
       {
         "dependency_type": "internal_module",
         "is_external": false,
         "line_number": 22,
-        "name": "kimi_cli.skill",
-        "path": null,
+        "name": "kimi_cli.config",
+        "path": "kimi_cli/config",
         "version": null
       },
       {
         "dependency_type": "internal_module",
         "is_external": false,
         "line_number": 23,
-        "name": "kimi_cli.soul.approval",
-        "path": null,
+        "name": "kimi_cli.exception",
+        "path": "kimi_cli/exception",
         "version": null
       },
       {
         "dependency_type": "internal_module",
         "is_external": false,
         "line_number": 24,
-        "name": "kimi_cli.soul.denwarenji",
-        "path": null,
+        "name": "kimi_cli.llm",
+        "path": "kimi_cli/llm",
         "version": null
       },
       {
         "dependency_type": "internal_module",
         "is_external": false,
         "line_number": 25,
-        "name": "kimi_cli.soul.toolset",
-        "path": null,
+        "name": "kimi_cli.session",
+        "path": "kimi_cli/session",
         "version": null
       },
       {
         "dependency_type": "internal_module",
         "is_external": false,
         "line_number": 26,
-        "name": "kimi_cli.utils.environment",
-        "path": null,
+        "name": "kimi_cli.skill",
+        "path": "kimi_cli/skill",
         "version": null
       },
       {
         "dependency_type": "internal_module",
         "is_external": false,
         "line_number": 27,
-        "name": "kimi_cli.utils.logging",
-        "path": null,
+        "name": "kimi_cli.soul.approval",
+        "path": "kimi_cli/soul/approval",
         "version": null
       },
       {
         "dependency_type": "internal_module",
         "is_external": false,
         "line_number": 28,
-        "name": "kimi_cli.utils.path",
-        "path": null,
+        "name": "kimi_cli.soul.denwarenji",
+        "path": "kimi_cli/soul/denwarenji",
+        "version": null
+      },
+      {
+        "dependency_type": "internal_module",
+        "is_external": false,
+        "line_number": 29,
+        "name": "kimi_cli.soul.toolset",
+        "path": "kimi_cli/soul/toolset",
+        "version": null
+      },
+      {
+        "dependency_type": "internal_module",
+        "is_external": false,
+        "line_number": 30,
+        "name": "kimi_cli.utils.environment",
+        "path": "kimi_cli/utils/environment",
         "version": null
       },
       {
         "dependency_type": "internal_module",
         "is_external": false,
         "line_number": 31,
-        "name": "fastmcp.mcp_config",
-        "path": null,
+        "name": "kimi_cli.utils.logging",
+        "path": "kimi_cli/utils/logging",
         "version": null
       },
       {
-        "dependency_type": "internal_class",
+        "dependency_type": "internal_module",
         "is_external": false,
-        "line_number": 37,
-        "name": "BuiltinSystemPromptArgs",
-        "path": null,
-        "version": null
-      },
-      {
-        "dependency_type": "internal_function",
-        "is_external": false,
-        "line_number": 50,
-        "name": "load_agents_md",
-        "path": null,
-        "version": null
-      },
-      {
-        "dependency_type": "internal_class",
-        "is_external": false,
-        "line_number": 58,
-        "name": "Runtime",
-        "path": null,
-        "version": null
-      },
-      {
-        "dependency_type": "internal_class",
-        "is_external": false,
-        "line_number": 145,
-        "name": "LaborMarket",
-        "path": null,
-        "version": null
-      },
-      {
-        "dependency_type": "internal_class",
-        "is_external": false,
-        "line_number": 178,
-        "name": "Agent",
-        "path": null,
+        "line_number": 32,
+        "name": "kimi_cli.utils.path",
+        "path": "kimi_cli/utils/path",
         "version": null
       }
     ],
-    "detailed_description": "Core agent management system for AI assistant framework. Handles agent lifecycle management, runtime environment creation, subagent orchestration, tool integration, and system prompt templating. Implements sophisticated subagent architecture with both fixed and dynamic subagents, manages labor markets, and integrates with MCP tools.",
+    "detailed_description": "This component is the core intelligent agent implementation for the Kimi CLI system. It provides comprehensive agent management capabilities including:\n\n**Agent Lifecycle Management**: The `load_agent` function orchestrates the complete agent initialization process, loading agent specifications, initializing toolsets, and setting up MCP (Model Context Protocol) configurations.\n\n**Runtime Management**: The `Runtime` dataclass encapsulates all runtime dependencies including configuration, OAuth management, LLM instances, session state, approval workflows, labor market for subagents, environment detection, and skill discovery. It provides factory methods for creating isolated runtime instances for different subagent types.\n\n**Subagent Orchestration**: The `LaborMarket` class manages both fixed subagents (defined in agent specs) and dynamic subagents (created at runtime), providing a hierarchical agent architecture. Fixed subagents have isolated labor markets while dynamic subagents share the main agent's labor market.\n\n**System Prompt Processing**: Implements Jinja2-based template rendering for system prompts with builtin arguments (current datetime, working directory, skills listing) and custom arguments, using strict undefined checking to catch template errors early.\n\n**Skill Discovery**: Automatically discovers and indexes skills from configured root directories, formatting them for inclusion in agent system prompts.\n\n**Approval State Persistence**: Manages approval workflows with YOLO mode and auto-approve actions, persisting state changes to session storage.\n\n**MCP Integration**: Supports Model Context Protocol configurations for extended tool capabilities with validation and error handling.",
     "interfaces": [
       {
-        "description": "Builtin system prompt arguments for template substitution",
+        "description": "Immutable dataclass containing builtin system prompt arguments including KIMI_NOW (current datetime), KIMI_WORK_DIR (working directory path), KIMI_WORK_DIR_LS (directory listing), KIMI_AGENTS_MD (AGENTS.md content), KIMI_SKILLS (formatted skills info), and KIMI_ADDITIONAL_DIRS_INFO (additional workspace directories). Frozen and uses slots for efficiency.",
         "interface_type": "dataclass",
         "name": "BuiltinSystemPromptArgs",
-        "parameters": [
-          {
-            "description": "The current datetime",
-            "is_optional": false,
-            "name": "KIMI_NOW",
-            "param_type": "str"
-          },
-          {
-            "description": "The absolute path of current working directory",
-            "is_optional": false,
-            "name": "KIMI_WORK_DIR",
-            "param_type": "KaosPath"
-          },
-          {
-            "description": "The directory listing of current working directory",
-            "is_optional": false,
-            "name": "KIMI_WORK_DIR_LS",
-            "param_type": "str"
-          },
-          {
-            "description": "The content of AGENTS.md",
-            "is_optional": false,
-            "name": "KIMI_AGENTS_MD",
-            "param_type": "str"
-          },
-          {
-            "description": "Formatted information about available skills",
-            "is_optional": false,
-            "name": "KIMI_SKILLS",
-            "param_type": "str"
-          }
-        ],
-        "return_type": null,
-        "visibility": "public"
-      },
-      {
-        "description": "Agent runtime environment containing all dependencies",
-        "interface_type": "dataclass",
-        "name": "Runtime",
-        "parameters": [
-          {
-            "description": "Configuration object",
-            "is_optional": false,
-            "name": "config",
-            "param_type": "Config"
-          },
-          {
-            "description": "OAuth authentication manager",
-            "is_optional": false,
-            "name": "oauth",
-            "param_type": "OAuthManager"
-          },
-          {
-            "description": "Language model instance",
-            "is_optional": false,
-            "name": "llm",
-            "param_type": "LLM | None"
-          },
-          {
-            "description": "Session management",
-            "is_optional": false,
-            "name": "session",
-            "param_type": "Session"
-          },
-          {
-            "description": "Builtin prompt arguments",
-            "is_optional": false,
-            "name": "builtin_args",
-            "param_type": "BuiltinSystemPromptArgs"
-          },
-          {
-            "description": "DenwaRenji component",
-            "is_optional": false,
-            "name": "denwa_renji",
-            "param_type": "DenwaRenji"
-          },
-          {
-            "description": "Approval system",
-            "is_optional": false,
-            "name": "approval",
-            "param_type": "Approval"
-          },
-          {
-            "description": "Labor market for subagents",
-            "is_optional": false,
-            "name": "labor_market",
-            "param_type": "LaborMarket"
-          },
-          {
-            "description": "Environment detection",
-            "is_optional": false,
-            "name": "environment",
-            "param_type": "Environment"
-          },
-          {
-            "description": "Available skills dictionary",
-            "is_optional": false,
-            "name": "skills",
-            "param_type": "dict[str, Skill]"
-          }
-        ],
-        "return_type": null,
-        "visibility": "public"
-      },
-      {
-        "description": "Manages subagent labor market with fixed and dynamic subagents",
-        "interface_type": "class",
-        "name": "LaborMarket",
         "parameters": [],
         "return_type": null,
         "visibility": "public"
       },
       {
-        "description": "Loaded agent configuration",
-        "interface_type": "dataclass",
-        "name": "Agent",
-        "parameters": [
-          {
-            "description": "Agent name",
-            "is_optional": false,
-            "name": "name",
-            "param_type": "str"
-          },
-          {
-            "description": "Processed system prompt",
-            "is_optional": false,
-            "name": "system_prompt",
-            "param_type": "str"
-          },
-          {
-            "description": "Agent toolset",
-            "is_optional": false,
-            "name": "toolset",
-            "param_type": "Toolset"
-          },
-          {
-            "description": "Agent runtime environment",
-            "is_optional": false,
-            "name": "runtime",
-            "param_type": "Runtime"
-          }
-        ],
-        "return_type": null,
-        "visibility": "public"
-      },
-      {
-        "description": "Load AGENTS.md file from working directory",
-        "interface_type": "function",
+        "description": "Asynchronously loads AGENTS.md file from working directory, checking both 'AGENTS.md' and 'agents.md' filenames. Returns file content stripped of whitespace or None if not found.",
+        "interface_type": "async_function",
         "name": "load_agents_md",
         "parameters": [
           {
-            "description": "Working directory to search for agents.md",
+            "description": "Working directory path to search for AGENTS.md file",
             "is_optional": false,
             "name": "work_dir",
             "param_type": "KaosPath"
@@ -50678,8 +50890,16 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Static factory method to create Runtime instance",
-        "interface_type": "method",
+        "description": "Mutable runtime dataclass managing agent execution state. Contains config, oauth, llm (changeable), session, builtin_args, denwa_renji, approval, labor_market, environment, skills dict, and additional_dirs list. Provides factory methods for creating subagent runtimes.",
+        "interface_type": "dataclass",
+        "name": "Runtime",
+        "parameters": [],
+        "return_type": null,
+        "visibility": "public"
+      },
+      {
+        "description": "Asynchronous factory method that creates and initializes a Runtime instance. Handles directory listing, AGENTS.md loading, environment detection, skill discovery, approval state restoration, and additional directories management.",
+        "interface_type": "async_classmethod",
         "name": "Runtime.create",
         "parameters": [
           {
@@ -50689,31 +50909,31 @@ Code analysis results from preprocessing phase, including definitions of functio
             "param_type": "Config"
           },
           {
-            "description": "OAuth manager",
+            "description": "OAuth manager instance",
             "is_optional": false,
             "name": "oauth",
             "param_type": "OAuthManager"
           },
           {
-            "description": "Language model",
+            "description": "LLM instance or None",
             "is_optional": false,
             "name": "llm",
             "param_type": "LLM | None"
           },
           {
-            "description": "Session management",
+            "description": "Session object",
             "is_optional": false,
             "name": "session",
             "param_type": "Session"
           },
           {
-            "description": "YOLO mode flag",
+            "description": "YOLO mode flag for approvals",
             "is_optional": false,
             "name": "yolo",
             "param_type": "bool"
           },
           {
-            "description": "Optional skills directory override",
+            "description": "Optional override for skills directory",
             "is_optional": true,
             "name": "skills_dir",
             "param_type": "KaosPath | None"
@@ -50723,7 +50943,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Clone runtime for fixed subagent with isolated labor market",
+        "description": "Creates a copy of runtime for fixed subagent with isolated DenwaRenji and LaborMarket, shared approval state, and shared additional_dirs reference.",
         "interface_type": "method",
         "name": "Runtime.copy_for_fixed_subagent",
         "parameters": [],
@@ -50731,7 +50951,7 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Clone runtime for dynamic subagent with shared labor market",
+        "description": "Creates a copy of runtime for dynamic subagent with isolated DenwaRenji, shared LaborMarket and approval state, and shared additional_dirs reference.",
         "interface_type": "method",
         "name": "Runtime.copy_for_dynamic_subagent",
         "parameters": [],
@@ -50739,7 +50959,31 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Add fixed subagent to labor market",
+        "description": "Immutable dataclass representing a loaded agent with name, system_prompt (rendered string), toolset (Toolset instance), and runtime (Runtime instance). Frozen and uses slots for memory efficiency.",
+        "interface_type": "dataclass",
+        "name": "Agent",
+        "parameters": [],
+        "return_type": null,
+        "visibility": "public"
+      },
+      {
+        "description": "Manages collection of subagents. Separates fixed subagents (pre-defined in agent specs with descriptions) from dynamic subagents (runtime-created). Provides add methods for both types and a combined subagents property.",
+        "interface_type": "class",
+        "name": "LaborMarket",
+        "parameters": [],
+        "return_type": null,
+        "visibility": "public"
+      },
+      {
+        "description": "Returns combined mapping of all fixed and dynamic subagents.",
+        "interface_type": "property",
+        "name": "LaborMarket.subagents",
+        "parameters": [],
+        "return_type": "Mapping[str, Agent]",
+        "visibility": "public"
+      },
+      {
+        "description": "Adds a fixed subagent with associated description to the labor market.",
         "interface_type": "method",
         "name": "LaborMarket.add_fixed_subagent",
         "parameters": [
@@ -50762,11 +51006,11 @@ Code analysis results from preprocessing phase, including definitions of functio
             "param_type": "str"
           }
         ],
-        "return_type": null,
+        "return_type": "None",
         "visibility": "public"
       },
       {
-        "description": "Add dynamic subagent to labor market",
+        "description": "Adds a dynamic subagent without description to the labor market.",
         "interface_type": "method",
         "name": "LaborMarket.add_dynamic_subagent",
         "parameters": [
@@ -50783,34 +51027,34 @@ Code analysis results from preprocessing phase, including definitions of functio
             "param_type": "Agent"
           }
         ],
-        "return_type": null,
+        "return_type": "None",
         "visibility": "public"
       },
       {
-        "description": "Main function to load agent from specification file",
-        "interface_type": "function",
+        "description": "Asynchronously loads and initializes an agent from specification file. Loads agent spec, renders system prompt, initializes fixed subagents recursively, loads tools and MCP tools, restores dynamic subagents from session state, and returns initialized Agent instance. Raises FileNotFoundError, AgentSpecError, SystemPromptTemplateError, InvalidToolError, MCPConfigError, or MCPRuntimeError on failures.",
+        "interface_type": "async_function",
         "name": "load_agent",
         "parameters": [
           {
-            "description": "Agent specification file path",
+            "description": "Path to agent specification file",
             "is_optional": false,
             "name": "agent_file",
             "param_type": "Path"
           },
           {
-            "description": "Runtime environment",
+            "description": "Runtime instance for the agent",
             "is_optional": false,
             "name": "runtime",
             "param_type": "Runtime"
           },
           {
-            "description": "MCP configurations",
+            "description": "List of MCP configurations",
             "is_optional": false,
             "name": "mcp_configs",
             "param_type": "list[MCPConfig] | list[dict[str, Any]]"
           },
           {
-            "description": "Whether to restore dynamic subagents from session",
+            "description": "Internal flag to control dynamic subagent restoration",
             "is_optional": true,
             "name": "_restore_dynamic_subagents",
             "param_type": "bool"
@@ -50820,24 +51064,24 @@ Code analysis results from preprocessing phase, including definitions of functio
         "visibility": "public"
       },
       {
-        "description": "Load and process system prompt template with variable substitution",
+        "description": "Internal function that loads system prompt template from file and renders it using Jinja2 with ${} variable syntax. Merges builtin args (as dict) with custom args. Uses StrictUndefined to catch missing variables. Raises SystemPromptTemplateError on template errors.",
         "interface_type": "function",
         "name": "_load_system_prompt",
         "parameters": [
           {
-            "description": "System prompt template file path",
+            "description": "Path to system prompt template file",
             "is_optional": false,
             "name": "path",
             "param_type": "Path"
           },
           {
-            "description": "Agent-specific arguments",
+            "description": "Custom template arguments",
             "is_optional": false,
             "name": "args",
             "param_type": "dict[str, str]"
           },
           {
-            "description": "Builtin arguments",
+            "description": "Builtin template arguments",
             "is_optional": false,
             "name": "builtin_args",
             "param_type": "BuiltinSystemPromptArgs"
@@ -50848,11 +51092,11 @@ Code analysis results from preprocessing phase, including definitions of functio
       }
     ],
     "responsibilities": [
-      "Agent lifecycle management and runtime environment orchestration",
-      "Subagent system management with fixed and dynamic subagent strategies",
-      "Tool integration and management including MCP tool loading",
-      "System prompt templating and variable substitution",
-      "Session state persistence and restoration for dynamic subagents"
+      "Agent lifecycle management including loading, initialization, and configuration of agents from specification files",
+      "Runtime state orchestration managing configuration, LLM instances, sessions, approvals, and environment settings",
+      "Subagent coordination through LaborMarket pattern supporting both fixed (pre-defined) and dynamic (runtime-created) subagents",
+      "System prompt template processing with Jinja2 rendering, builtin arguments injection, and error handling",
+      "Tool and skill management including discovery, indexing, MCP tool loading, and dependency injection"
     ]
   },
   {
@@ -59221,27 +59465,26 @@ Code analysis results from preprocessing phase, including definitions of functio
 
 ## Memory Storage Statistics
 
-**Total Storage Size**: 4136501 bytes
+**Total Storage Size**: 4214443 bytes
 
-- **documentation**: 320473 bytes (7.7%)
-- **preprocess**: 3553620 bytes (85.9%)
-- **timing**: 36 bytes (0.0%)
-- **studies_research**: 262372 bytes (6.3%)
+- **timing**: 39 bytes (0.0%)
+- **documentation**: 310182 bytes (7.4%)
+- **preprocess**: 3598120 bytes (85.4%)
+- **studies_research**: 306102 bytes (7.3%)
 
 ## Generated Documents Statistics
 
-Number of Generated Documents: 13
+Number of Generated Documents: 12
 
-- Key Modules and Components Research Report_Web 前端工作台域
-- Core Workflows
-- Key Modules and Components Research Report_对外 SDK 域（kimi-sdk）
-- Architecture Description
-- Key Modules and Components Research Report_Web 前端 API 接入域
-- Key Modules and Components Research Report_系统与异步辅助域（kaos）
+- Key Modules and Components Research Report_Agent System Domain
 - Project Overview
-- Key Modules and Components Research Report_配置管理域（CLI/Web 共享）
-- Key Modules and Components Research Report_Web 后端会话与文件域
-- Key Modules and Components Research Report_Runner/Worker 编排与流式通讯域
-- Key Modules and Components Research Report_CLI 交互与向导域
-- Key Modules and Components Research Report_LLM Provider 与工具抽象域（kosong）
+- Core Workflows
+- Key Modules and Components Research Report_CLI Interface Domain
 - Boundary Interfaces
+- Key Modules and Components Research Report_LLM Provider Integration Domain
+- Key Modules and Components Research Report_Tool Execution Domain
+- Key Modules and Components Research Report_Infrastructure Domain
+- Key Modules and Components Research Report_Conversation Management Domain
+- Key Modules and Components Research Report_Web Interface Domain
+- Architecture Description
+- Key Modules and Components Research Report_Configuration Management Domain
