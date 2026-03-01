@@ -1,0 +1,133 @@
+# Litho Test Configuration File
+# Used for testing startup based on preset configuration files
+
+# Project name
+project_name = "kimi-cli"
+
+# Project path
+project_path = "."
+
+# Output path
+output_path = "./deepwiki"
+
+# Internal working directory path (.litho)
+internal_path = "./.litho"
+
+# Target language (zh, en, ja, ko, de, fr, ru)
+target_language = "zh"
+
+# Whether to analyze dependencies
+analyze_dependencies = true
+
+# Whether to identify core components
+identify_components = true
+
+# Maximum recursive depth for directories
+max_depth = 10
+
+# Percentage of core components
+core_component_percentage = 20
+
+# Maximum file size limit (bytes)
+max_file_size = 65536 # 64KB
+
+# Whether to include test files
+include_tests = false
+
+# Whether to include hidden files
+include_hidden = false
+
+# Directories to exclude
+excluded_dirs = [
+  ".litho",
+  "litho.docs",
+  "target",
+  "node_modules",
+  ".git",
+  "build",
+  "dist",
+  "venv",
+  "__pycache__",
+]
+
+# Files to exclude
+excluded_files = [
+  "litho.toml",
+  "*.log",
+  "*.tmp",
+  "*.cache",
+  "Cargo.lock",
+  ".gitignore",
+]
+
+# File extensions to exclude
+excluded_extensions = [
+  "jpg",
+  "jpeg",
+  "png",
+  "gif",
+  "bmp",
+  "ico",
+  "mp3",
+  "mp4",
+  "avi",
+  "pdf",
+  "zip",
+  "tar",
+  "exe",
+  "dll",
+  "so",
+]
+
+# Include only specified file extensions (leave empty for no restriction)
+included_extensions = []
+
+# Architecture meta description file path (optional)
+architecture_meta_path = ""
+
+# LLM model configuration
+[llm]
+# LLM Provider type (openai, moonshot, deepseek, mistral, openrouter, anthropic, gemini)
+provider = "openai"
+
+# LLM API KEY (retrieved from environment variable, can be left empty here)
+api_key = "quotio-local-E0FEC616-64B4-4F92-8188-8F0FF0EFBA34"
+
+# LLM API base URL
+api_base_url = "http://127.0.0.1:8317/v1"
+
+# High-efficiency model, prioritized for Litho engine's routine inference tasks
+model_efficient = "deepwiki-efficient"
+
+# High-quality model, prioritized for Litho engine's complex inference tasks
+model_powerful = "deepwiki-powerful"
+
+# Maximum tokens
+max_tokens = 131072
+
+# Temperature
+temperature = 0.1
+
+# Retry attempts
+retry_attempts = 3
+
+# Retry interval (milliseconds)
+retry_delay_ms = 5000
+
+# Timeout (seconds)
+timeout_seconds = 300
+
+disable_preset_tools = false
+
+max_parallels = 1
+
+# Cache configuration
+[cache]
+# Whether to enable cache
+enabled = true
+
+# Cache directory
+cache_dir = ".litho/cache"
+
+# Cache expiration time (hours)
+expire_hours = 720 # 30 days

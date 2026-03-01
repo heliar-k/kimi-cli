@@ -42,3 +42,7 @@ static/
 .memo/
 .entire
 .claude
+
+# Editor files
+.litho/
+tags
