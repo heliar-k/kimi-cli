@@ -134,7 +134,7 @@ import {
 } from "./wireTypes";
 import { createMessageId, getApiBaseUrl } from "./utils";
 import { kimiCliVersion } from "@/lib/version";
-import { handleToolResult } from "@/features/tool/store";
+import { handleToolResult, useToolEventsStore, type TodoItem } from "@/features/tool/store";
 import { v4 as uuidV4 } from "uuid";
 
 // Regex patterns moved to top level for performance
@@ -347,6 +347,9 @@ export function useSessionStream(
 
   // Track compaction indicator message so we can remove it on CompactionEnd
   const compactionMessageIdRef = useRef<string | null>(null);
+
+  // Track MCP loading indicator message so we can remove it on MCPLoadingEnd
+  const mcpLoadingMessageIdRef = useRef<string | null>(null);
 
   // Wrapped setMessages
   const setMessages: typeof setMessagesInternal = useCallback((action) => {
@@ -1291,6 +1294,18 @@ export function useSessionStream(
               isReplay,
             );
           }
+
+          // Extract todo list from display blocks
+          if (!isReplay && Array.isArray(return_value.display)) {
+            const todoBlock = return_value.display.find(
+              (d: { type: string }) => d.type === "todo",
+            );
+            if (todoBlock) {
+              useToolEventsStore.getState().setTodoItems(
+                (todoBlock as unknown as { type: string; items: TodoItem[] }).items,
+              );
+            }
+          }
           break;
         }
 
@@ -1744,6 +1759,31 @@ export function useSessionStream(
             const kept = lastUserMsgIndex >= 0 ? prev.slice(lastUserMsgIndex) : [];
             return compactMsgId ? kept.filter((m) => m.id !== compactMsgId) : kept;
           });
+          break;
+        }
+
+        case "MCPLoadingBegin": {
+          const mcpMsgId = getNextMessageId("assistant");
+          mcpLoadingMessageIdRef.current = mcpMsgId;
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: mcpMsgId,
+              role: "assistant",
+              variant: "status",
+              content: "Connecting to MCP servers…",
+              isStreaming: true,
+            },
+          ]);
+          break;
+        }
+
+        case "MCPLoadingEnd": {
+          const mcpMsgId = mcpLoadingMessageIdRef.current;
+          mcpLoadingMessageIdRef.current = null;
+          if (mcpMsgId) {
+            setMessages((prev) => prev.filter((m) => m.id !== mcpMsgId));
+          }
           break;
         }
 
@@ -2335,9 +2375,16 @@ export function useSessionStream(
     pendingApprovalRequestsRef.current.clear();
     pendingQuestionRequestsRef.current.clear();
 
+    // Remove lingering MCP loading indicator (e.g. MCPLoadingEnd was never received)
+    const mcpMsgId = mcpLoadingMessageIdRef.current;
+    if (mcpMsgId) {
+      mcpLoadingMessageIdRef.current = null;
+      setMessages((prev) => prev.filter((m) => m.id !== mcpMsgId));
+    }
+
     // Mark all streaming/subagent messages as complete
     completeStreamingMessages();
-  }, [completeStreamingMessages, setAwaitingFirstResponse]);
+  }, [completeStreamingMessages, setAwaitingFirstResponse, setMessages]);
 
   // Send cancel request or disconnect if stream not ready
   const cancel = useCallback(() => {
@@ -2558,6 +2605,7 @@ export function useSessionStream(
     // Reset state for new session
     resetState();
     setMessages([]);
+    useToolEventsStore.getState().clearTodoItems();
 
     // Auto-connect if we have a valid sessionId
     if (sessionId) {

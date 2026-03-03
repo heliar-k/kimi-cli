@@ -11,6 +11,21 @@ Only write entries that are worth mentioning to users.
 
 ## Unreleased
 
+- Core: Pass session ID as `user_id` metadata to Anthropic API
+
+## 1.17.0 (2026-03-03)
+
+- Core: Add `/export` command to export current session context (messages, metadata) to a Markdown file, and `/import` command to import context from a file or another session ID into the current session
+- Shell: Show token counts (used/total) alongside context usage percentage in the status bar (e.g., `context: 42.0% (4.2k/10.0k)`)
+- Shell: Rotate keyboard shortcut tips in the toolbar — tips cycle through available shortcuts on each prompt submission to save horizontal space
+- MCP: Add loading indicators for MCP server connections — Shell displays a "Connecting to MCP servers..." spinner and Web shows a status message while MCP tools are being loaded
+- Web: Fix scrollable file list overflow in the toolbar changes panel
+- Core: Add `compaction_trigger_ratio` config option (default `0.85`) to control when auto-compaction triggers — compaction now fires when context usage reaches the configured ratio or when remaining space falls below `reserved_context_size`, whichever comes first
+- Core: Support custom instructions in `/compact` command (e.g., `/compact keep database discussions`) to guide what the compaction preserves
+- Web: Add URL action parameters (`?action=create` to open create-session dialog, `?action=create-in-dir&workDir=xxx` to create a session directly) for external integrations, and support Cmd/Ctrl+Click on new-session buttons to open session creation in a new browser tab
+- Web: Add todo list display in prompt toolbar — shows task progress with expandable panel when the `SetTodoList` tool is active
+- ACP: Add authentication check for session operations with `AUTH_REQUIRED` error responses for terminal-based login flow
+
 ## 1.16.0 (2026-02-27)
 
 - Web: Update ASCII logo banner to a new styled design
@@ -64,6 +79,8 @@ Only write entries that are worth mentioning to users.
 - Web: Show placeholder text in prompt input with hints for slash commands and file mentions
 - Web: Fix Ctrl+C not working in uvicorn web server by restoring default SIGINT handler and terminal state after shell mode exits
 - Web: Improve session stop handling with proper async cleanup and timeout
+- ACP: Add protocol version negotiation framework for client-server compatibility
+- ACP: Add session resume method to restore session state (experimental)
 
 ## 1.11.0 (2026-02-10)
 
